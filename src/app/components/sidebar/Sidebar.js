@@ -1,7 +1,7 @@
 'use client';
+import React from 'react';
 import { IonIcon } from '@ionic/react';
 import { chevronDown } from 'ionicons/icons';
-import React from 'react';
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     return (
@@ -13,7 +13,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                 }`}
             >
                 <div className="p-2 max-xl:bg-white shadow-sm 2xl:w-72 sm:w-64 w-[80%] h-[calc(100vh-64px)] relative z-30 max-lg:border-r dark:max-xl:!bg-slate-700 dark:border-slate-700">
-                    <div className="pr-4" data-simplebar>
+                    <div className="pr-4 overflow-y-auto h-full">
                         <nav id="side">
                             <ul>
                                 <li className="active">
@@ -226,7 +226,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                                             />
                                         </svg>
                                         <span> Development </span>
-                                        <IonIcon name={chevronDown} className="text-base ml-auto duration-200 group-aria-expanded:rotate-180"></IonIcon>
+                                        <IonIcon icon={chevronDown} className="text-base ml-auto duration-200 group-aria-expanded:rotate-180"></IonIcon>
                                     </a>
                                     <ul className="pl-10 my-1 space-y-0 text-sm">
                                         <li>
@@ -272,7 +272,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     </div>
                 </div>
             </div>
-
             <div
                 id="site__sidebar__overlay"
                 className={`absolute top-0 left-0 z-20 w-screen h-screen xl:hidden backdrop-blur-sm ${
