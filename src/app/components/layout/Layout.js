@@ -1,14 +1,16 @@
 import React from 'react';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
+import Sidebar from '../sidebar/Sidebar';
 
 const Layout = ({ children }) => {
     return (
-        <>
+        <div id='wrapper'>
             <Header />
+            <Sidebar/>
             {children}
-            <Footer />
-        </>
+            {/* <Footer /> */}
+        </div>
     );
 };
 
