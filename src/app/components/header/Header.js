@@ -6,6 +6,10 @@ import Image from 'next/image';
 import { IonIcon } from '@ionic/react';
 import { search, menuOutline, closeOutline } from 'ionicons/icons';
 import DropDown from './search/DropDown';
+import Create from './create/Create';
+import Notifications from './notification/Notifications';
+import Message from './message/Message';
+import Profile from './user/Profile';
 
 
 const Header = () => {
@@ -84,7 +88,7 @@ const Header = () => {
                     <div className="max-w-[1220px] mx-auto flex items-center">
                         <div
                             id="search--box"
-                            className="xl:w-[680px] sm:w-96 sm:relative rounded-xl overflow-hidden z-20 bg-secondery max-md:hidden w-screen left-0 max-sm:fixed max-sm:top-2 dark:!bg-white/5"
+                            className="xl:w-[680px] sm:w-96 relative rounded-xl overflow-hidden z-20 bg-secondery max-md:hidden w-screen left-0 max-sm:fixed max-sm:top-2 dark:!bg-white/5"
                         >
                             <IonIcon icon={search} className="absolute left-4 top-1/2 -translate-y-1/2" />
                             <input
@@ -101,16 +105,10 @@ const Header = () => {
                             <button type="button" className="sm:hidden  sm:p-2 p-1 rounded-full relative sm:bg-secondery dark:text-white">
                                 <IonIcon icon={search} className="sm:hidden text-2xl" />
                             </button>
-                            <DarkModeComponent />
-                            <div className="rounded-full relative bg-secondery cursor-pointer shrink-0">
-                                <Image
-                                    src="/assets/images/avatars/avatar-2.jpg"
-                                    alt="Avatar"
-                                    width={36}
-                                    height={36}
-                                    className="sm:w-9 sm:h-9 w-7 h-7 rounded-full shadow shrink-0"
-                                />
-                            </div>
+                            <Create/>
+                            <Notifications/>
+                            <Message/> 
+                            <Profile/>
                         </div>
                     </div>
                 </div>

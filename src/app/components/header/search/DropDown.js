@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonIcon } from '@ionic/react';
-import { trash, searchOutline } from 'ionicons/icons';
+import { trash, searchOutline, close } from 'ionicons/icons';
 
 const DropDown = ({reff}) => {
     return (
