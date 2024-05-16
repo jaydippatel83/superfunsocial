@@ -1,6 +1,5 @@
 import React from 'react';
-import Header from '../header/Header';
-import Footer from '../footer/Footer';
+import Header from '../header/Header'; 
 import Sidebar from '../sidebar/Sidebar';
 
 const Layout = ({ children }) => {
@@ -8,8 +7,7 @@ const Layout = ({ children }) => {
         <div id='wrapper'>
             <Header />
             <Sidebar/>
-            {children}
-            {/* <Footer /> */}
+            {children} 
         </div>
     );
 };

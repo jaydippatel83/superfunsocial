@@ -1,4 +1,5 @@
 import React from 'react';
+import DarkModeComponent from '../theme/Dark';
 
 const Header = () => {
     return (
@@ -70,6 +71,7 @@ const Header = () => {
                                 </svg>
                                 <ion-icon name="add-circle-outline" className="sm:hidden text-2xl "></ion-icon>
                             </button>
+                           < DarkModeComponent/>
                             <div className="hidden bg-white p-4 rounded-lg overflow-hidden drop-shadow-xl dark:bg-slate-700 md:w-[324px] w-screen border2"
                                 uk-drop="offset:6;pos: bottom-right; mode: click; animate-out: true; animation: uk-animation-scale-up uk-transform-origin-top-right ">
 
