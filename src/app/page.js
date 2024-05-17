@@ -1,12 +1,12 @@
 'use client';
 import Image from "next/image";
-import Layout from "./components/layout/Layout";
-import PostCardLoader from "./components/loader/PostCardLoader";
-import RightSIdeBar from "./components/sidebar/RightSIdeBar";
+import Layout from "../components/layout/Layout";
+import PostCardLoader from "../components/loader/PostCardLoader";
+import RightSIdeBar from "../components/sidebar/RightSIdeBar";
 import { IonIcon } from "@ionic/react";
 import { camera, chevronBack, chevronBackCircle, chevronForward, ellipsisHorizontal } from "ionicons/icons";
-import PostCards from "./components/posts/PostCards";
-import CreatePost from "./components/posts/CreatePost";
+import PostCards from "../components/posts/PostCards";
+import CreatePost from "../components/posts/CreatePost";
 
 export default function Home() {
   return (
