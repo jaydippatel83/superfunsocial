@@ -54,3 +54,48 @@ export const notificationsData = [
       button: null,
     }
   ];
+
+  export const  gamesData = [
+    {
+      id: 1,
+      imgSrc: '/assets/images/games/img-1.jpg',
+      title: 'Battle Grounds',
+      viewers: '365K',
+      description: 'Play match 3! Fight in battles, win, and claim your rewards!',
+    },
+    {
+      id: 2,
+      imgSrc: '/assets/images/games/img-2.jpg',
+      title: 'ChooxTv',
+      viewers: '240K',
+      description: 'Play match 3! Fight in battles, win, and claim your rewards!',
+    },
+    {
+      id: 3,
+      imgSrc: '/assets/images/games/img-4.jpg',
+      title: 'Mobile Legends',
+      viewers: '420K',
+      description: 'Play match 3! Fight in battles, win, and claim your rewards!',
+    },
+    {
+      id: 4,
+      imgSrc: '/assets/images/games/img-5.jpg',
+      title: 'Minecraft',
+      viewers: '194K',
+      description: 'Play match 3! Fight in battles, win, and claim your rewards!',
+    },
+    {
+      id: 5,
+      imgSrc: '/assets/images/games/img-6.jpg',
+      title: 'Fortninte',
+      viewers: '512K',
+      description: 'Play match 3! Fight in battles, win, and claim your rewards!',
+    },
+    {
+      id: 6,
+      imgSrc: '/assets/images/games/img-3.jpg',
+      title: 'Larion TV',
+      viewers: '512K',
+      description: 'Play match 3! Fight in battles, win, and claim your rewards!',
+    },
+  ];
