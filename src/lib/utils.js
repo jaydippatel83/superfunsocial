@@ -99,3 +99,29 @@ export const notificationsData = [
       description: 'Play match 3! Fight in battles, win, and claim your rewards!',
     },
   ];
+
+  export const contestsData = [
+    {
+      id: 1,
+      imgSrc: '/assets/images/product/product-10.jpg',
+      title: 'Herbel',
+      description: 'Herbal Shampoo',
+      price: '19$',
+    },
+    {
+      id: 2,
+      imgSrc: '/assets/images/product/product-8.jpg',
+      title: 'Parfum',
+      description: 'Parfum Spray',
+      price: '20$',
+    },
+    {
+      id: 3,
+      imgSrc: '/assets/images/product/product-9.jpg',
+      title: 'Furniture',
+      description: 'Wood Chair',
+      price: '34$',
+    },
+    // Add more contest data here
+  ];
+  

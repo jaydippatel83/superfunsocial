@@ -1,6 +1,7 @@
 import ContestCard from '@/components/contest/ContestCard';
 import Layout from '@/components/layout/Layout';
 import RightSIdeBar from '@/components/sidebar/RightSIdeBar';
+import { contestsData } from '@/lib/utils';
 import React from 'react';
 
 const page = () => {
@@ -11,7 +12,11 @@ const page = () => {
                     <div className="max-w-[1080px] mx-auto ">
                         <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
                             <h1>Welcome TO contest</h1>
-                            <ContestCard/>
+                            <div className="grid sm:grid-cols-3 grid-cols-2 gap-3">
+                                {contestsData.map((contest) => (
+                                    <ContestCard key={contest.id} contest={contest} />
+                                ))}
+                            </div>
                         </div>
                     </div>
                     <RightSIdeBar />
