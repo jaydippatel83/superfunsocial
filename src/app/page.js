@@ -8,6 +8,7 @@ import { camera, chevronBack, chevronBackCircle, chevronForward, ellipsisHorizon
 import PostCards from "../components/posts/PostCards";
 import CreatePost from "../components/posts/CreatePost";
 import PostTabs from "@/components/tabs/PostTabs";
+import StickyHeader from "@/components/header/StickyHeader";
 
 export default function Home() {
   return (
@@ -16,8 +17,8 @@ export default function Home() {
         <div className="lg:flex 2xl:gap-12 gap-8 max-w-[1065px] mx-auto" id="js-oversized"> 
           <div className="max-w-[1080px] mx-auto">   
             <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3"> 
-            <PostTabs/>
-              <CreatePost/>
+            <StickyHeader/>
+              <CreatePost/> 
               <PostCards/> 
               <PostCardLoader />
             </div>
