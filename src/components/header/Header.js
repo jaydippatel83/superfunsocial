@@ -1,5 +1,5 @@
 'use client';
-import React from 'react'; 
+import React, { useState } from 'react'; 
 import Link from 'next/link';
 import Image from 'next/image';
 import { IonIcon } from '@ionic/react';
@@ -9,8 +9,10 @@ import Create from './create/Create';
 import Notifications from './notification/Notifications';
 import Message from './message/Message';
 import Profile from './user/Profile'; 
+import CreatePostModal from '../modals/CreatePostModal';
 
 const Header = ({isSidebarOpen,toggleSidebar}) => { 
+   
     return (
         <header className="z-[100] h-[--m-top] fixed top-0 left-0 w-full flex items-center bg-white/80 sky-50 backdrop-blur-xl border-b border-slate-200 dark:bg-dark2 dark:border-slate-800">
             <div className="flex items-center w-full xl:px-6 px-2 max-lg:gap-10">
@@ -58,21 +60,21 @@ const Header = ({isSidebarOpen,toggleSidebar}) => {
                     </div>
                 </div>
 
-                <div className="flex-1 relative">
+                <div className="flex-1 ">
                     <div className="max-w-[1220px] mx-auto flex items-center">
                         <DropDown />
                         <div className="flex items-center sm:gap-4 gap-2 absolute right-5 top-1/2 -translate-y-1/2 text-black">
-                            <button type="button" className="sm:hidden sm:p-2 p-1 rounded-full relative sm:bg-secondery dark:text-white">
+                            <button type="button" className="sm:hidden sm:p-2 p-1 rounded-full  sm:bg-secondery dark:text-white">
                                 <IonIcon icon={search} className="sm:hidden text-2xl" />
                             </button>
-                            <Create />
+                            <Create  />
                             <Notifications />
                             <Message />
                             <Profile />
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
         </header>
     );
 };

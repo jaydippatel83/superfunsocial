@@ -9,6 +9,7 @@ import PostCards from "../components/posts/PostCards";
 import CreatePost from "../components/posts/CreatePost";
 import PostTabs from "@/components/tabs/PostTabs";
 import StickyHeader from "@/components/header/StickyHeader";
+import CreatePostModal from "@/components/modals/CreatePostModal";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
           <RightSIdeBar /> 
         </div> 
       </main>
+      <CreatePostModal />
     </Layout>
 
   );

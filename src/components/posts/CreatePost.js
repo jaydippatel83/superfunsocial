@@ -1,14 +1,13 @@
-import React, { useState } from 'react'; 
+'use client';
+import React, { useContext, useState } from 'react'; 
 import { IonIcon } from '@ionic/react';
 import { imageOutline, videocamOutline } from 'ionicons/icons';
 import CreatePostModal from '../modals/CreatePostModal';
+import { FarcasterContext } from '@/context/farcaster';
 
 const CreatePost = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
-    };
+    const farcasterContext = useContext(FarcasterContext);
+    const { toggleModal,isModalOpen } = farcasterContext;
 
     return (
         <div className="bg-white rounded-xl shadow-sm md:p-4 p-2 space-y-4 text-sm font-medium border1 dark:bg-dark2">
