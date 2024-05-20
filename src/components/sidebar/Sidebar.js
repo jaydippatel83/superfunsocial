@@ -1,7 +1,5 @@
 'use client';
-import React from 'react';
-import { IonIcon } from '@ionic/react';
-import { chevronDown } from 'ionicons/icons';
+import React from 'react'; 
 import Link from 'next/link';
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
@@ -44,6 +42,12 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                                     <Link href="/leaderboard">
                                         <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Leaderboard</span>
+                                    </Link>
+                                </li>
+                                <li className="">
+                                    <Link href="/profile">
+                                        <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <span>Profile</span>
                                     </Link>
                                 </li>
 
