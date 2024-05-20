@@ -9,7 +9,7 @@ const page = () => {
                 <div className="lg:flex 2xl:gap-12 gap-8 max-w-[1065px] mx-auto" id="js-oversized">
                     <div className="max-w-[1080px] mx-auto flex-auto">
                         <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
-                            <h1>Welcome TO Feeds</h1>
+                            <h1>Welcome To Feeds</h1>
                         </div>
                     </div>
                     <RightSIdeBar />

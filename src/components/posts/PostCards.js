@@ -16,7 +16,7 @@ const PostCards = () => {
     };
 
     return (
-        <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2">
+        <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-5">
             <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
                 <a href="timeline.html">
                     <img src="/assets/images/avatars/avatar-3.jpg" alt="" className="w-9 h-9 rounded-full" />

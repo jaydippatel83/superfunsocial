@@ -17,7 +17,7 @@ const page = () => {
                     <RightSIdeBar />
                 </div>
             </main>
-        </Layout>
+        </Layout>   
     );
 };
 
