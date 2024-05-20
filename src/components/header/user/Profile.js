@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
 
 const Profile = () => {
@@ -44,7 +45,7 @@ const Profile = () => {
 
       {isDropdownOpen && (
         <div ref={dropdownRef} className="absolute top-full right-0 mt-2 bg-white rounded-lg drop-shadow-xl dark:bg-slate-700 w-64 border2 z-10">
-          <a href="timeline.html">
+          <Link href="/profile">
             <div className="p-4 py-5 flex items-center gap-4">
               <img src="assets/images/avatars/avatar-2.jpg" alt="" className="w-10 h-10 rounded-full shadow" />
               <div className="flex-1">
@@ -52,7 +53,7 @@ const Profile = () => {
                 <div className="text-sm mt-1 text-blue-600 font-light dark:text-white/70">@mohnson</div>
               </div>
             </div>
-          </a>
+          </Link>
 
           <hr className="dark:border-gray-600/60" />
 
