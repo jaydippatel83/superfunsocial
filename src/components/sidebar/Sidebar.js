@@ -15,7 +15,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                         <nav id="side">
                             <ul>
                                 <li className="active">
-                                    <Link href="/feed">
+                                    <Link href="/">
                                         <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Fun Feed </span>
                                     </Link>
