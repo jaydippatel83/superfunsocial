@@ -66,7 +66,7 @@ app.transaction("/vote/:pollId/:choice", async (c) => {
     abi: contractAbi,
     chainId: "eip155:84532",
     functionName: "vote",
-    to: process.env.CONTRACT_ADDRESS,
+    to: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     args: [pollId, choice],
   });
 });

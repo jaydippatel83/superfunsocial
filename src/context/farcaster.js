@@ -6,7 +6,7 @@ import { ethers } from "ethers";
 
 export const FarcasterContext = createContext();
 
-const contractAddress = process.env.CONTRACT_ADDRESS;
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
 export function FarcasterContextProvider(props) {
   const [isModalOpen, setModalOpen] = useState(false);
