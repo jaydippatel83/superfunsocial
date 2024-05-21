@@ -1,8 +1,15 @@
 'use client';
 import React from 'react'; 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+    const pathname = usePathname();
+
+    const isActive = (path) => {
+        return pathname.startsWith(path) && (pathname.length === path.length || pathname[path.length] === '/');
+    };
+
     return (
         <>
             <div
@@ -14,37 +21,37 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     <div className="pr-4 overflow-y-auto h-full">
                         <nav id="side">
                             <ul>
-                                <li className="active">
+                                <li className={` ${isActive('/') ? 'active' : ' '}`}>
                                     <Link href="/">
                                         <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Fun Feed </span>
                                     </Link>
                                 </li>
-                                <li className="">
+                                <li className={` ${isActive('/questions') ? 'active' : ' '}`}>
                                     <Link href="/questions">
                                         <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Q & A </span>
                                     </Link>
                                 </li>
-                                <li className="">
+                                <li className={` ${isActive('/superplay') ? 'active' : ' '}`}>
                                     <Link href="/superplay">
                                         <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Super Play </span>
                                     </Link>
                                 </li>
-                                <li className="">
+                                <li className={` ${isActive('/contest') ? 'active' : ' '}`}>
                                     <Link href="/contest">
                                         <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Contest</span>
                                     </Link>
                                 </li>
-                                <li className="">
+                                <li className={` ${isActive('/leaderboard') ? 'active' : ' '}`}>
                                     <Link href="/leaderboard">
                                         <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Leaderboard</span>
                                     </Link>
                                 </li>
-                                <li className="">
+                                <li className={` ${isActive('/profile') ? 'active' : ' '}`}>
                                     <Link href="/profile">
                                         <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Profile</span>
