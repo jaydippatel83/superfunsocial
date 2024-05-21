@@ -12,10 +12,6 @@ export function FarcasterContextProvider(props) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [polls, setPolls] = useState([]);
 
-  const provider = new ethers.BrowserProvider(window.ethereum);
-
-  const signer = provider.getSigner();
-
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
@@ -48,6 +44,9 @@ export function FarcasterContextProvider(props) {
 
   async function CreatePoll(name, numOfChoice, pollId) {
     try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+
+      const signer = provider.getSigner();
       const contract = new ethers.Contract(
         contractAddress,
         contractAbi,
@@ -63,6 +62,9 @@ export function FarcasterContextProvider(props) {
 
   async function getVotes(pollId) {
     try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+
+      const signer = provider.getSigner();
       const contract = new ethers.Contract(
         contractAddress,
         contractAbi,
@@ -83,7 +85,7 @@ export function FarcasterContextProvider(props) {
         isModalOpen,
         setModalOpen,
         toggleModal,
-        
+
         getPoll,
         CreatePoll,
         getVotes,
