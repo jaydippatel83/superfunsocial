@@ -3,6 +3,7 @@ import "./globals.css";
 import '@/tailwind/style.css';
 import '@/tailwind/tailwind.css'
 import { FarcasterContextProvider } from "@/context/farcaster";
+import { ThirdwebProvider } from "thirdweb/react";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,9 +17,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
+      <ThirdwebProvider>
         <FarcasterContextProvider>
           {children}
         </FarcasterContextProvider>
+        </ThirdwebProvider>
       </body>
     </html>
   );
