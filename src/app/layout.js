@@ -1,10 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import '@/tailwind/style.css';
-import '@/tailwind/tailwind.css'
-import { FarcasterContextProvider } from "@/context/farcaster";
-import { ThirdwebProvider } from "thirdweb/react";
-
+import "@/tailwind/style.css";
+import "@/tailwind/tailwind.css";
+ 
+import { FarcasterContextProvider } from "@/context/farcaster"; 
+import { PrivyProviderComponent } from "@/components/provider/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +17,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-      <ThirdwebProvider>
-        <FarcasterContextProvider>
-          {children}
-        </FarcasterContextProvider>
-        </ThirdwebProvider>
+        <PrivyProviderComponent >
+          <FarcasterContextProvider>{children}</FarcasterContextProvider>
+        </PrivyProviderComponent>
       </body>
     </html>
   );
