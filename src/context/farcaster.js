@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
-import contractAbi from "../../utils/contract.json";
+import contractAbi from "../utils/contract.json";
 import axios from "axios";
 import { ethers } from "ethers";
 
