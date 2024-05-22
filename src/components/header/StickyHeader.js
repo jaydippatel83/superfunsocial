@@ -7,7 +7,7 @@ import PollInputForm from '../poll/PollForm';
 import CreatePost from '../posts/CreatePost';
 import { imageOutline, videocamOutline } from 'ionicons/icons';
 
-const StickyHeader = () => {
+const StickyHeader = ({data}) => {
   const [activeTab, setActiveTab] = useState('All');
   const [showPollModal, setShowPollModal] = useState(false);
 
@@ -39,13 +39,22 @@ const StickyHeader = () => {
       {
         activeTab === 'All' && <>
           <CreatePost />
-          <PostCards />
+          {
+            data.map((item=>{
+             return <PostCards data={item} />
+            }))
+          }
+         
         </>
       }
       {
         activeTab === 'Memes' && <>
           <CreatePost />
-          <PostCards />
+          {
+            data.map((item=>{
+             return <PostCards data={item} />
+            }))
+          }
         </>
       }
       {

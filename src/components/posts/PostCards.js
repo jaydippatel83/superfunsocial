@@ -2,8 +2,11 @@
 import React, { useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline, bookmarkOutline, notificationsOffOutline, flagOutline, stopCircleOutline, chevronDownOutline } from 'ionicons/icons';
+import getRelativeTime from '@/lib/utils';
+import Link from 'next/link';
+import EmbedUrls from './EmbedUrls';
 
-const PostCards = () => {
+const PostCards = ({ data }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isReactionOpen, setIsReactionOpen] = useState(false);
 
@@ -14,18 +17,19 @@ const PostCards = () => {
     const toggleReaction = () => {
         setIsReactionOpen(!isReactionOpen);
     };
+ 
 
     return (
         <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-5">
             <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
                 <a href="timeline.html">
-                    <img src="/assets/images/avatars/avatar-3.jpg" alt="" className="w-9 h-9 rounded-full" />
+                    <img src={data?.author?.pfp_url} alt="" className="w-9 h-9 rounded-full" />
                 </a>
                 <div className="flex-1">
                     <a href="timeline.html">
-                        <h4 className="text-black dark:text-white"> Monroe Parker </h4>
+                        <h4 className="text-black dark:text-white"> {data?.author?.display_name} </h4>
                     </a>
-                    <div className="text-xs text-gray-500 dark:text-white/80"> 2 hours ago</div>
+                    <div className="text-xs text-gray-500 dark:text-white/80"> {getRelativeTime(data?.timestamp)}</div>
                 </div>
                 <div className="-mr-1 relative">
                     <button type="button" className="button-icon w-8 h-8" onClick={toggleDropdown}>
@@ -55,36 +59,36 @@ const PostCards = () => {
                     )}
                 </div>
             </div>
-            <a href="#preview_modal">
+            {/* {
+                data?.parent_url !== null && <a href="#preview_modal">
                 <div className="relative w-full lg:h-96 h-full sm:px-4">
-                    <img src="/assets/images/post/img-2.jpg" alt="" className="sm:rounded-lg w-full h-full object-cover" />
+                    <img src={data?.parent_url} alt="" className="sm:rounded-lg w-full h-full object-cover" />
                 </div>
             </a>
+            } */}
+            <div class="sm:px-4 p-2.5 pt-0">
+                <p class="font-normal"> {data?.text}</p>
+            </div>
+            {data?.embeds && data?.embeds?.map((embed, index) => {  
+                return (
+                   <EmbedUrls data={embed.url} />
+                )
+            }
+            )}
             <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
                 <div>
                     <div className="flex items-center gap-2.5">
                         <button type="button" className="button-icon text-red-500 bg-red-100 dark:bg-slate-700" onClick={toggleReaction}>
                             <IonIcon className="text-lg" icon={heart}></IonIcon>
                         </button>
-                        <a href="#">1,300</a>
+                        <a href="#">{data?.reactions.likes_count}</a>
                     </div>
-                    {isReactionOpen && (
-                        <div className="absolute top-full left-0 mt-2 bg-white p-2 rounded-lg shadow-lg z-10 dark:bg-slate-700 text-2xl">
-                            <div className="flex gap-2">
-                                <button type="button" className="text-red-600 hover:scale-125 duration-300">👍</button>
-                                <button type="button" className="text-red-600 hover:scale-125 duration-300">❤️</button>
-                                <button type="button" className="text-red-600 hover:scale-125 duration-300">😂</button>
-                                <button type="button" className="text-red-600 hover:scale-125 duration-300">😯</button>
-                                <button type="button" className="text-red-600 hover:scale-125 duration-300">😢</button>
-                            </div>
-                        </div>
-                    )}
                 </div>
                 <div className="flex items-center gap-3">
                     <button type="button" className="button-icon bg-slate-200/70 dark:bg-slate-700">
                         <IonIcon className="text-lg" icon={chatbubbleEllipses}></IonIcon>
                     </button>
-                    <span>260</span>
+                    <span>{data?.replies?.count}</span>
                 </div>
                 <button type="button" className="button-icon ml-auto">
                     <IonIcon className="text-xl" icon={paperPlaneOutline}></IonIcon>

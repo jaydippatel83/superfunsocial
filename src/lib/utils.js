@@ -1,3 +1,7 @@
+import axios from 'axios';
+import moment from 'moment';
+import Link from "next/link";
+
 export const notificationsData = [
   {
     href: "#",
@@ -124,3 +128,27 @@ export const contestsData = [
   },
   // Add more contest data here
 ];
+
+
+const getRelativeTime = (timestamp) => {
+  const now = moment();
+  const then = moment(timestamp);
+
+  const duration = moment.duration(now.diff(then));
+
+  if (duration.asMonths() >= 1) {
+    return `${Math.floor(duration.asMonths())}mo`;
+  } else if (duration.asDays() >= 1) {
+    return `${Math.floor(duration.asDays())}d`;
+  } else if (duration.asHours() >= 1) {
+    return `${Math.floor(duration.asHours())}h`;
+  } else if (duration.asMinutes() >= 1) {
+    return `${Math.floor(duration.asMinutes())}m`;
+  } else {
+    return 'just now';
+  }
+};
+export default getRelativeTime;
+
+ 
+
