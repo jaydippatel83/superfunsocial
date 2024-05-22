@@ -11,6 +11,7 @@ const EmbedUrls = ({ data }) => {
     const [error, setError] = useState(null);
     const [image, setImage] = useState(null);
     const [video, setVideo] = useState(null);
+    const [twitterTags, setTwitterTags] = useState(null);
 
 
     const fetchMetadata = async (url) => {
@@ -19,13 +20,12 @@ const EmbedUrls = ({ data }) => {
 
         try {
             const response = await axios.get(`/api/metadata?url=${encodeURIComponent(url)}`);
-            console.log(response.data, "resp");
-            const { metaTags, frameTags, image, video } = response.data;
-            console.log(metaTags, frameTags, image, video,"metaTags, frameTags, image, video");
+            const { metaTags, frameTags, twitterTags, image, video } = response.data;
             setMetaTags(metaTags);
             setFrameTags(frameTags);
             setImage(image);
             setVideo(video);
+            setTwitterTags(twitterTags);
         } catch (err) {
             setError('Failed to fetch metadata');
         }
@@ -36,6 +36,10 @@ const EmbedUrls = ({ data }) => {
         fetchMetadata(data)
     }, [data])
 
+    const title = twitterTags ? twitterTags['twitter:title'] : metaTags ? metaTags['og:title'] : '';
+    const description = twitterTags ? twitterTags['twitter:description'] : metaTags ? metaTags['og:description'] : '';
+    const imageUrl = twitterTags ? twitterTags['twitter:image'] : metaTags ? metaTags['og:image'] : '';
+    const siteName = twitterTags ? twitterTags['twitter:site'] : metaTags ? metaTags['og:site_name'] : url;
 
     return (
         <div className="p-4 max-w-4xl mx-auto">
@@ -51,11 +55,31 @@ const EmbedUrls = ({ data }) => {
                 onClick={() => fetchMetadata(url)}
             >
                 Preview URL
-            </button> 
+            </button>
 
             {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
+            {title && description && (
+                <div className="relative">
+                    <a className="absolute inset-0 subtle-hover-z" title={url} href={url} target="_blank" rel="noopener noreferrer"></a>
+                    <div title={url} className="border border-faint relative  flex cursor-pointer rounded-lg text-sm text-inherit bg-app w-full flex-row">
+                        {imageUrl && (
+                            <img
+                                loading="lazy"
+                                src={imageUrl}
+                                alt={title}
+                                className=" object-cover  h-24 w-[88px] min-w-[88px] rounded-l-lg"
+                            />
+                        )}
+                        <div className="flex max-h-24 w-full flex-col justify-center overflow-hidden rounded-lg  p-2  w-full rounded-l-none border-l-0">
+                            <div className="line-clamp-1 font-semibold">{title}</div>
+                            <div className="line-clamp-2 max-h-12 max-w-lg text-xs break-gracefully text-faint">{description}</div>
+                            <div className="text-xs text-muted">{siteName}</div>
+                        </div>
+                    </div>
+                </div>
+            )}
             {image &&
                 <div className="border p-4 rounded shadow-lg bg-white">
                     <img src={url} alt="Preview" className="w-full h-full object-cover" />
@@ -68,9 +92,9 @@ const EmbedUrls = ({ data }) => {
                 </div>
             }
 
-            {(metaTags || frameTags) && (
+            {/* {(frameTags) && (
                 <LinkPreview frameTags={frameTags} metaTags={metaTags} url={url} />
-            )}
+            )} */}
         </div>
     );
 };
