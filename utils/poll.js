@@ -3,6 +3,14 @@ import axios from "axios";
 import contractAbi from "./contract.json";
 import { ethers } from "ethers";
 
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+
+const provider = new ethers.JsonRpcProvider(
+  `${process.env.NEXT_PUBLIC_ALCHEMY_URL}`
+);
+const signer = new ethers.Wallet(process.env.NEXT_PUBLIC_PRIVATE_KEY, provider);
+const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+
 export async function getPoll(pollId) {
   try {
     var poll;
@@ -20,12 +28,12 @@ export async function getPoll(pollId) {
 
 export async function getVotes(pollId) {
   try {
-    const provider = new ethers.BrowserProvider(window.ethereum);
-
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(contractAddress, contractAbi, signer);
     const votes = await contract.getVotes(pollId);
+
     const pollVotes = await votes.map((vote) => vote.toString());
+
+    console.log(pollVotes, "pollVotes");
+
     return pollVotes;
   } catch (error) {
     console.log(error);
