@@ -30,9 +30,11 @@ const Profile = () => {
 
   async function getProvider() {
     const wallet = wallets[0]; // Replace this with your desired wallet
-    console.log(wallet, "wallet");
-    const eip1193provider = await wallet.getEthersProvider();
-    setEthreumProvider(eip1193provider);
+
+    if (wallet) {
+      const eip1193provider = await wallet.getEthersProvider();
+      setEthreumProvider(eip1193provider);
+    }
   }
 
   const toggleNightMode = () => {
@@ -224,7 +226,7 @@ const Profile = () => {
                   </div>
                 </button>
                 <hr className="-mx-2 my-2 dark:border-gray-600/60" />
-                <a href="form-login.html">
+                <a href="/">
                   <div className="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
                     <svg
                       className="w-6"
@@ -232,7 +234,10 @@ const Profile = () => {
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      onClick={logout}
+                      onClick={() => {
+                        logout();
+                        localStorage.clear()
+                      }}
                     >
                       <path
                         strokeLinecap="round"

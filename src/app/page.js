@@ -1,23 +1,18 @@
-"use client";
+"use server";
 import Image from "next/image";
 import Layout from "../components/layout/Layout";
 import PostCardLoader from "../components/loader/PostCardLoader";
 import RightSIdeBar from "../components/sidebar/RightSIdeBar";
-import { IonIcon } from "@ionic/react";
-import {
-  camera,
-  chevronBack,
-  chevronBackCircle,
-  chevronForward,
-  ellipsisHorizontal,
-} from "ionicons/icons";
+ 
 import PostCards from "../components/posts/PostCards";
 import CreatePost from "../components/posts/CreatePost";
 import PostTabs from "@/components/tabs/PostTabs";
 import StickyHeader from "@/components/header/StickyHeader";
 import CreatePostModal from "@/components/modals/CreatePostModal";
+import { getFeed } from "@/lib/farcaster";
 
-export default function Home() {
+export default async function Home() {
+  const feed = await getFeed(); 
   return (
     <Layout>
       <main
@@ -30,9 +25,7 @@ export default function Home() {
         >
           <div className="max-w-[1080px] mx-auto">
             <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
-              <StickyHeader />
-              <CreatePost />
-              <PostCards />
+              <StickyHeader data={feed?.feed?.casts} /> 
               <PostCardLoader />
             </div>
           </div>
