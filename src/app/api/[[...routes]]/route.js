@@ -3,7 +3,7 @@
 import { Button, Frog } from "frog";
 import { handle } from "frog/vercel";
 import { getPoll, getVotes } from "../../../utils/poll";
-import contractAbi from "../../../utils/contract.json";
+import contractAbi from "../../../utils/contract";
 
 const app = new Frog({
   basePath: "/api",
