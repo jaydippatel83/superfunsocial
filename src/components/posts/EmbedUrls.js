@@ -1,7 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import LinkPreview from './PreviewLink';
-import axios from 'axios';
+import axios from 'axios';   
+import SocialMediaEmbed from './SocialMediaEmbed';
 
 const EmbedUrls = ({ data }) => {
     const [url, setUrl] = useState(data)
@@ -36,6 +37,11 @@ const EmbedUrls = ({ data }) => {
         fetchMetadata(data)
     }, [data])
 
+    const isSocialMediaLink = (url) => {
+        const socialMediaRegex = /(?:www\.)?(facebook\.com|instagram\.com|linkedin\.com|pinterest\.com|tiktok\.com|twitter\.com|x\.com|youtube\.com)/;
+        return socialMediaRegex.test(url);
+    };
+
     const title = twitterTags ? twitterTags['twitter:title'] : metaTags ? metaTags['og:title'] : '';
     const description = twitterTags ? twitterTags['twitter:description'] : metaTags ? metaTags['og:description'] : '';
     const imageUrl = twitterTags ? twitterTags['twitter:image'] : metaTags ? metaTags['og:image'] : '';
@@ -60,35 +66,39 @@ const EmbedUrls = ({ data }) => {
             {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
-            {title && description && (
-                <div className="relative">
-                    <a className="absolute inset-0 subtle-hover-z" title={url} href={url} target="_blank" rel="noopener noreferrer"></a>
-                    <div title={url} className="border border-faint relative  flex cursor-pointer rounded-lg text-sm text-inherit bg-app w-full flex-row">
-                        {imageUrl && (
-                            <img
-                                loading="lazy"
-                                src={imageUrl}
-                                alt={title}
-                                className=" object-cover  h-24 w-[88px] min-w-[88px] rounded-l-lg"
-                            />
-                        )}
-                        <div className="flex max-h-24 w-full flex-col justify-center overflow-hidden rounded-lg  p-2  w-full rounded-l-none border-l-0">
-                            <div className="line-clamp-1 font-semibold">{title}</div>
-                            <div className="line-clamp-2 max-h-12 max-w-lg text-xs break-gracefully text-faint">{description}</div>
-                            <div className="text-xs text-muted">{siteName}</div>
+            {isSocialMediaLink(url) ? (
+                <SocialMediaEmbed url={url} />
+            ) : (
+                title && description && (
+                    <div className="relative">
+                        <a className="absolute inset-0 subtle-hover-z" title={url} href={url} target="_blank" rel="noopener noreferrer"></a>
+                        <div title={url} className="relative flex cursor-pointer rounded-lg text-sm text-inherit bg-app w-full flex-row">
+                            {imageUrl && (
+                                <img
+                                    loading="lazy"
+                                    src={imageUrl}
+                                    alt={title}
+                                    className="border object-cover border-faint h-24 w-[88px] min-w-[88px] rounded-l-lg"
+                                />
+                            )}
+                            <div className="flex max-h-24 w-full flex-col justify-center overflow-hidden rounded-lg border p-2 border-faint w-full rounded-l-none border-l-0">
+                                <div className="line-clamp-1 font-semibold">{title}</div>
+                                <div className="line-clamp-2 max-h-12 max-w-lg text-xs break-gracefully text-faint">{description}</div>
+                                <div className="text-xs text-muted">{siteName}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )
             )}
             {image &&
-                <div className="border p-4 rounded shadow-lg bg-white">
-                    <img src={url} alt="Preview" className="w-full h-full object-cover" />
+                <div className="rounded-lg border">
+                    <img src={url} alt="Preview" className="w-full h-full object-cover rounded-lg " />
                 </div>
             }
             {
                 video &&
-                <div className="border p-4 rounded shadow-lg bg-white">
-                    <video src={video} controls className="w-full h-full object-cover"></video>
+                <div className="border rounded-lg">
+                    <video src={video} controls className="w-full h-full object-cover rounded-lg "></video>
                 </div>
             }
 

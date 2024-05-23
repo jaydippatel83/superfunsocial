@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline, bookmarkOutline, notificationsOffOutline, flagOutline, stopCircleOutline, chevronDownOutline } from 'ionicons/icons';
 import getRelativeTime from '@/lib/utils';
-import Link from 'next/link';
 import EmbedUrls from './EmbedUrls';
 
 const PostCards = ({ data }) => {
@@ -17,11 +16,11 @@ const PostCards = ({ data }) => {
     const toggleReaction = () => {
         setIsReactionOpen(!isReactionOpen);
     };
- 
 
+    console.log(data, "data");
     return (
         <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-5">
-            <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
+            <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium ">
                 <a href="timeline.html">
                     <img src={data?.author?.pfp_url} alt="" className="w-9 h-9 rounded-full" />
                 </a>
@@ -59,19 +58,13 @@ const PostCards = ({ data }) => {
                     )}
                 </div>
             </div>
-            {/* {
-                data?.parent_url !== null && <a href="#preview_modal">
-                <div className="relative w-full lg:h-96 h-full sm:px-4">
-                    <img src={data?.parent_url} alt="" className="sm:rounded-lg w-full h-full object-cover" />
-                </div>
-            </a>
-            } */}
+
             <div class="sm:px-4 p-2.5 pt-0">
                 <p class="font-normal"> {data?.text}</p>
             </div>
-            {data?.embeds && data?.embeds?.map((embed, index) => {  
+            {data?.embeds && data?.embeds?.map((embed, index) => {
                 return (
-                   <EmbedUrls data={embed.url} />
+                    <EmbedUrls data={embed.url} />
                 )
             }
             )}
