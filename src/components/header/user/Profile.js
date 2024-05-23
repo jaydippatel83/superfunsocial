@@ -1,12 +1,19 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useRef, useEffect } from "react";
-import { usePrivy } from "@privy-io/react-auth";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { FarcasterContext } from "@/context/farcaster";
+import { ethers } from "ethers";
 
 const Profile = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNightMode, setIsNightMode] = useState(false);
   const dropdownRef = useRef(null);
+
+  const { wallets } = useWallets();
+
+  const farcasterContext = useContext(FarcasterContext);
+  const { setEthreumProvider } = farcasterContext;
 
   const { login } = usePrivy();
   const { ready, authenticated, user, logout } = usePrivy();
@@ -14,6 +21,21 @@ const Profile = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  useEffect(() => {
+    if (user) {
+      getProvider();
+    }
+  }, [user]);
+
+  async function getProvider() {
+    const wallet = wallets[0]; // Replace this with your desired wallet
+
+    if (wallet) {
+      const eip1193provider = await wallet.getEthersProvider();
+      setEthreumProvider(eip1193provider);
+    }
+  }
 
   const toggleNightMode = () => {
     setIsNightMode(!isNightMode);
@@ -204,7 +226,7 @@ const Profile = () => {
                   </div>
                 </button>
                 <hr className="-mx-2 my-2 dark:border-gray-600/60" />
-                <a href="form-login.html">
+                <a href="/">
                   <div className="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
                     <svg
                       className="w-6"
@@ -212,7 +234,10 @@ const Profile = () => {
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      onClick={logout}
+                      onClick={() => {
+                        logout();
+                        localStorage.clear()
+                      }}
                     >
                       <path
                         strokeLinecap="round"

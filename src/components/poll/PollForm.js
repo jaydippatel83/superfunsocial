@@ -9,9 +9,9 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { ethers } from "ethers";
 import { FarcasterContext } from "@/context/farcaster";
 import { usePrivy } from "@privy-io/react-auth";
+import { ethers } from "ethers";
 
 const PollInputForm = ({ togglePollModal }) => {
   const farcasterContext = useContext(FarcasterContext);
@@ -51,7 +51,11 @@ const PollInputForm = ({ togglePollModal }) => {
         fid: user.farcaster.fid,
       })
       .then(async (res) => {
-        await CreatePoll(pollQuestion, pollOptions.length, res.data.data._id);
+        await CreatePoll(
+          pollQuestion,
+          pollOptions.length,
+          res.data.data._id
+        );
         alert("Poll Created!");
         setLoading(false);
       })

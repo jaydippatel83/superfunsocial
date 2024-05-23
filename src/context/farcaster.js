@@ -11,10 +11,17 @@ const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 export function FarcasterContextProvider(props) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [polls, setPolls] = useState([]);
+  const [provider, setProvider] = useState();
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
+
+  function setEthreumProvider(provider) {
+    setProvider(provider);
+  }
+
+  console.log(provider, "provide");
 
   async function getPoll(pollId) {
     try {
@@ -44,15 +51,15 @@ export function FarcasterContextProvider(props) {
 
   async function CreatePoll(name, numOfChoice, pollId) {
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-
       const signer = provider.getSigner();
+
       const contract = new ethers.Contract(
         contractAddress,
         contractAbi,
         signer
       );
       const transaction = await contract.createPoll(name, numOfChoice, pollId);
+      console.log(transaction, "transaction");
       return transaction;
     } catch (error) {
       console.log(error);
@@ -90,6 +97,7 @@ export function FarcasterContextProvider(props) {
         CreatePoll,
         getVotes,
         getPolls,
+        setEthreumProvider,
         polls,
       }}
     >
