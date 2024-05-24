@@ -4,6 +4,7 @@ import { IonIcon } from '@ionic/react';
 import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline, bookmarkOutline, notificationsOffOutline, flagOutline, stopCircleOutline, chevronDownOutline } from 'ionicons/icons';
 import getRelativeTime from '@/lib/utils';
 import EmbedUrls from './EmbedUrls';
+import MainEmbed from './MainEmbed';
 
 const PostCards = ({ data }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -16,8 +17,6 @@ const PostCards = ({ data }) => {
     const toggleReaction = () => {
         setIsReactionOpen(!isReactionOpen);
     };
-
-    console.log(data, "data");
     return (
         <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-5">
             <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium ">
@@ -28,7 +27,9 @@ const PostCards = ({ data }) => {
                     <a href="timeline.html">
                         <h4 className="text-black dark:text-white"> {data?.author?.display_name} </h4>
                     </a>
-                    <div className="text-xs text-gray-500 dark:text-white/80"> {getRelativeTime(data?.timestamp)}</div>
+                    <div className="flex items-center"> 
+                      <span className="text-sm text-gray-500">@{data?.author?.username} {getRelativeTime(data?.timestamp)}</span>
+                    </div>
                 </div>
                 <div className="-mr-1 relative">
                     <button type="button" className="button-icon w-8 h-8" onClick={toggleDropdown}>
@@ -62,12 +63,7 @@ const PostCards = ({ data }) => {
             <div class="sm:px-4 p-2.5 pt-0">
                 <p class="font-normal"> {data?.text}</p>
             </div>
-            {data?.embeds && data?.embeds?.map((embed, index) => {
-                return (
-                    <EmbedUrls data={embed.url} />
-                )
-            }
-            )}
+            <MainEmbed data={data} lable="post" />
             <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
                 <div>
                     <div className="flex items-center gap-2.5">

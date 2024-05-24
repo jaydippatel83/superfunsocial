@@ -1,10 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import LinkPreview from './PreviewLink';
-import axios from 'axios';   
+import axios from 'axios';
 import SocialMediaEmbed from './SocialMediaEmbed';
+import Link from 'next/link';
 
-const EmbedUrls = ({ data }) => {
+const EmbedUrls = ({ data, lable }) => {
     const [url, setUrl] = useState(data)
     const [metaTags, setMetaTags] = useState(null);
     const [frameTags, setFrameTags] = useState(null);
@@ -48,63 +49,46 @@ const EmbedUrls = ({ data }) => {
     const siteName = twitterTags ? twitterTags['twitter:site'] : metaTags ? metaTags['og:site_name'] : url;
 
     return (
-        <div className="p-4 max-w-4xl mx-auto">
-            <input
-                type="text"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="Enter URL"
-                className="border p-2 rounded w-full mb-4"
-            />
-            <button
-                className="bg-blue-500 text-white p-2 rounded mb-4"
-                onClick={() => fetchMetadata(url)}
-            >
-                Preview URL
-            </button>
-
-            {loading && <p>Loading...</p>}
-            {error && <p className="text-red-500">{error}</p>}
-
+        <div className="max-w-4xl mx-auto p-4">
             {isSocialMediaLink(url) ? (
                 <SocialMediaEmbed url={url} />
             ) : (
-                title && description && (
-                    <div className="relative">
+                title && imageUrl && (
+                    <div className="relative ">
                         <a className="absolute inset-0 subtle-hover-z" title={url} href={url} target="_blank" rel="noopener noreferrer"></a>
-                        <div title={url} className="relative flex cursor-pointer rounded-lg text-sm text-inherit bg-app w-full flex-row">
+                        <Link href={url} target='_blank' className="relative flex cursor-pointer rounded-lg text-sm text-inherit bg-app w-full flex-row">
                             {imageUrl && (
                                 <img
                                     loading="lazy"
                                     src={imageUrl}
                                     alt={title}
-                                    className="border object-cover border-faint h-24 w-[88px] min-w-[88px] rounded-l-lg"
+                                    className="border border-r-0 object-cover border-faint h-24 w-[88px] min-w-[88px] rounded-l-lg"
                                 />
                             )}
-                            <div className="flex max-h-24 w-full flex-col justify-center overflow-hidden rounded-lg border p-2 border-faint w-full rounded-l-none border-l-0">
+                            <div className="flex max-h-24 w-full flex-col justify-center overflow-hidden border border-l-0 rounded-r-lg p-2 border-faint  ">
                                 <div className="line-clamp-1 font-semibold">{title}</div>
                                 <div className="line-clamp-2 max-h-12 max-w-lg text-xs break-gracefully text-faint">{description}</div>
                                 <div className="text-xs text-muted">{siteName}</div>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 )
             )}
             {image &&
-                <div className="rounded-lg border">
+                <div className="rounded-lg border  ">
                     <img src={url} alt="Preview" className="w-full h-full object-cover rounded-lg " />
                 </div>
             }
             {
                 video &&
-                <div className="border rounded-lg">
-                    <video src={video} controls className="w-full h-full object-cover rounded-lg "></video>
+                <div className="rounded-lg border ">
+                    <video src={video} controls className="w-full h-full object-cover  rounded-lg"></video>
                 </div>
             }
 
-            {/* {(frameTags) && (
+            {/* {frameTags || metaTags &&
                 <LinkPreview frameTags={frameTags} metaTags={metaTags} url={url} />
-            )} */}
+            } */}
         </div>
     );
 };
