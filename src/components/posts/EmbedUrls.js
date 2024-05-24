@@ -4,6 +4,7 @@ import LinkPreview from './PreviewLink';
 import axios from 'axios';
 import SocialMediaEmbed from './SocialMediaEmbed';
 import Link from 'next/link';
+import DynamicFrame from '../frames/DynamicFrame';
 
 const EmbedUrls = ({ data, lable }) => {
     const [url, setUrl] = useState(data)
@@ -22,7 +23,8 @@ const EmbedUrls = ({ data, lable }) => {
 
         try {
             const response = await axios.get(`/api/metadata?url=${encodeURIComponent(url)}`);
-            const { metaTags, frameTags, twitterTags, image, video } = response.data;
+            const { metaTags, frameTags, twitterTags, image, video } = response.data;  
+            console.log(metaTags, frameTags, twitterTags, image, video,"metaTags, frameTags, twitterTags, image, video");
             setMetaTags(metaTags);
             setFrameTags(frameTags);
             setImage(image);
@@ -47,10 +49,30 @@ const EmbedUrls = ({ data, lable }) => {
     const description = twitterTags ? twitterTags['twitter:description'] : metaTags ? metaTags['og:description'] : '';
     const imageUrl = twitterTags ? twitterTags['twitter:image'] : metaTags ? metaTags['og:image'] : '';
     const siteName = twitterTags ? twitterTags['twitter:site'] : metaTags ? metaTags['og:site_name'] : url;
-
+    const framesIs = frameTags ? frameTags['fc:frame:image'] : frameTags ? frameTags['fc:frame:button']: '';
+    
     return (
-        <div className="max-w-4xl mx-auto p-4">
-            {isSocialMediaLink(url) ? (
+        <div className="max-w-4xl mx-auto px-4 py-1">
+            <input
+                type="text"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="Enter URL"
+                className="border p-2 rounded w-full mb-4"
+            />
+            <button
+                className="bg-blue-500 text-white p-2 rounded mb-4"
+                onClick={() => fetchMetadata(url)}
+            >
+                Preview URL
+            </button>
+
+            {loading && <p>Loading...</p>}
+            {error && <p className="text-red-500">{error}</p>}
+
+            {framesIs ? (
+                <DynamicFrame metadata={metaTags} />
+            ) : isSocialMediaLink(url) ? (
                 <SocialMediaEmbed url={url} />
             ) : (
                 title && imageUrl && (
@@ -74,21 +96,16 @@ const EmbedUrls = ({ data, lable }) => {
                     </div>
                 )
             )}
-            {image &&
+            {image && (
                 <div className="rounded-lg border  ">
                     <img src={url} alt="Preview" className="w-full h-full object-cover rounded-lg " />
                 </div>
-            }
-            {
-                video &&
+            )}
+            {video && (
                 <div className="rounded-lg border ">
                     <video src={video} controls className="w-full h-full object-cover  rounded-lg"></video>
                 </div>
-            }
-
-            {/* {frameTags || metaTags &&
-                <LinkPreview frameTags={frameTags} metaTags={metaTags} url={url} />
-            } */}
+            )}
         </div>
     );
 };
