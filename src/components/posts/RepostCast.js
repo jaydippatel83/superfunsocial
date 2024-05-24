@@ -29,7 +29,7 @@ const RepostCast = ({id, hash }) => {
     },[hash])
 
     return (
-        <div className='p-4 max-w-4xl mx-auto'>  
+        <div className='px-4 py-1 max-w-4xl mx-auto'>  
             {feed && (
                 <div className=" w-full  bg-white border border-gray-300 rounded-lg cursor-pointer">
                 <div className="flex items-start px-4 py-3">
