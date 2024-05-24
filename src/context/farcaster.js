@@ -12,6 +12,7 @@ export function FarcasterContextProvider(props) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [polls, setPolls] = useState([]);
   const [provider, setProvider] = useState();
+  const [address, setAddress] = useState();
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
@@ -47,17 +48,54 @@ export function FarcasterContextProvider(props) {
       });
   }; // Get data from our own backend..
 
+  async function connectMetaMaskAndGetSigner() {
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      alert("Please install the Metamask Extension!");
+    }
+    try {
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log("Found an account! Address: ", accounts[0]);
+      console.log(accounts);
+      setAddress(accounts[0]);
+    } catch (err) {
+      console.log(err);
+      if (err.code === 4902) {
+        try {
+          const accounts = await ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          console.log(accounts);
+          setAddress(accounts[0]);
+        } catch (err) {
+          alert(err.message);
+        }
+      }
+    }
+  }
+
   async function CreatePoll(name, numOfChoice, pollId) {
     try {
-      const signer = provider.getSigner();
+      await connectMetaMaskAndGetSigner();
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
 
-      const contract = new ethers.Contract(
-        contractAddress,
-        contractAbi,
-        signer
-      );
-      const transaction = await contract.createPoll(name, numOfChoice, pollId);
+      console.log(signer, "signer");
+      var transaction;
+      if (signer) {
+        const contract = new ethers.Contract(
+          contractAddress,
+          contractAbi,
+          signer
+        );
+        transaction = await contract.createPoll(name, numOfChoice, pollId);
+      }
+
       console.log(transaction, "transaction");
+
       return transaction;
     } catch (error) {
       console.log(error);
