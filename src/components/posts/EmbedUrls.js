@@ -51,8 +51,8 @@ const EmbedUrls = ({ data, lable }) => {
     const framesIs = frameTags ? frameTags['fc:frame:image'] : frameTags ? frameTags['fc:frame:button']: '';
     
     return (
-        <div className="max-w-4xl mx-auto px-4 py-1">
-            <input
+        <div className="max-w-4xl mx-auto px-4 pb-4">
+            {/* <input
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
@@ -67,7 +67,7 @@ const EmbedUrls = ({ data, lable }) => {
             </button>
 
             {loading && <p>Loading...</p>}
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-red-500">{error}</p>} */}
 
             {framesIs ? (
                 <DynamicFrame metadata={metaTags} />
