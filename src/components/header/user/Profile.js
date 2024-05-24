@@ -1,47 +1,86 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { FarcasterContext } from "@/context/farcaster";
-import { ethers } from "ethers";
+import { useApp } from "@/context/AppContext";
+import useLocalStorage from "@/hooks/use-local-storage-state";
 
 const Profile = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNightMode, setIsNightMode] = useState(false);
   const dropdownRef = useRef(null);
 
+  const client_id = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
+
+  const { userData, fid, setSignerUuid, setFid } = useApp();
+  const [user, setUser, removeUser] = useLocalStorage("user");
+
   const farcasterContext = useContext(FarcasterContext);
   const { setEthreumProvider } = farcasterContext;
 
-  const { login, connectWallet } = usePrivy();
-  const { ready, authenticated, user, logout } = usePrivy();
-  const { wallets } = useWallets();
+  // const { login, connectWallet } = usePrivy();
+  // const { wallets } = useWallets();
+
+  useEffect(() => {
+    let script = document.getElementById("siwn-script");
+
+    if (!script) {
+      script = document.createElement("script");
+      script.id = "siwn-script";
+      document.body.appendChild(script);
+    }
+
+    script.src = "https://neynarxyz.github.io/siwn/raw/1.2.0/index.js";
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      if (document.body && script) {
+        document.body.removeChild(script);
+      }
+
+      let button = document.getElementById("siwn-button");
+      if (button && button.parentElement) {
+        button.parentElement.removeChild(button);
+      }
+    };
+  }, []);
+
+  if (!client_id) {
+    throw new Error("NEXT_PUBLIC_NEYNAR_CLIENT_ID is not defined in .env");
+  }
+
+  useEffect(() => {
+    window.onSignInSuccess = (data) => {
+      setUser({
+        signerUuid: data.signer_uuid,
+        fid: data.fid,
+      });
+      setSignerUuid(data.signer_uuid);
+      setFid(data.fid);
+    };
+
+    return () => {
+      delete window.onSignInSuccess;
+    };
+  }, []);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  useEffect(() => {
-    if (user) {
-      getProvider();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (ready && authenticated) {
-      connectWallet();
-    }
-  }, [ready, authenticated]);
-
-  async function getProvider() {
-    const wallet = wallets[0]; // Replace this with your desired wallet
-
-    if (wallet) {
-      wallet.loginOrLink();
-      const eip1193provider = await wallet.getEthersProvider();
-      setEthreumProvider(eip1193provider);
-    }
-  }
+  const handleSignout = () => {
+    removeUser();
+    window.location.reload();
+  };
 
   const toggleNightMode = () => {
     setIsNightMode(!isNightMode);
@@ -69,11 +108,21 @@ const Profile = () => {
     };
   }, [isDropdownOpen]);
 
-  // console.log(user.farcaster.fid, "user");
-  // console.log(user.farcaster.ownerAddress, "user");
+  const getButton = useCallback(() => {
+    return (
+      <div
+        className="neynar_signin mt-6"
+        data-client_id={client_id}
+        data-success-callback="onSignInSuccess"
+      />
+    );
+  }, []);
+
+
+
   return (
     <div className="relative">
-      {ready && authenticated ? (
+      {userData ? (
         <>
           <div
             className="rounded-full relative bg-secondery cursor-pointer shrink-0"
@@ -81,8 +130,8 @@ const Profile = () => {
           >
             <img
               src={
-                user.farcaster.pfp !== ""
-                  ? user.farcaster.pfp
+                userData?.pfp.url !== ""
+                  ? userData?.pfp.url
                   : "assets/images/avatars/avatar-2.jpg"
               }
               alt=""
@@ -99,8 +148,8 @@ const Profile = () => {
                 <div className="p-4 py-5 flex items-center gap-4">
                   <img
                     src={
-                      user.farcaster.pfp !== ""
-                        ? user.farcaster.pfp
+                      userData?.pfp.url !== ""
+                        ? userData?.pfp.url
                         : "assets/images/avatars/avatar-2.jpg"
                     }
                     alt=""
@@ -108,10 +157,10 @@ const Profile = () => {
                   />
                   <div className="flex-1">
                     <h4 className="text-sm font-medium text-black">
-                      {user.farcaster.displayName}
+                      {userData?.displayName}
                     </h4>
                     <div className="text-sm mt-1 text-blue-600 font-light dark:text-white/70">
-                      @{user.farcaster.username}
+                      @{userData?.username}
                     </div>
                   </div>
                 </div>
@@ -241,8 +290,7 @@ const Profile = () => {
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       onClick={() => {
-                        logout();
-                        localStorage.clear();
+                        handleSignout();
                       }}
                     >
                       <path
@@ -260,16 +308,7 @@ const Profile = () => {
           )}
         </>
       ) : (
-        <div>
-          <button
-            className="dark:bg-slate-700 hover:dark:bg-slate-700 py-3 px-6 text-black rounded-lg"
-            onClick={() => {
-              login();
-            }}
-          >
-            Login
-          </button>
-        </div>
+        <div>{getButton()}</div>
       )}
     </div>
   );
