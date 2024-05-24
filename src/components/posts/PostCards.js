@@ -17,7 +17,7 @@ const PostCards = ({ data }) => {
         setIsReactionOpen(!isReactionOpen);
     };
 
-    console.log(data, "data");
+    
     return (
         <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-5">
             <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium ">
