@@ -10,13 +10,12 @@ const Profile = () => {
   const [isNightMode, setIsNightMode] = useState(false);
   const dropdownRef = useRef(null);
 
-  const { wallets } = useWallets();
-
   const farcasterContext = useContext(FarcasterContext);
   const { setEthreumProvider } = farcasterContext;
 
-  const { login } = usePrivy();
+  const { login, connectWallet } = usePrivy();
   const { ready, authenticated, user, logout } = usePrivy();
+  const { wallets } = useWallets();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -28,10 +27,17 @@ const Profile = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (ready && authenticated) {
+      connectWallet();
+    }
+  }, [ready, authenticated]);
+
   async function getProvider() {
     const wallet = wallets[0]; // Replace this with your desired wallet
 
     if (wallet) {
+      wallet.loginOrLink();
       const eip1193provider = await wallet.getEthersProvider();
       setEthreumProvider(eip1193provider);
     }
@@ -236,7 +242,7 @@ const Profile = () => {
                       stroke="currentColor"
                       onClick={() => {
                         logout();
-                        localStorage.clear()
+                        localStorage.clear();
                       }}
                     >
                       <path
@@ -257,7 +263,9 @@ const Profile = () => {
         <div>
           <button
             className="dark:bg-slate-700 hover:dark:bg-slate-700 py-3 px-6 text-black rounded-lg"
-            onClick={login}
+            onClick={() => {
+              login();
+            }}
           >
             Login
           </button>

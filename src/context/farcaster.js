@@ -21,8 +21,6 @@ export function FarcasterContextProvider(props) {
     setProvider(provider);
   }
 
-  console.log(provider, "provide");
-
   async function getPoll(pollId) {
     try {
       var poll;
