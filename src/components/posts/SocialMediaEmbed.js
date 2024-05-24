@@ -34,7 +34,7 @@ const  SocialMediaEmbed = ({ url }) => {
   };
 
   return (
-    <div className="social-media-embed">
+    <div className="social-media-embed p-4 max-w-4xl mx-auto">
      {getEmbedComponent(url)} 
     </div>
   );
