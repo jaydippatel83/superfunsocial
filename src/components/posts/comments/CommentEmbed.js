@@ -19,4 +19,4 @@ const CommentEmbed = ({ embeds }) => {
     );
 };
 
-export default CommentEmbed;
+export default CommentEmbed; 

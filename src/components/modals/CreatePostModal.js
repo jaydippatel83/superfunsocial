@@ -21,9 +21,15 @@ const CreatePostModal = () => {
   const { userData } = useApp();
   const [user, _1, removeUser] = useLocalStorage("user");
   const [text, setText] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [embeds, setEmbeds] = useState([]);
+
+
 
   const createCast = async () => {
+    setLoading(true);
     if (!user.signerUuid) {
+      setLoading(false);
       return;
     }
 
@@ -35,6 +41,7 @@ const CreatePostModal = () => {
       body: JSON.stringify({
         signerUid: user.signerUuid,
         text,
+        embeds,
       }),
     });
 
@@ -42,8 +49,10 @@ const CreatePostModal = () => {
       alert("Cast created");
 
       setText("");
+      setLoading(false);
     } else {
       alert("Failed to create cast");
+      setLoading(false);
     }
 
     toggleModal();
@@ -68,6 +77,22 @@ const CreatePostModal = () => {
           rows="4"
           value={text}
           onChange={(e) => setText(e.target.value)}
+        />
+        <input
+          type="file"
+          name="myImage"
+          accept="image/png, image/gif, image/jpeg"
+          onChange={(e) => {
+            let arr = [];
+            let file = e.target.files[0];
+            if (file) {
+              // Create a URL for the file object
+              const imageUrl = URL.createObjectURL(file);
+              console.log(imageUrl, "imageUrl");
+              arr.push({ url: imageUrl });
+            }
+            setEmbeds(arr);
+          }}
         />
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-2">
@@ -94,7 +119,7 @@ const CreatePostModal = () => {
             className="bg-blue-500 text-white px-4 py-2 rounded"
             onClick={createCast}
           >
-            Create
+            {loading ? "Creating..." : "Create"}
           </button>
         </div>
       </div>
