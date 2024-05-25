@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";  
-import useLocalStorage from "@/hooks/use-local-storage-state";  
+import React, { useState } from "react";
+import useLocalStorage from "@/hooks/use-local-storage-state";
 import { IonIcon } from '@ionic/react';
 import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline, bookmarkOutline, notificationsOffOutline, flagOutline, stopCircleOutline, chevronDownOutline } from 'ionicons/icons';
 import getRelativeTime from '@/lib/utils';
@@ -88,11 +88,11 @@ const PostCards = ({ data }) => {
       //   .then((response) => response.json())
       .then((response) => setReactions(response.data.reactions))
       .catch((err) => console.error(err));
-  }; 
-  
+  };
+
 
   return (
-    <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-5">
+    <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
       <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium ">
         <a
           href="#"
@@ -137,9 +137,12 @@ const PostCards = ({ data }) => {
       </div>
 
       <div class="sm:px-4 p-2.5 pt-0">
-        <p class="font-normal"> {data?.text}</p>
-      </div>
-
+      <p className="font-normal cursor-pointer">
+        <Link href={`${data?.author?.username}/${data?.hash}`} className='break-all'>
+          {data?.text}
+        </Link>
+      </p>
+      </div> 
       <MainEmbed data={data} lable="post" />
       <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
         <div>

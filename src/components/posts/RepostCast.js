@@ -50,7 +50,7 @@ const RepostCast = ({id, hash , classId}) => {
                     </div>
                   </div>
                 </div>
-                <MainEmbed data={feed} lable="repost" />
+                {/* <MainEmbed data={feed} lable="repost" /> */}
               </div>
             )}
         </div>

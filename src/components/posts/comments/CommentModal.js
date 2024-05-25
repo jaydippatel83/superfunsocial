@@ -17,7 +17,7 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
           <div className="flex-1">
             <h4 className="font-bold">{parentPost.author.display_name}</h4>
             <p className="text-gray-600">@{parentPost.author.username}</p>
-            <p className="mt-2">{parentPost.text}</p>
+            <p className="mt-2 break-all">{parentPost.text}</p>
           </div>
         </div>
         <div className="flex items-start gap-3">
