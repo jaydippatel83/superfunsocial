@@ -1,7 +1,9 @@
+'use client';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 
 const DynamicFrame = ({ metadata }) => {
+    const [loader, setLoader]= useState(false);
     const {
         description,
         'fc:frame:image': frameImage,
@@ -14,11 +16,14 @@ const DynamicFrame = ({ metadata }) => {
     } = metadata;
 
     const handleButtonClick = async (buttonAction, buttonTarget) => {
+        setLoader(true);
         console.log(`Button clicked: action=${buttonAction}, target=${buttonTarget}`);
         if (buttonAction === 'post_redirect' && buttonTarget) {
             window.location.href = buttonTarget;
+            setLoader(false);
         } else if (buttonAction === 'post' && buttonTarget) {
             window.open(buttonTarget, '_blank');
+            setLoader(false);
         } else if (buttonAction === 'tx' && buttonTarget) {
             try {
                 const response = await fetch(buttonTarget, {
@@ -29,14 +34,14 @@ const DynamicFrame = ({ metadata }) => {
                 });
                 const result = await response.json();
                 console.log('API call result:', result);
-                // Handle the response as needed
+                setLoader(false);
             } catch (error) {
+                setLoader(false);
                 console.error('API call error:', error);
             }
         }
     };
-
-    console.log(metadata,"metadata");
+ 
  
     const renderButtons = () => {
         const buttonElements = [];
@@ -55,7 +60,7 @@ const DynamicFrame = ({ metadata }) => {
                     onClick={() => handleButtonClick(buttonAction, buttonTarget)}
                     className="px-4 w-full py-2 mb-2 font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 hover:border-gray-400"
                 >
-                    {buttonText}
+                 {buttonText}
                 </button>
             );
         }
