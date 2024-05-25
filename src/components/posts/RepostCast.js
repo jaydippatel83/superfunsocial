@@ -5,7 +5,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import MainEmbed from './MainEmbed';
 
-const RepostCast = ({id, hash }) => {
+const RepostCast = ({id, hash , classId}) => {
     const [feed, setFeed] = useState(null); 
 
     const getFeedByHash = async () => {
@@ -29,7 +29,7 @@ const RepostCast = ({id, hash }) => {
     },[hash])
 
     return (
-        <div className='px-4 py-1 max-w-4xl mx-auto'>  
+        <div className={`${classId}`}>  
             {feed && (
                 <div className=" w-full  bg-white border border-gray-300 rounded-lg cursor-pointer">
                 <div className="flex items-start px-4 py-3">

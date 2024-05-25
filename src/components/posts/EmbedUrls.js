@@ -51,7 +51,7 @@ const EmbedUrls = ({ data, lable }) => {
     const framesIs = frameTags ? frameTags['fc:frame:image'] : frameTags ? frameTags['fc:frame:button']: '';
     
     return (
-        <div className="max-w-4xl mx-auto px-4 pb-4">
+        <div className={`${lable}`}>
             {/* <input
                 type="text"
                 value={url}

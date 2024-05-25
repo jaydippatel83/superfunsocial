@@ -4,11 +4,13 @@ import { IonIcon } from '@ionic/react';
 import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline, bookmarkOutline, notificationsOffOutline, flagOutline, stopCircleOutline, chevronDownOutline } from 'ionicons/icons';
 import getRelativeTime from '@/lib/utils';
 import EmbedUrls from './EmbedUrls';
-import MainEmbed from './MainEmbed'; 
+import MainEmbed from './MainEmbed';
 import FeedComments from './comments/FeedCommnets';
 import Menu from './Menu';
 import UserHoverCard from './UserHoverCard';
 import CommentModal from './comments/CommentModal';
+import Link from 'next/link';
+import Reactions from './Reactions';
 
 const PostCards = ({ data }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -40,15 +42,15 @@ const PostCards = ({ data }) => {
 
     const handleCommentClick = () => {
         setIsCommentModalOpen(true);
-      };
+    };
 
     const closeCommentModal = () => {
         setIsCommentModalOpen(false);
-      };
- 
+    };
+
 
     return (
-        <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-5">
+        <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-1">
             <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium ">
                 <a href="#" className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <img src={data?.author?.pfp_url} alt="" className="w-9 h-9 rounded-full" />
@@ -67,37 +69,20 @@ const PostCards = ({ data }) => {
                         <IonIcon className="text-xl" icon={ellipsisHorizontal}></IonIcon>
                     </button>
                     {isDropdownOpen && (
-                      <Menu/>
+                        <Menu />
                     )}
                 </div>
             </div>
 
-            <div class="sm:px-4 p-2.5 pt-0">
-                <p class="font-normal"> {data?.text}</p>
+            <div className="sm:px-4 p-2.5 pt-0">
+                <p className="font-normal cursor-pointer break-all">
+                    <Link href={`${data?.author?.username}/${data?.hash}`}>
+                        {data?.text}
+                    </Link>
+                </p>
             </div>
             <MainEmbed data={data} lable="post" />
-            <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
-                <div>
-                    <div className="flex items-center gap-2.5">
-                        <button type="button" className="button-icon text-red-500 bg-red-100 dark:bg-slate-700" onClick={toggleReaction}>
-                            <IonIcon className="text-lg" icon={heart}></IonIcon>
-                        </button>
-                        <a href="#">{data?.reactions.likes_count}</a>
-                    </div>
-                </div>
-                <div className="flex items-center gap-3">
-                    <button type="button" className="button-icon bg-slate-200/70 dark:bg-slate-700" onClick={handleCommentClick}>
-                        <IonIcon className="text-lg" icon={chatbubbleEllipses}></IonIcon>
-                    </button>
-                    <span onClick={handleCommentClick}>{data?.replies?.count}</span>
-                </div>
-                <button type="button" className="button-icon ml-auto">
-                    <IonIcon className="text-xl" icon={paperPlaneOutline}></IonIcon>
-                </button>
-                <button type="button" className="button-icon">
-                    <IonIcon className="text-xl" icon={shareOutline}></IonIcon>
-                </button>
-            </div> 
+            <Reactions data={data} handleCommentClick={handleCommentClick}/>
             <CommentModal isOpen={isCommentModalOpen} onClose={closeCommentModal} parentPost={data} />
         </div>
     );
