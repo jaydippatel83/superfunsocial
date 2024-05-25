@@ -9,24 +9,22 @@ const FeedComments = ({ url }) => {
     const [limit, setLimit] = useState(20);
     const [cast, setCast] = useState([]);
     const [cursor, setCursor] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); 
 
-    const getRecentComments = async (parent_url, cursor = null) => {
+
+    const getRecentComments = async (hash) => {
         const headers = {
             accept: 'application/json',
             api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY
         };
-        let apiUrl = `https://api.neynar.com/v2/farcaster/feed?feed_type=filter&filter_type=parent_url&parent_url=${parent_url}&with_recasts=true&limit=${limit}`;
-        if (cursor) {
-            apiUrl += `&cursor=${cursor}`;
-        }
+        let apiUrl = `https://api.neynar.com/v2/farcaster/cast/conversation?identifier=${hash}&type=hash&reply_depth=5&include_chronological_parent_casts=false`;
+        
         try {
             const response = await axios.get(apiUrl, { headers });
-            const data = response.data?.casts || [];
-            setCast(prevCast => [...prevCast, ...data]);
+            const data = response.data?.conversation.cast  || [];
+            // setCast(prevCast => [...prevCast, ...data]);
             setCursor(response.data.next?.cursor);
-            setLoading(false);
-            console.log(data, "data");
+            setLoading(false); 
         } catch (error) {
             console.log(error);
             setLoading(false);
@@ -44,7 +42,7 @@ const FeedComments = ({ url }) => {
             getRecentComments(url, cursor);
         }
     };
-
+console.log(cast,"cast");
     return (
         <div className="sm:py-4 py-2.5 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40 overflow-y-scroll max-h-52">
             {
