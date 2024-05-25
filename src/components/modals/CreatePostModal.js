@@ -24,7 +24,7 @@ const CreatePostModal = () => {
   const [loading, setLoading] = useState(false);
   const [embeds, setEmbeds] = useState([]);
 
-  console.log(user, "user");
+
 
   const createCast = async () => {
     setLoading(true);
