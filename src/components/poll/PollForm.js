@@ -12,17 +12,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FarcasterContext } from "@/context/farcaster";
 import { usePrivy } from "@privy-io/react-auth";
 import { ethers } from "ethers";
+import useLocalStorage from "@/hooks/use-local-storage-state";
 
 const PollInputForm = ({ togglePollModal }) => {
   const farcasterContext = useContext(FarcasterContext);
   const { CreatePoll } = farcasterContext;
 
-  const { ready, authenticated, user } = usePrivy();
+  const [user, _1, removeUser] = useLocalStorage("user");
 
   const [pollOptions, setPollOptions] = useState([{ id: 1, value: "" }]);
   const [pollQuestion, setPollQuestion] = useState("");
   const [endDate, setEndDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
+  const [text, setText] = useState("Check this out!");
 
   const handleAddChoice = () => {
     const newChoice = { id: pollOptions.length + 1, value: "" };
@@ -48,16 +50,35 @@ const PollInputForm = ({ togglePollModal }) => {
         title: pollQuestion,
         choices: pollOptions,
         endDate: endDate,
-        fid: user.farcaster.fid,
+        fid: user.fid,
       })
       .then(async (res) => {
-        await CreatePoll(
-          pollQuestion,
-          pollOptions.length,
-          res.data.data._id
-        );
-        alert("Poll Created!");
-        setLoading(false);
+        await CreatePoll(pollQuestion, pollOptions.length, res.data.data._id);
+
+        const options = {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            signer_uuid: user.signerUuid,
+            text: "Check this out!",
+            embeds: [
+              {
+                url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/poll/${res.data.data._id}`,
+              },
+            ],
+          }),
+        };
+
+        fetch("https://api.neynar.com/v2/farcaster/cast", options)
+          .then((response) => {
+            alert("Poll Created!");
+            setLoading(false);
+          })
+          .catch((err) => console.error(err));
       })
       .catch((err) => {
         alert("Something went wrong!");
