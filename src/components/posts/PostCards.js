@@ -1,17 +1,28 @@
 "use client";
 import React, { useState } from "react";
 import useLocalStorage from "@/hooks/use-local-storage-state";
-import { IonIcon } from '@ionic/react';
-import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline, bookmarkOutline, notificationsOffOutline, flagOutline, stopCircleOutline, chevronDownOutline } from 'ionicons/icons';
-import getRelativeTime from '@/lib/utils';
-import EmbedUrls from './EmbedUrls';
-import MainEmbed from './MainEmbed';
-import FeedComments from './comments/FeedCommnets';
-import Menu from './Menu';
-import UserHoverCard from './UserHoverCard';
-import CommentModal from './comments/CommentModal';
-import Link from 'next/link';
-import Reactions from './Reactions';
+import { IonIcon } from "@ionic/react";
+import {
+  ellipsisHorizontal,
+  heart,
+  chatbubbleEllipses,
+  paperPlaneOutline,
+  shareOutline,
+  bookmarkOutline,
+  notificationsOffOutline,
+  flagOutline,
+  stopCircleOutline,
+  chevronDownOutline,
+} from "ionicons/icons";
+import getRelativeTime from "@/lib/utils";
+import EmbedUrls from "./EmbedUrls";
+import MainEmbed from "./MainEmbed";
+import FeedComments from "./comments/FeedCommnets";
+import Menu from "./Menu";
+import UserHoverCard from "./UserHoverCard";
+import CommentModal from "./comments/CommentModal";
+import Link from "next/link";
+import Reactions from "./Reactions";
 
 import axios from "axios";
 import Image from "next/image";
@@ -25,6 +36,8 @@ const PostCards = ({ data }) => {
   const [reactions, setReactions] = useState([]);
 
   const [user, _1, removeUser] = useLocalStorage("user");
+
+  console.log(user, "user");
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -95,7 +108,7 @@ const PostCards = ({ data }) => {
     <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
       <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium ">
         <Link
-          href={`/profile/${data.author.fid}`}
+          href={`/profile/${data?.author.fid}`}
           className="relative"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -109,7 +122,7 @@ const PostCards = ({ data }) => {
           />
         </Link>
         <div className="flex-1 ">
-          <Link href={`/profile/${data.author.fid}`} className="relative flex items-center">
+          <Link href={`/profile/${data?.author.fid}`} className="relative flex items-center">
             <h4
               className="text-black dark:text-white"
               onMouseEnter={handleMouseEnter}
@@ -139,12 +152,15 @@ const PostCards = ({ data }) => {
       </div>
 
       <div class="sm:px-4 p-2.5 pt-0">
-      <p className="font-normal cursor-pointer">
-        <Link href={`${data?.author?.username}/${data?.hash}`} className='break-all'>
-          {data?.text}
-        </Link>
-      </p>
-      </div> 
+        <p className="font-normal cursor-pointer">
+          <Link
+            href={`${data?.author?.username}/${data?.hash}`}
+            className="break-all"
+          >
+            {data?.text}
+          </Link>
+        </p>
+      </div>
       <MainEmbed data={data} lable="post" />
       <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
         <div>
