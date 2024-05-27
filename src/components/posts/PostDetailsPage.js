@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline } from 'ionicons/icons';
 import Link from 'next/link';
-import getRelativeTime from '@/lib/utils';
+import getRelativeTime, { formatNumber } from '@/lib/utils';
 import UserHoverCard from './UserHoverCard';
 import MainEmbed from './MainEmbed';
 import CommentModal from './comments/CommentModal';
@@ -84,14 +84,14 @@ export const PostDetailPage = ({ post }) => {
                             <button type="button" className="button-icon text-red-500 bg-red-100 dark:bg-slate-700" onClick={toggleReaction}>
                                 <IonIcon className="text-lg" icon={heart}></IonIcon>
                             </button>
-                            <a href="#">{post?.reactions.likes_count}</a>
+                            <a href="#">{formatNumber(post?.reactions.likes_count)}</a>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <button type="button" className="button-icon bg-slate-200/70 dark:bg-slate-700" onClick={handleCommentClick}>
                             <IonIcon className="text-lg" icon={chatbubbleEllipses}></IonIcon>
                         </button>
-                        <span onClick={handleCommentClick}>{post?.replies?.count}</span>
+                        <span onClick={handleCommentClick}>{formatNumber(post?.replies?.count)}</span>
                     </div>
                     <button type="button" className="button-icon ml-auto">
                         <IonIcon className="text-xl" icon={paperPlaneOutline}></IonIcon>

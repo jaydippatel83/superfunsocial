@@ -8,8 +8,7 @@ import { PostDetailPage } from "@/components/posts/PostDetailsPage";
 
 export default async function CastDetailPage({ params }) {
     const { username, hash } = params;
-    const castdata = await getCastConversations(hash);
-    console.log(castdata, "castdata");
+    const castdata = await getCastConversations(hash); 
     return (
         <Layout>
             <main
@@ -22,7 +21,9 @@ export default async function CastDetailPage({ params }) {
                 >
                     <div className="max-w-[1080px] mx-auto">
                         <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3"> 
-                            <PostDetailPage post={castdata}/>
+                          {
+                            castdata && <PostDetailPage post={castdata}/> 
+                          }  
                         </div>
                     </div>
                     <RightSIdeBar />

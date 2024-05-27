@@ -9,6 +9,7 @@ import { FarcasterContext } from "@/context/farcaster";
 import { useApp } from "@/context/AppContext";
 import useLocalStorage from "@/hooks/use-local-storage-state"; 
 import AutoResizeTextarea from "../posts/AutosizeTextArea";
+import SuggestionInput from "../posts/SuggestionInput";
 
 const CreatePostModal = () => {
   const farcasterContext = useContext(FarcasterContext);
@@ -91,6 +92,7 @@ const CreatePostModal = () => {
             onChange={(e) => setText(e.target.value)}
             placeholder="What do you have in mind?"
             />
+            {/* <SuggestionInput /> */}
           </div>
 
           {embeds.map((embed, index) => (

@@ -14,7 +14,7 @@ import {
   stopCircleOutline,
   chevronDownOutline,
 } from "ionicons/icons";
-import getRelativeTime from "@/lib/utils";
+import getRelativeTime, { formatNumber } from "@/lib/utils";
 import EmbedUrls from "./EmbedUrls";
 import MainEmbed from "./MainEmbed";
 import FeedComments from "./comments/FeedCommnets";
@@ -177,7 +177,7 @@ const PostCards = ({ data }) => {
             >
               <IonIcon className="text-lg" icon={heart}></IonIcon>
             </button>
-            <a href="#">{data?.reactions.likes_count}</a>
+            <a href="#">{formatNumber(data?.reactions.likes_count)}</a>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -188,7 +188,7 @@ const PostCards = ({ data }) => {
           >
             <IonIcon className="text-lg" icon={chatbubbleEllipses}></IonIcon>
           </button>
-          <span onClick={handleCommentClick}>{data?.replies?.count}</span>
+          <span onClick={handleCommentClick}>{formatNumber(data?.replies?.count)}</span>
         </div>
         <button type="button" className="button-icon ml-auto">
           <IonIcon className="text-xl" icon={paperPlaneOutline}></IonIcon>
