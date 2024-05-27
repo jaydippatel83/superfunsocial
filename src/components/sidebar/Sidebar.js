@@ -2,6 +2,7 @@
 import React from 'react'; 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     const pathname = usePathname();
@@ -23,37 +24,37 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                             <ul>
                                 <li className={` ${isActive('/') ? 'active' : ' '}`}>
                                     <Link href="/">
-                                        <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Fun Feed </span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/questions') ? 'active' : ' '}`}>
                                     <Link href="/questions">
-                                        <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Q & A </span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/superplay') ? 'active' : ' '}`}>
                                     <Link href="/superplay">
-                                        <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Super Play </span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/contest') ? 'active' : ' '}`}>
                                     <Link href="/contest">
-                                        <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Contest</span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/leaderboard') ? 'active' : ' '}`}>
                                     <Link href="/leaderboard">
-                                        <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Leaderboard</span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/profile') ? 'active' : ' '}`}>
                                     <Link href="/profile">
-                                        <img src="assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
                                         <span>Profile</span>
                                     </Link>
                                 </li>

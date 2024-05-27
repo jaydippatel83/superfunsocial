@@ -25,8 +25,7 @@ export default async function Home() {
         >
           <div className="max-w-[1080px] mx-auto">
             <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
-              <StickyHeader data={feed?.feed?.casts} /> 
-              <PostCardLoader />
+              <StickyHeader data={feed?.feed?.casts} />  
             </div>
           </div>
           <RightSIdeBar />
