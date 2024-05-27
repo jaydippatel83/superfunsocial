@@ -10,6 +10,7 @@ import Reactions from '../Reactions';
 import CommentEmbed from './CommentEmbed';
 import CommentModal from './CommentModal';
 import Menu from '../Menu';
+import Image from 'next/image';
 
 const CommentCards = ({ comment,depth = 0 }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -56,18 +57,29 @@ const CommentCards = ({ comment,depth = 0 }) => {
     return (
         <div className={`bg-white  ${depth > 0 ? '' : 'border-b p-4'}`}>
         <div className="flex items-start">
-          <a href="#" className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <img src={comment?.author?.pfp_url} alt="" className="w-9 h-9 rounded-full" />
-          </a>
+        <Link
+          href={`/profile/${comment.author.fid}`}
+          className="relative"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <Image
+            src={comment?.author?.pfp_url}
+            alt=""
+            width={48}
+            height={48}
+            className="w-9 h-9 rounded-full"
+          />
+        </Link>
           <div className="flex-1 ml-2">
             <div className="flex items-center justify-between relative">
               <div>
                 <div className="flex items-center">
-                  <a href="#" className='relative flex items-center'>
+                  <Link href={`/profile/${comment.author.fid}`} className='relative flex items-center'>
                     <h4 className="text-black dark:text-white font-bold" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                       {comment?.author?.display_name}
                     </h4>
-                  </a>
+                  </Link>
                   <div className="flex items-center">
                     <span className="text-sm text-gray-500"> @{comment?.author?.username} <span className="text-gray-500 mx-1">|</span> {getRelativeTime(comment?.timestamp)}</span>
                   </div>

@@ -24,7 +24,7 @@ const PollInputForm = ({ togglePollModal }) => {
   const [pollQuestion, setPollQuestion] = useState("");
   const [endDate, setEndDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
-  const [text, setText] = useState("Check this out!");
+  const [text, setText] = useState("");
 
   const handleAddChoice = () => {
     const newChoice = { id: pollOptions.length + 1, value: "" };
@@ -64,7 +64,7 @@ const PollInputForm = ({ togglePollModal }) => {
           },
           body: JSON.stringify({
             signer_uuid: user.signerUuid,
-            text: "Check this out!",
+            text: text,
             embeds: [
               {
                 url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/poll/${res.data.data._id}`,
@@ -94,6 +94,13 @@ const PollInputForm = ({ togglePollModal }) => {
           <IonIcon icon={closeOutline} />
         </button>
       </div>
+      <textarea
+        placeholder="What do you have in mind?"
+        className="w-full p-2 border border-gray-300 rounded mb-4 resize-none"
+        rows="4"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
       <input
         type="text"
         placeholder="What is your poll question?"
