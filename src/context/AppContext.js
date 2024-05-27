@@ -52,7 +52,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     isUserLoggedIn();
-  }, [isUserLoggedIn]);
+  }, []);
 
   const value = useMemo(
     () => ({

@@ -14,6 +14,7 @@ import Link from 'next/link';
 import Reactions from './Reactions';
 
 import axios from "axios";
+import Image from "next/image";
 
 const PostCards = ({ data }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -88,26 +89,27 @@ const PostCards = ({ data }) => {
       //   .then((response) => response.json())
       .then((response) => setReactions(response.data.reactions))
       .catch((err) => console.error(err));
-  };
-
+  }; 
 
   return (
     <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
       <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium ">
-        <a
-          href="#"
+        <Link
+          href={`/profile/${data.author.fid}`}
           className="relative"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <img
+          <Image
             src={data?.author?.pfp_url}
             alt=""
+            width={48}
+            height={48}
             className="w-9 h-9 rounded-full"
           />
-        </a>
+        </Link>
         <div className="flex-1 ">
-          <a href="#" className="relative flex items-center">
+          <Link href={`/profile/${data.author.fid}`} className="relative flex items-center">
             <h4
               className="text-black dark:text-white"
               onMouseEnter={handleMouseEnter}
@@ -116,7 +118,7 @@ const PostCards = ({ data }) => {
               {" "}
               {data?.author?.display_name}{" "}
             </h4>
-          </a>
+          </Link>
           <UserHoverCard user={data?.author} isVisible={isHoverCardVisible} />
           <div className="flex items-center">
             <span className="text-sm text-gray-500">

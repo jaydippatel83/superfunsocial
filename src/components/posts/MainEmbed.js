@@ -12,7 +12,7 @@ const MainEmbed = ({ data ,lable}) => {
                         <RepostCast key={index} id={embed.cast_id.fid} hash={embed.cast_id.hash} classId="max-w-4xl mx-auto px-4" />
                     }
                     {
-                        embed.url && <EmbedUrls key={index} data={embed.url} lable="max-w-4xl mx-auto px-4"/>
+                        embed.url &&  <EmbedUrls key={index} data={embed.url} lable="max-w-4xl mx-auto px-4"/>
                     }
                 </>
             })}

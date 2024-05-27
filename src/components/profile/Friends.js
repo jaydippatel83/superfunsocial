@@ -1,5 +1,6 @@
 'use client';
 import axios from 'axios';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 const Friends = ({ fid }) => { 
@@ -40,12 +41,12 @@ const Friends = ({ fid }) => {
                     followers && followers.map((user) => {
                         console.log(user,"user");
                         return (
-                            <div key={user.user.fid}>
+                            <Link key={user.user.fid} href={`/profile/${user.user.fid}`}>
                                 <div className="relative w-full aspect-square rounded-lg overflow-hidden">
                                     <img src={user.user.pfp_url} alt="" className="object-cover w-full h-full inset-0" />
                                 </div>
                                 <div className="mt-2 line-clamp-1">{user.user.display_name}</div>
-                            </div>
+                            </Link>
                         )
                     })
                 } 
