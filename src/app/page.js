@@ -24,7 +24,7 @@ export default async function Home() {
           id="js-oversized"
         >
           <div className="max-w-[1080px] mx-auto">
-            <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
+            <div className="md:w-[580px] md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
               <StickyHeader data={feed?.feed?.casts} />  
             </div>
           </div>

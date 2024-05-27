@@ -35,9 +35,7 @@ const PostCards = ({ data }) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [reactions, setReactions] = useState([]);
 
-  const [user, _1, removeUser] = useLocalStorage("user");
-
-  console.log(user, "user");
+  const [user, _1, removeUser] = useLocalStorage("user"); 
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -154,7 +152,7 @@ const PostCards = ({ data }) => {
       <div class="sm:px-4 p-2.5 pt-0">
         <p className="font-normal cursor-pointer">
           <Link
-            href={`${data?.author?.username}/${data?.hash}`}
+            href={`/${data?.author?.username}/${data?.hash}`}
             className="break-all"
           >
             {data?.text}

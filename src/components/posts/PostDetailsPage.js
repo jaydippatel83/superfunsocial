@@ -47,13 +47,13 @@ export const PostDetailPage = ({ post }) => {
         <main className="flex-1 p-4">
             <div className="bg-white rounded-xl shadow-sm text-sm font-medium border dark:bg-dark2">
                 <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                    <Link href={`/profile/${post?.author?.username}`}>
+                    <Link href={`/profile/${post?.author?.fid}`}>
                         <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                             <img src={post?.author?.pfp_url} alt="" className="w-10 h-10 rounded-full" />
                         </div>
                     </Link>
                     <div className="flex-1">
-                        <Link href={`/profile/${post?.author?.username}`}>
+                        <Link href={`/profile/${post?.author?.fid}`}>
                             <div className="relative flex items-center">
                                 <h4 className="text-black dark:text-white" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}> {post?.author?.display_name} </h4>
                             </div>

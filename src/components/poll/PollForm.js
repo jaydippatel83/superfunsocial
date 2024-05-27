@@ -87,13 +87,15 @@ const PollInputForm = ({ togglePollModal }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-dark3 p-6 rounded-lg shadow-lg w-[90%] md:w-1/2 lg:w-1/3 z-10">
-      <div className="flex justify-between items-center border-b pb-2 mb-4">
+    <div className="bg-white dark:bg-dark3  rounded-lg shadow-lg  w-full max-w-2xl mx-auto z-10">
+      <div className="flex justify-between items-center pb-2 mb-4 p-6">
         <h2 className="text-lg font-semibold">Create Poll</h2>
         <button onClick={togglePollModal} className="text-xl">
           <IonIcon icon={closeOutline} />
         </button>
       </div>
+      <hr />
+      <div className="p-6 overflow-y-scroll max-h-96"> 
       <textarea
         placeholder="What do you have in mind?"
         className="w-full p-2 border border-gray-300 rounded mb-4 resize-none"
@@ -156,6 +158,7 @@ const PollInputForm = ({ togglePollModal }) => {
         >
           {loading ? "Creating poll...." : "Create Poll"}
         </button>
+      </div>
       </div>
     </div>
   );

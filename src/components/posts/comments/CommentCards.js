@@ -86,7 +86,7 @@ const CommentCards = ({ comment,depth = 0 }) => {
                 </div>
                 <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} />
               </div>
-              <button type="button" className="text-gray-500" onClick={toggleDropdown}>
+              <button type="button" className="text-gray-500 relative" onClick={toggleDropdown}>
                 <IonIcon icon={ellipsisHorizontal} />
               </button>
               {isDropdownOpen && (
