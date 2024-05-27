@@ -22,7 +22,7 @@ export default async function CastDetailPage({ params }) {
                 >
                     <div className="max-w-[1080px] mx-auto">
                         <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3"> 
-                            <PostDetailPage post={castdata}/>
+                            {/* <PostDetailPage post={castdata}/> */}
                         </div>
                     </div>
                     <RightSIdeBar />

@@ -52,6 +52,7 @@ const CommentCards = ({ comment,depth = 0 }) => {
         setShowReplies(!showReplies);
       };
  
+ 
     return (
         <div className={`bg-white  ${depth > 0 ? '' : 'border-b p-4'}`}>
         <div className="flex items-start">
@@ -82,7 +83,7 @@ const CommentCards = ({ comment,depth = 0 }) => {
             </div>
             <div className="">
               <p className="font-normal cursor-pointer  break-all">
-                <Link href={`${comment?.author?.username}/${comment?.hash}`}>
+                <Link href={`/${comment?.hash}`}>
                   {comment?.text}
                 </Link>
               </p>

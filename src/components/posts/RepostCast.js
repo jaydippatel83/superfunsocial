@@ -45,7 +45,7 @@ const RepostCast = ({id, hash , classId}) => {
                       <span className="font-semibold text-gray-900">{feed?.author?.display_name}</span>
                       <span className="ml-1 text-sm text-gray-500">@{feed?.author?.username} {getRelativeTime(feed?.timestamp)}</span>
                     </div>
-                    <div className="mt-1 text-gray-900">
+                    <div className="mt-1 text-gray-900 break-all">
                         {feed?.text}
                     </div>
                   </div>

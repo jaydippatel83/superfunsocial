@@ -83,7 +83,7 @@ const EmbedUrls = ({ data, lable }) => {
                                     loading="lazy"
                                     src={imageUrl}
                                     alt={title}
-                                    className="border border-r-0 object-cover border-faint h-24 w-[88px] min-w-[88px] rounded-l-lg"
+                                    className="border border-r-0 object-cover border-faint h-24 w-[88px] min-w-[88px] rounded-l-lg max-h-96"
                                 />
                             )}
                             <div className="flex max-h-24 w-full flex-col justify-center overflow-hidden border border-l-0 rounded-r-lg p-2 border-faint  ">
@@ -97,12 +97,12 @@ const EmbedUrls = ({ data, lable }) => {
             )}
             {image && (
                 <div className="rounded-lg border  ">
-                    <img src={url} alt="Preview" className="w-full h-full object-cover rounded-lg " />
+                    <img src={url} alt="Preview" className="w-full h-full object-contain rounded-lg max-h-96" />
                 </div>
             )}
             {video && (
                 <div className="rounded-lg border ">
-                    <video src={video} controls className="w-full h-full object-cover  rounded-lg"></video>
+                    <video src={video} controls className="w-full h-full object-contain  rounded-lg max-h-96"></video>
                 </div>
             )}
         </div>
