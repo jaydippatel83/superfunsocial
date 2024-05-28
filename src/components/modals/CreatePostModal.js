@@ -21,15 +21,23 @@ const CreatePostModal = () => {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [embeds, setEmbeds] = useState([]);
-
+  
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async(e) => {
     let arr = [];
+//     const req = await fetch("/api/appid", {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     })
+//     const response = await req.json();
+// console.log(response,"response");
     let file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file); 
-      arr.push({ url: imageUrl });
+      arr.push({ url: "https://superfunsocial.vercel.app/" });
     }
     setEmbeds(arr);
   };
@@ -44,7 +52,7 @@ const CreatePostModal = () => {
     if (!user.signerUuid) {
       setLoading(false);
       return;
-    }
+    } 
 
     const req = await fetch("/api/casts", {
       method: "POST",

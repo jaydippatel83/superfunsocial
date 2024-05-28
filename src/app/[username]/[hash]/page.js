@@ -8,8 +8,7 @@ import { PostDetailPage } from "@/components/posts/PostDetailsPage";
 
 export default async function CastDetailPage({ params }) {
     const { username, hash } = params;
-    const castdata = await getCastConversations(hash); 
-    console.log(castdata);
+    const castdata = await getCastConversations(hash);  
     return (
         <Layout>
             <main
