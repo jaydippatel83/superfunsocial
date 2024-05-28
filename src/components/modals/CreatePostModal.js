@@ -59,8 +59,7 @@ const CreatePostModal = () => {
     });
 
     if (req.ok) {
-      alert("Cast created");
-
+      alert("Cast created"); 
       setText("");
       setLoading(false);
     } else {

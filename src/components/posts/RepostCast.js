@@ -2,7 +2,7 @@
 import getRelativeTime from '@/lib/utils';
 import axios from 'axios';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 const RepostCast = ({ id, hash, classId }) => {
@@ -61,7 +61,7 @@ const RepostCast = ({ id, hash, classId }) => {
                                 {feed?.text}
                             </Link>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             )}
         </div>
