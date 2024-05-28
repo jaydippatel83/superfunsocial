@@ -1,13 +1,10 @@
 "use client";
 import React, { useContext, useRef, useState } from "react";
 import { IonIcon } from "@ionic/react";
-import {
-  closeOutline,
-  imageOutline, 
-} from "ionicons/icons";
+import { closeOutline, imageOutline } from "ionicons/icons";
 import { FarcasterContext } from "@/context/farcaster";
 import { useApp } from "@/context/AppContext";
-import useLocalStorage from "@/hooks/use-local-storage-state"; 
+import useLocalStorage from "@/hooks/use-local-storage-state";
 import AutoResizeTextarea from "../posts/AutosizeTextArea";
 import SuggestionInput from "../posts/SuggestionInput";
 
@@ -24,20 +21,38 @@ const CreatePostModal = () => {
 
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (e) => {
-    let arr = [];
+  const handleFileChange = async (e) => {
+    let arr = [{ url: "superfunsocial" }];
     let file = e.target.files[0];
+    // get secure url from our server
+
     if (file) {
-      const imageUrl = URL.createObjectURL(file); 
-      arr.push({ url: imageUrl });
+      const { url } = await fetch(
+        "https://frame-backend-z2b9.onrender.com/s3/bucket"
+      ).then((res) => res.json());
+
+      // post the image direclty to the s3 bucket
+      if (url) {
+        await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: file,
+        });
+
+        const imageUrl = url.split("?")[0];
+        console.log(imageUrl, "imageUrl");
+
+        arr.push({ url: imageUrl });
+        setEmbeds(arr);
+      }
     }
-    setEmbeds(arr);
   };
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
-  }; 
-
+  };
 
   const createCast = async () => {
     setLoading(true);
@@ -46,26 +61,30 @@ const CreatePostModal = () => {
       return;
     }
 
-    const req = await fetch("/api/casts", {
+    const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        accept: "application/json",
+        api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+        "content-type": "application/json",
       },
       body: JSON.stringify({
-        signerUid: user.signerUuid,
-        text,
+        signer_uuid: user.signerUuid,
+        text: text,
         embeds,
       }),
-    });
+    };
 
-    if (req.ok) {
-      alert("Cast created"); 
-      setText("");
-      setLoading(false);
-    } else {
-      alert("Failed to create cast");
-      setLoading(false);
-    }
+    fetch("https://api.neynar.com/v2/farcaster/cast", options)
+      .then((response) => {
+        alert("Cast created");
+        setText("");
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
 
     toggleModal();
   };
@@ -84,28 +103,32 @@ const CreatePostModal = () => {
           </button>
         </div>
         <hr />
-        <div className="p-6 overflow-y-scroll max-h-96"> 
-          <div className="space-y-2  p-2"> 
+        <div className="p-6 overflow-y-scroll max-h-96">
+          <div className="space-y-2  p-2">
             <AutoResizeTextarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="What do you have in mind?"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="What do you have in mind?"
             />
             {/* <SuggestionInput /> */}
           </div>
 
           {embeds.map((embed, index) => (
             <div key={index} className="mt-4">
-              <img src={embed.url} alt={`embed-${index}`} className="rounded-lg max-h-96" />
+              <img
+                src={embed.url}
+                alt={`embed-${index}`}
+                className="rounded-lg max-h-96"
+              />
             </div>
-          ))} 
+          ))}
           <input
             type="file"
             name="myImage"
             accept="image/png, image/gif, image/jpeg"
             onChange={handleFileChange}
             ref={fileInputRef}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
           />
           <div className="flex items-center justify-between mt-4">
             <div className="flex gap-2">
