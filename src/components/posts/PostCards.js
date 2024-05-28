@@ -14,7 +14,7 @@ import {
   stopCircleOutline,
   chevronDownOutline,
 } from "ionicons/icons";
-import getRelativeTime from "@/lib/utils";
+import getRelativeTime, { formatNumber } from "@/lib/utils";
 import EmbedUrls from "./EmbedUrls";
 import MainEmbed from "./MainEmbed";
 import FeedComments from "./comments/FeedCommnets";
@@ -35,9 +35,7 @@ const PostCards = ({ data }) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [reactions, setReactions] = useState([]);
 
-  const [user, _1, removeUser] = useLocalStorage("user");
-
-  // console.log(user, "user");
+  const [user, _1, removeUser] = useLocalStorage("user"); 
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -154,7 +152,7 @@ const PostCards = ({ data }) => {
       <div class="sm:px-4 p-2.5 pt-0">
         <p className="font-normal cursor-pointer">
           <Link
-            href={`${data?.author?.username}/${data?.hash}`}
+            href={`/${data?.author?.username}/${data?.hash}`}
             className="break-all"
           >
             {data?.text}
@@ -179,7 +177,7 @@ const PostCards = ({ data }) => {
             >
               <IonIcon className="text-lg" icon={heart}></IonIcon>
             </button>
-            <a href="#">{data?.reactions.likes_count}</a>
+            <a href="#">{formatNumber(data?.reactions.likes_count)}</a>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -190,7 +188,7 @@ const PostCards = ({ data }) => {
           >
             <IonIcon className="text-lg" icon={chatbubbleEllipses}></IonIcon>
           </button>
-          <span onClick={handleCommentClick}>{data?.replies?.count}</span>
+          <span onClick={handleCommentClick}>{formatNumber(data?.replies?.count)}</span>
         </div>
         <button type="button" className="button-icon ml-auto">
           <IonIcon className="text-xl" icon={paperPlaneOutline}></IonIcon>

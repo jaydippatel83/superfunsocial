@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline } from 'ionicons/icons';
 import Link from 'next/link';
-import getRelativeTime from '@/lib/utils';
+import getRelativeTime, { formatNumber } from '@/lib/utils';
 import UserHoverCard from './UserHoverCard';
 import MainEmbed from './MainEmbed';
 import CommentModal from './comments/CommentModal';
@@ -47,13 +47,13 @@ export const PostDetailPage = ({ post }) => {
         <main className="flex-1 p-4">
             <div className="bg-white rounded-xl shadow-sm text-sm font-medium border dark:bg-dark2">
                 <div className="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                    <Link href={`/profile/${post?.author?.username}`}>
+                    <Link href={`/profile/${post?.author?.fid}`}>
                         <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                             <img src={post?.author?.pfp_url} alt="" className="w-10 h-10 rounded-full" />
                         </div>
                     </Link>
                     <div className="flex-1">
-                        <Link href={`/profile/${post?.author?.username}`}>
+                        <Link href={`/profile/${post?.author?.fid}`}>
                             <div className="relative flex items-center">
                                 <h4 className="text-black dark:text-white" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}> {post?.author?.display_name} </h4>
                             </div>
@@ -84,14 +84,14 @@ export const PostDetailPage = ({ post }) => {
                             <button type="button" className="button-icon text-red-500 bg-red-100 dark:bg-slate-700" onClick={toggleReaction}>
                                 <IonIcon className="text-lg" icon={heart}></IonIcon>
                             </button>
-                            <a href="#">{post?.reactions.likes_count}</a>
+                            <a href="#">{formatNumber(post?.reactions.likes_count)}</a>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <button type="button" className="button-icon bg-slate-200/70 dark:bg-slate-700" onClick={handleCommentClick}>
                             <IonIcon className="text-lg" icon={chatbubbleEllipses}></IonIcon>
                         </button>
-                        <span onClick={handleCommentClick}>{post?.replies?.count}</span>
+                        <span onClick={handleCommentClick}>{formatNumber(post?.replies?.count)}</span>
                     </div>
                     <button type="button" className="button-icon ml-auto">
                         <IonIcon className="text-xl" icon={paperPlaneOutline}></IonIcon>

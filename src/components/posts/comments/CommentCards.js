@@ -21,7 +21,8 @@ const CommentCards = ({ comment,depth = 0 }) => {
     const [showReplies, setShowReplies] = useState(false);
 
 
-    const toggleDropdown = () => {
+    const toggleDropdown = (e) => {
+      e.stopPropagation();
         setIsDropdownOpen(!isDropdownOpen);
     };
 
@@ -33,7 +34,8 @@ const CommentCards = ({ comment,depth = 0 }) => {
         setIsCommentsOpen(!isCommentsOpen);
     };
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = (e) => {
+      e.stopPropagation();
         setIsHoverCardVisible(true);
     };
 
@@ -49,7 +51,8 @@ const CommentCards = ({ comment,depth = 0 }) => {
         setIsCommentModalOpen(false);
     };
 
-    const handleShowReplies = () => {
+    const handleShowReplies = (e) => {
+      e.stopPropagation();
         setShowReplies(!showReplies);
       };
  
@@ -86,12 +89,14 @@ const CommentCards = ({ comment,depth = 0 }) => {
                 </div>
                 <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} />
               </div>
+              <div className='relative'>
               <button type="button" className="text-gray-500" onClick={toggleDropdown}>
                 <IonIcon icon={ellipsisHorizontal} />
               </button>
               {isDropdownOpen && (
                <Menu/>
               )}
+              </div>
             </div>
             <div className="">
               <p className="font-normal cursor-pointer  break-all">
