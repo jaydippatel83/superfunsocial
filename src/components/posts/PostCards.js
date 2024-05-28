@@ -37,7 +37,7 @@ const PostCards = ({ data }) => {
 
   const [user, _1, removeUser] = useLocalStorage("user");
 
-  console.log(user, "user");
+  // console.log(user, "user");
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);

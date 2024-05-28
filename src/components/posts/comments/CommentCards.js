@@ -95,7 +95,7 @@ const CommentCards = ({ comment,depth = 0 }) => {
             </div>
             <div className="">
               <p className="font-normal cursor-pointer  break-all">
-                <Link href={`/${comment?.hash}`}>
+                <Link href={`/${comment?.author.username}/${comment?.hash}`}>
                   {comment?.text}
                 </Link>
               </p>

@@ -39,7 +39,7 @@ const Friends = ({ fid }) => {
             <div className="grid grid-cols-3 gap-2 gap-y-5 text-center text-sm mt-4 mb-2">
                 {
                     followers && followers.map((user) => {
-                        console.log(user,"user");
+                        // console.log(user,"user");
                         return (
                             <Link key={user.user.fid} href={`/profile/${user.user.fid}`}>
                                 <div className="relative w-full aspect-square rounded-lg overflow-hidden">

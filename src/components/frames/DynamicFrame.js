@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { FarcasterContext } from "@/context/farcaster";
+import { ethers } from "ethers";
 
 const DynamicFrame = ({ metadata }) => {
   const [loader, setLoader] = useState(false);
@@ -15,32 +17,43 @@ const DynamicFrame = ({ metadata }) => {
     ...buttons
   } = metadata;
 
+  const farcasterContext = useContext(FarcasterContext);
+  const { connectMetaMaskAndGetSigner } = farcasterContext;
+
   const handleButtonClick = async (e, buttonAction, buttonTarget) => {
-    alert("heyy");
-    // setLoader(true);
-    // console.log(`Button clicked: action=${buttonAction}, target=${buttonTarget}`);
-    // if (buttonAction === 'post_redirect' && buttonTarget) {
-    //     window.location.href = buttonTarget;
-    //     setLoader(false);
-    // } else if (buttonAction === 'post' && buttonTarget) {
-    //     window.open(buttonTarget, '_blank');
-    //     setLoader(false);
-    // } else if (buttonAction === 'tx' && buttonTarget) {
-    //     try {
-    //         const response = await fetch(buttonTarget, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //         const result = await response.json();
-    //         console.log('API call result:', result);
-    //         setLoader(false);
-    //     } catch (error) {
-    //         setLoader(false);
-    //         console.error('API call error:', error);
-    //     }
-    // }
+    e.preventDefault();
+
+    setLoader(true);
+    console.log(
+      `Button clicked: action=${buttonAction}, target=${buttonTarget}`
+    );
+    if (buttonAction === "post_redirect" && buttonTarget) {
+      window.location.href = buttonTarget;
+      setLoader(false);
+    } else if (buttonAction === "post" && buttonTarget) {
+      window.open(buttonTarget, "_blank");
+      setLoader(false);
+    } else if (buttonAction === "tx" && buttonTarget) {
+      try {
+        await connectMetaMaskAndGetSigner();
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+       
+
+        const response = await fetch(buttonTarget, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        console.log("API call result:", result);
+        setLoader(false);
+      } catch (error) {
+        setLoader(false);
+        console.error("API call error:", error);
+      }
+    }
   };
 
   const renderButtons = () => {
@@ -50,10 +63,13 @@ const DynamicFrame = ({ metadata }) => {
       const buttonAction = buttons[`fc:frame:button:${i}:action`];
       let buttonTarget = buttons[`fc:frame:button:${i}:target`];
 
-      // Replace part of the URL
-      // if (buttonTarget) {
-      //     buttonTarget = buttonTarget.replace("https://superfunsocial.vercel.app", "http://localhost:3000");
-      // }
+      //   Replace part of the URL
+      if (buttonTarget) {
+        buttonTarget = buttonTarget.replace(
+          "https://superfunsocial.vercel.app",
+          "http://localhost:3000"
+        );
+      }
       buttonElements.push(
         <button
           key={i}
