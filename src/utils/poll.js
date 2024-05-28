@@ -40,3 +40,22 @@ export async function getVotes(pollId) {
     return error;
   }
 }
+
+export async function giveVote(pollId, choice, signer) {
+  try {
+    var transaction;
+    if (signer) {
+      const contract = new ethers.Contract(
+        contractAddress,
+        contractAbi,
+        signer
+      );
+      transaction = await contract.vote(pollId, choice);
+    }
+    console.log(transaction, "transaction");
+    return transaction;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}

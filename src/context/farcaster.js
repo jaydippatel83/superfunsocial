@@ -83,7 +83,6 @@ export function FarcasterContextProvider(props) {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
 
-      console.log(signer, "signer");
       var transaction;
       if (signer) {
         const contract = new ethers.Contract(
@@ -134,6 +133,7 @@ export function FarcasterContextProvider(props) {
         getVotes,
         getPolls,
         setEthreumProvider,
+        connectMetaMaskAndGetSigner,
         polls,
       }}
     >

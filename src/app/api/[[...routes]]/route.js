@@ -5,6 +5,8 @@ import { handle } from "frog/vercel";
 import { getPoll, getVotes } from "../../../utils/poll";
 import contractAbi from "../../../utils/contract";
 import { neynar } from "frog/hubs";
+import { ethers } from "ethers";
+
 
 const app = new Frog({
   basePath: "/api",
@@ -62,6 +64,7 @@ app.frame("/poll/:id", async (c) => {
 app.transaction("/vote/:pollId/:choice", async (c) => {
   const pollId = c.req.param("pollId");
   const choice = c.req.param("choice");
+  const signer = c.req.body;
   const pollData = await getPoll(pollId); // Retrieve the poll data based on the link
   const fid = pollData.fid;
   return c.contract({
