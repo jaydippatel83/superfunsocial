@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useRef, useState } from "react";
 import { IonIcon } from "@ionic/react";
-import { closeOutline, imageOutline } from "ionicons/icons";
+import { closeOutline, imageOutline, videocamOutline } from "ionicons/icons";
 import { FarcasterContext } from "@/context/farcaster";
 import { useApp } from "@/context/AppContext";
 import useLocalStorage from "@/hooks/use-local-storage-state";
@@ -18,8 +18,10 @@ const CreatePostModal = () => {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [embeds, setEmbeds] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
   const fileInputRef = useRef(null);
+  const videoFileInputRef = useRef(null);
 
   const handleFileChange = async (e) => {
     let arr = [{ url: "superfunsocial" }];
@@ -27,6 +29,7 @@ const CreatePostModal = () => {
     // get secure url from our server
 
     if (file) {
+      setUploading(true);
       const { url } = await fetch(
         "https://frame-backend-z2b9.onrender.com/s3/bucket"
       ).then((res) => res.json());
@@ -42,16 +45,54 @@ const CreatePostModal = () => {
         });
 
         const imageUrl = url.split("?")[0];
-        console.log(imageUrl, "imageUrl");
+        // console.log(imageUrl, "imageUrl");
 
         arr.push({ url: imageUrl });
         setEmbeds(arr);
+        setUploading(false);
+      }
+    }
+  };
+
+  const handleVideoFileChange = async (e) => {
+    let arr = [{ url: "superfunsocial" }];
+    let file = e.target.files[0];
+    // Get the MIME type of the video file
+    let fileType = file.type;
+
+    // Get secure URL from our server
+    if (file) {
+      setUploading(true);
+      const { url } = await fetch(
+        "https://frame-backend-z2b9.onrender.com/s3/bucket"
+      ).then((res) => res.json());
+
+      // POST the video directly to the S3 bucket
+      if (url) {
+        await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": fileType, // Use the correct MIME type for the video file
+          },
+          body: file,
+        });
+
+        const videoUrl = url.split("?")[0];
+        // console.log(videoUrl, "videoUrl");
+
+        arr.push({ url: videoUrl });
+        setEmbeds(arr);
+        setUploading(true);
       }
     }
   };
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleVideoButtonClick = () => {
+    videoFileInputRef.current.click();
   };
 
   const createCast = async () => {
@@ -130,6 +171,14 @@ const CreatePostModal = () => {
             ref={fileInputRef}
             style={{ display: "none" }}
           />
+          <input
+            type="file"
+            name="myVideo"
+            accept="video/mp4,video/x-m4v,video/*"
+            onChange={handleVideoFileChange}
+            ref={videoFileInputRef}
+            style={{ display: "none" }}
+          />
           <div className="flex items-center justify-between mt-4">
             <div className="flex gap-2">
               <button
@@ -138,10 +187,17 @@ const CreatePostModal = () => {
               >
                 <IonIcon icon={imageOutline} />
               </button>
+              <div
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-red-600 bg-red-100"
+                onClick={handleVideoButtonClick}
+              >
+                <IonIcon icon={videocamOutline} />
+              </div>
             </div>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={createCast}
+              disabled={!text || uploading}
             >
               {loading ? "Creating..." : "Create"}
             </button>
