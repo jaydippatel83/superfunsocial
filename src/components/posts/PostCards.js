@@ -8,11 +8,7 @@ import {
   chatbubbleEllipses,
   paperPlaneOutline,
   shareOutline,
-  bookmarkOutline,
-  notificationsOffOutline,
-  flagOutline,
-  stopCircleOutline,
-  chevronDownOutline,
+  repeat,
 } from "ionicons/icons";
 import getRelativeTime, { formatNumber } from "@/lib/utils";
 import EmbedUrls from "./EmbedUrls";
@@ -101,6 +97,7 @@ const PostCards = ({ data }) => {
       .then((response) => setReactions(response.data.reactions))
       .catch((err) => console.error(err));
   };
+ 
 
   return (
     <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
@@ -164,24 +161,31 @@ const PostCards = ({ data }) => {
       </div>
       <MainEmbed data={data} lable="post" />
       <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              className={
-                reactions.some((like) => like.user.fid === user.fid)
-                  ? "button-icon text-red-500 bg-red-100 dark:bg-slate-700"
-                  : "button-icon   dark:bg-slate-700"
-              }
-              onClick={() => {
-                publishLike("like", data.hash);
-                // getReactions(data.hash);
-              }}
-            >
-              <IonIcon className="text-lg" icon={heart}></IonIcon>
-            </button>
-            <a href="#">{formatNumber(data?.reactions.likes_count)}</a>
-          </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            className={
+              reactions.some((like) => like.user.fid === user.fid)
+                ? "button-icon text-red-500 bg-red-100 dark:bg-slate-700"
+                : "button-icon   dark:bg-slate-700"
+            }
+            onClick={() => {
+              publishLike("like", data.hash);
+              // getReactions(data.hash);
+            }}
+          >
+            <IonIcon className="text-lg" icon={heart}></IonIcon>
+          </button>
+          <a href="#">{formatNumber(data?.reactions.likes_count)}</a>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="button-icon bg-slate-200/70 dark:bg-slate-700" 
+          >
+            <IonIcon className="text-lg" icon={repeat}></IonIcon>
+          </button>
+          <span onClick={handleCommentClick}>{formatNumber(data?.reactions?.recasts_count)}</span>
         </div>
         <div className="flex items-center gap-3">
           <button

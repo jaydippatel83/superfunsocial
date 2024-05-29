@@ -28,7 +28,7 @@ export default async function Home() {
           <div className="max-w-[1080px] mx-auto">
             <div className="md:w-[580px] md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
             {
-              feed && <StickyHeader data={feed?.feed?.casts} cursor={feed?.feed?.next.cursor} />  
+              feed && <StickyHeader data={feed?.feed?.casts} cursor={feed?.feed?.next?.cursor} />  
             }  
             </div>
           </div>

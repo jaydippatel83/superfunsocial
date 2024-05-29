@@ -6,7 +6,7 @@ import axios from "axios";
 export async function getFeed(cursor) {
   const feed = await neynarClient.fetchFeed(FeedType.Filter, {
     filterType: FilterType.EmbedUrl,
-    embedUrl:'farcaster', 
+    embedUrl: 'farcaster', 
     limit:20,
     cursor: cursor || "",
     withRecasts:true,
