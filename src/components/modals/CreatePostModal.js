@@ -113,10 +113,8 @@ const CreatePostModal = () => {
       body: JSON.stringify({
         signer_uuid: user.signerUuid,
         text: text,
-        embeds:
-          embeds.length > 0
-            ? embeds
-            : [{ url: "https://superfunsocial.vercel.app/" }],
+        embeds,
+        parent: "/superfunsocial",
       }),
     };
 
