@@ -4,7 +4,6 @@ import EmbedUrls from "./EmbedUrls";
 import Link from "next/link";
 
 const MainEmbed = ({ data, lable }) => {
-
   return (
     <Link href={`${data?.author?.username}/${data?.hash}`}>
       {data?.embeds &&

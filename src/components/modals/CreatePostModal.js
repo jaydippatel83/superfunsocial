@@ -26,6 +26,7 @@ const CreatePostModal = () => {
   const handleFileChange = async (e) => {
     let arr = [];
     let file = e.target.files[0];
+    let fileType = file.type;
     // get secure url from our server
 
     if (file) {
@@ -39,7 +40,7 @@ const CreatePostModal = () => {
         await fetch(url, {
           method: "PUT",
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": fileType,
           },
           body: file,
         });
