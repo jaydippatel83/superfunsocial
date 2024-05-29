@@ -26,7 +26,7 @@ export async function GET(request) {
 export async function POST(request) {
   const body = await request.json();
 
-  const result = await neynarClient.publishCast(body.signerUid, body.text, body.embeds, {channel_id: 'superfunsocial'});
+  const result = await neynarClient.publishCast(body.signerUid, body.text, body.embeds, {});
 
   if (isApiErrorResponse(result)) {
     return NextResponse.json(result, { status: 500 });

@@ -100,7 +100,7 @@ const CreatePostModal = () => {
     if (!user.signerUuid) {
       setLoading(false);
       return;
-    }
+    } 
 
     const options = {
       method: "POST",

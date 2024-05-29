@@ -1,4 +1,4 @@
-"use server";
+ 
 import Image from "next/image";
 import Layout from "../components/layout/Layout";
 import PostCardLoader from "../components/loader/PostCardLoader";
@@ -12,7 +12,9 @@ import CreatePostModal from "@/components/modals/CreatePostModal";
 import { getFeed } from "@/lib/farcaster";
 
 export default async function Home() {
-  const feed = await getFeed(); 
+  const cursor ="";
+  const feed = await getFeed(cursor); 
+   
   return (
     <Layout>
       <main
@@ -25,7 +27,9 @@ export default async function Home() {
         >
           <div className="max-w-[1080px] mx-auto">
             <div className="md:w-[580px] md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
-              <StickyHeader data={feed?.feed?.casts} />  
+            {
+              feed && <StickyHeader data={feed?.feed?.casts} cursor={feed?.feed?.next.cursor} />  
+            }  
             </div>
           </div>
           <RightSIdeBar />

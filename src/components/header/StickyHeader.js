@@ -6,10 +6,14 @@ import PostCardLoader from '../loader/PostCardLoader';
 import PollInputForm from '../poll/PollForm';
 import CreatePost from '../posts/CreatePost';
 import { imageOutline, videocamOutline } from 'ionicons/icons';
+import { getFeed } from '@/lib/farcaster'; 
 
-const StickyHeader = ({data}) => {
+const StickyHeader = ({ data, cursor }) => {
   const [activeTab, setActiveTab] = useState('All');
   const [showPollModal, setShowPollModal] = useState(false);
+  const [casts, setCasts] = useState(data || []);
+  const [loadcasts, setLoadcasts] = useState(false);
+  const [endCursorcasts, setEndCursorcasts] = useState(cursor); 
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -18,6 +22,14 @@ const StickyHeader = ({data}) => {
   const togglePollModal = () => {
     setShowPollModal(!showPollModal);
   };
+
+  const loadmoreCastData = async () => {
+    setLoadcasts(true); 
+      const { feed } = await getFeed(endCursorcasts) 
+      setEndCursorcasts(feed?.next.cursor);
+      setCasts([...casts, ...feed?.casts]);
+      setLoadcasts(false); 
+  }; 
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between mt-3 border-gray-100 px-2 max-lg:flex-col dark:border-slate-700 sticky top-16 border bg-white dark:bg-gray-800 z-50 my-5">
@@ -36,54 +48,57 @@ const StickyHeader = ({data}) => {
           ))}
         </nav>
       </div>
-      {
-        activeTab === 'All' && <>
-          <CreatePost />
-          {
-            data.map((item=>{
-             return <PostCards data={item} />
-            }))
-          }
-         
-        </>
-      }
-      {
-        activeTab === 'Memes' && <>
-          <CreatePost />
-          {
-            data.map((item=>{
-             return <PostCards data={item} />
-            }))
-          }
-        </>
-      }
-      {
-        activeTab === 'Polls' && <>
-          <div className="bg-white rounded-xl shadow-sm md:p-4 p-2 space-y-4 text-sm font-medium border1 dark:bg-dark2">
-            <div className="flex items-center md:gap-3 gap-1">
-              <div
-                className="flex-1 bg-slate-100 hover:bg-opacity-80 transition-all rounded-lg cursor-pointer dark:bg-dark3"
-                onClick={togglePollModal}
-              >
-                <div className="py-2.5 text-center dark:text-white">What do you have in mind?</div>
-              </div>
-              <div
-                className="cursor-pointer hover:bg-opacity-80 p-1 px-1.5 rounded-xl transition-all bg-pink-100/60 hover:bg-pink-100 dark:bg-white/10 dark:hover:bg-white/20"
-                onClick={togglePollModal}
-              >
-                <IonIcon icon={imageOutline} className="w-8 h-8 stroke-pink-600 fill-pink-200/70" />
-              </div>
-              <div
-                className="cursor-pointer hover:bg-opacity-80 p-1 px-1.5 rounded-xl transition-all bg-sky-100/60 hover:bg-sky-100 dark:bg-white/10 dark:hover:bg-white/20"
-                onClick={togglePollModal}
-              >
-                <IonIcon icon={videocamOutline} className="w-8 h-8 stroke-sky-600 fill-sky-200/70" />
-              </div>
+      {activeTab === 'All' && <>
+        <CreatePost />
+        {casts && casts.map((item) => (
+          <PostCards key={item.id} data={item} />
+        ))}
+        {endCursorcasts && (
+          <div className="flex justify-center my-5">
+            <button onClick={()=>loadmoreCastData()} className="mt-4 font-bold text-base sm:text-lg bg-blue-800 text-white  px-4 sm:px-6 py-1 sm:py-2   min-w-[80px] sm:min-w-[100px] text-center rounded-md">
+              {loadcasts ?  'Loading...!' : "Load More"}
+            </button>
+          </div>
+        )}
+      </>}
+      {activeTab === 'Memes' && <>
+        <CreatePost />
+        {casts && casts.map((item) => (
+          <PostCards key={item.id} data={item} />
+        ))}
+        {endCursorcasts && (
+          <div className="flex justify-center">
+            <button onClick={()=>loadmoreCastData()} className="mt-4 font-bold text-base sm:text-lg bg-gradient-to-r text-white px-4 sm:px-6 py-1 sm:py-2 from-ct-blue-dark to-ct-blue-light min-w-[80px] sm:min-w-[100px] text-center rounded-md">
+              {loadcasts ? <div className="spinner-circular"></div> : "Load More"}
+            </button>
+          </div>
+        )}
+      </>}
+      {activeTab === 'Polls' && <>
+        <div className="bg-white rounded-xl shadow-sm md:p-4 p-2 space-y-4 text-sm font-medium border1 dark:bg-dark2">
+          <div className="flex items-center md:gap-3 gap-1">
+            <div
+              className="flex-1 bg-slate-100 hover:bg-opacity-80 transition-all rounded-lg cursor-pointer dark:bg-dark3"
+              onClick={togglePollModal}
+            >
+              <div className="py-2.5 text-center dark:text-white">What do you have in mind?</div>
+            </div>
+            <div
+              className="cursor-pointer hover:bg-opacity-80 p-1 px-1.5 rounded-xl transition-all bg-pink-100/60 hover:bg-pink-100 dark:bg-white/10 dark:hover:bg-white/20"
+              onClick={togglePollModal}
+            >
+              <IonIcon icon={imageOutline} className="w-8 h-8 stroke-pink-600 fill-pink-200/70" />
+            </div>
+            <div
+              className="cursor-pointer hover:bg-opacity-80 p-1 px-1.5 rounded-xl transition-all bg-sky-100/60 hover:bg-sky-100 dark:bg-white/10 dark:hover:bg-white/20"
+              onClick={togglePollModal}
+            >
+              <IonIcon icon={videocamOutline} className="w-8 h-8 stroke-sky-600 fill-sky-200/70" />
             </div>
           </div>
-          <PostCards />
-        </>
-      }
+        </div>
+        <PostCards />
+      </>}
       {showPollModal && (
         <div className="fixed inset-0 z-[99] flex items-center justify-center">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-sm" onClick={togglePollModal}></div>
