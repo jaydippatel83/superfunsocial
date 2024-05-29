@@ -97,7 +97,6 @@ const PostCards = ({ data }) => {
       .then((response) => setReactions(response.data.reactions))
       .catch((err) => console.error(err));
   };
- 
 
   return (
     <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
@@ -145,7 +144,13 @@ const PostCards = ({ data }) => {
           >
             <IonIcon className="text-xl" icon={ellipsisHorizontal}></IonIcon>
           </button>
-          {isDropdownOpen && <Menu hash={data?.hash} uuid={user?.signerUuid} />}
+          {isDropdownOpen && (
+            <Menu
+              hash={data?.hash}
+              uuid={user?.signerUuid}
+              isCurrentUser={data.author.fid == user.fid}
+            />
+          )}
         </div>
       </div>
 
@@ -181,11 +186,13 @@ const PostCards = ({ data }) => {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            className="button-icon bg-slate-200/70 dark:bg-slate-700" 
+            className="button-icon bg-slate-200/70 dark:bg-slate-700"
           >
             <IonIcon className="text-lg" icon={repeat}></IonIcon>
           </button>
-          <span onClick={handleCommentClick}>{formatNumber(data?.reactions?.recasts_count)}</span>
+          <span onClick={handleCommentClick}>
+            {formatNumber(data?.reactions?.recasts_count)}
+          </span>
         </div>
         <div className="flex items-center gap-3">
           <button
