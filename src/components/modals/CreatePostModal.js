@@ -100,7 +100,7 @@ const CreatePostModal = () => {
     if (!user.signerUuid) {
       setLoading(false);
       return;
-    } 
+    }
 
     const options = {
       method: "POST",
@@ -112,7 +112,10 @@ const CreatePostModal = () => {
       body: JSON.stringify({
         signer_uuid: user.signerUuid,
         text: text,
-        embeds,
+        embeds:
+          embeds.length > 0
+            ? embeds
+            : [{ url: "https://superfunsocial.vercel.app/" }],
       }),
     };
 

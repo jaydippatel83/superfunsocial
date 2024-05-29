@@ -24,7 +24,7 @@ const EmbedUrls = ({ data, lable }) => {
       const response = await axios.get(
         `/api/metadata?url=${encodeURIComponent(url)}`
       );
-      const { metaTags, frameTags, twitterTags, image, video } = response.data; 
+      const { metaTags, frameTags, twitterTags, image, video } = response.data;
       setMetaTags(metaTags);
       setFrameTags(frameTags);
       setImage(image);
