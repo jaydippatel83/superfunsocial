@@ -24,7 +24,7 @@ const EmbedUrls = ({ data, lable }) => {
       const response = await axios.get(
         `/api/metadata?url=${encodeURIComponent(url)}`
       );
-      const { metaTags, frameTags, twitterTags, image, video } = response.data;
+      const { metaTags, frameTags, twitterTags, image, video } = response.data; 
       setMetaTags(metaTags);
       setFrameTags(frameTags);
       setImage(image);
@@ -72,6 +72,7 @@ const EmbedUrls = ({ data, lable }) => {
     ? frameTags["fc:frame:button"]
     : "";
 
+    
   return (
     <div className={`${lable}`}>
       {/* <input

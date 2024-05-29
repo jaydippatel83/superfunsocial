@@ -17,7 +17,7 @@ export async function GET(req) {
     const contentType = headResponse.headers.get("content-type") || "";
 
     // Check if the URL is a direct link to an image
-    if (contentType.startsWith("image/")) {
+    if (contentType.startsWith("image/") || contentType.startsWith("superfunsocial/")) {
       return NextResponse.json({
         metaTags: { "og:image": url },
         frameTags: {},
