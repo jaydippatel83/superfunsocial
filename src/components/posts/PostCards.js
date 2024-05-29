@@ -97,8 +97,7 @@ const PostCards = ({ data }) => {
       .then((response) => setReactions(response.data.reactions))
       .catch((err) => console.error(err));
   };
-
-  console.log(data, "data");
+ 
 
   return (
     <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
@@ -118,7 +117,10 @@ const PostCards = ({ data }) => {
           />
         </Link>
         <div className="flex-1 ">
-          <Link href={`/profile/${data?.author.fid}`} className="relative flex items-center">
+          <Link
+            href={`/profile/${data?.author.fid}`}
+            className="relative flex items-center"
+          >
             <h4
               className="text-black dark:text-white"
               onMouseEnter={handleMouseEnter}
@@ -143,7 +145,7 @@ const PostCards = ({ data }) => {
           >
             <IonIcon className="text-xl" icon={ellipsisHorizontal}></IonIcon>
           </button>
-          {isDropdownOpen && <Menu />}
+          {isDropdownOpen && <Menu hash={data?.hash} uuid={user?.signerUuid} />}
         </div>
       </div>
 
@@ -193,7 +195,9 @@ const PostCards = ({ data }) => {
           >
             <IonIcon className="text-lg" icon={chatbubbleEllipses}></IonIcon>
           </button>
-          <span onClick={handleCommentClick}>{formatNumber(data?.replies?.count)}</span>
+          <span onClick={handleCommentClick}>
+            {formatNumber(data?.replies?.count)}
+          </span>
         </div>
         <button type="button" className="button-icon ml-auto">
           <IonIcon className="text-xl" icon={paperPlaneOutline}></IonIcon>
