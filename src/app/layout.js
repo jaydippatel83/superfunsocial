@@ -1,7 +1,5 @@
 import { Inter } from "next/font/google";
-import "./globals.css";
-import "@/tailwind/style.css";
-import "@/tailwind/tailwind.css";
+import "./globals.css";  
 
 import { FarcasterContextProvider } from "@/context/farcaster";
 import { AppProvider } from "@/context/AppContext";

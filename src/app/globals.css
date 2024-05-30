@@ -121,58 +121,7 @@
     input:checked + .switch-button         { @apply bg-sky-600 dark:bg-blue-300}
     input:checked + .switch-button:before  { @apply dark:bg-sky-600}
 
-} 
-
-/* ukit framework utitlites */
-@layer components {
-
-     /* switcher tabs */
-    .uk-switcher > :not(.uk-active)        { @apply hidden }
-    
-    /*slider tab*/
-    .uk-invisible                          { @apply !hidden }
-
-    /* tooltip */
-    .uk-tooltip                            { @apply bg-slate-800/80 hidden absolute z-[1050] top-0 text-[13px] px-2 py-1.5 text-white rounded-md font-semibold tracking-wide max-w-[200px] backdrop-blur-md}
-    .uk-tooltip.uk-active                  { @apply block } 
-
-    /* drop */
-    .uk-drop                               { @apply hidden absolute z-[1020] }
-    .uk-drop.uk-open                       { @apply !block } 
-
-    /* dropdown */
-    .uk-dropdown                           { @apply hidden absolute z-[1020] max-w-[200px] w-52 p-2 bg-white rounded-lg shadow-lg border border-gray-100 dark:border-slate-700/40 dark:bg-dark2}
-    .uk-dropdown.uk-open                   { @apply !block } 
-    .uk-dropdown nav                       { @apply font-medium text-sm text-slate-700 dark:text-white }
-    .uk-dropdown nav > a                   { @apply flex items-center gap-3 py-2 px-2.5 rounded-md hover:bg-secondery}
-    .uk-dropdown nav > hr                  { @apply my-1.5 -mx-2 border-gray-100 dark:border-slate-700/40 }
- 
-    /* dotnav */ 
-    .uk-dotnav > * > *                     { @apply hover:scale-[1.2] block w-2.5 h-2.5 rounded-full bg-gray-200 dark:bg-white/30 overflow-hidden whitespace-nowrap ease-in-out duration-75 transition-all }
-    .uk-dotnav > * > :hover ,   
-    .uk-dotnav > * > :active ,
-    .uk-dotnav > .uk-active > *            { @apply bg-slate-600 dark:bg-white/90}
-      
-    /* Modal */ 
-    .uk-modal                              { @apply !bg-white/5 backdrop-blur-sm dark:bg-black/5 fixed top-0 right-0 bottom-0 left-0 z-[1010] overflow-y-auto opacity-0 invisible transition-transform}
-    .uk-modal.uk-open                      { @apply opacity-100 visible !flex items-center justify-center scale-100 }
-    .uk-modal-dialog                       { @apply opacity-100 scale-75}
-    .uk-open > .uk-modal-dialog            { @apply opacity-100 scale-100 }
-
-    /* Slider */ 
-    .uk-slider                             { @apply relative }
-    .uk-slider-items                       { @apply relative flex !m-0 !p-0 list-none will-change-transform touch-pan-y}
-    .uk-slider-items > *                   { @apply relative flex-none max-w-full }
-    .uk-slider-container                   { @apply overflow-hidden }
- 
-
-    /* slideshow */ 
-    .uk-slideshow-items                    { @apply relative !m-0 !p-0 z-0 list-none overflow-hidden touch-pan-y }
-    .uk-slideshow-items > *                { @apply absolute top-0 left-0 right-0 bottom-0 overflow-hidden }
-    .uk-slideshow-items > :not(.uk-active) { @apply hidden }
-
-
-}
+}  
 
 @layer components {
 
@@ -188,13 +137,8 @@
      
     /* border */
     .border1                               { @apply  border border-gray-100 dark:border-gray-700/40 }
-    .border2                               { @apply  border border-gray-200 dark:border-gray-600/40 }
-    
-    /* slider spacing*/
-    .uk-slider-items.grid-small            { @apply lg:w-[calc(100%+0.5rem)]  w-[calc(100%+0.3rem)]}
-    .uk-slider-items.grid-small > *        { @apply lg:pr-[0.5rem] pr-[0.3rem]}
-
-    /* nav buttons */
+    .border2    
+      /* nav buttons */
     .nav-prev                              { @apply -left-4 w-9 h-9 top-1/2 absolute -translate-y-1/2 bg-white rounded-full grid place-items-center shadow dark:bg-dark3}
     .nav-next                              { @apply -right-4 w-9 h-9 top-1/2 absolute -translate-y-1/2 bg-white rounded-full grid place-items-center shadow dark:bg-dark3}
 
