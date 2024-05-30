@@ -24,7 +24,8 @@ const EmbedUrls = ({ data, lable }) => {
       const response = await axios.get(
         `/api/metadata?url=${encodeURIComponent(url)}`
       );
-      const { metaTags, frameTags, twitterTags, image, video } = response.data; 
+      const { metaTags, frameTags, twitterTags, image, video } = response.data;
+      console.log(response.data, "response.data");
       setMetaTags(metaTags);
       setFrameTags(frameTags);
       setImage(image);
@@ -49,30 +50,30 @@ const EmbedUrls = ({ data, lable }) => {
   const title = twitterTags
     ? twitterTags["twitter:title"]
     : metaTags
-    ? metaTags["og:title"]
-    : "";
+      ? metaTags["og:title"]
+      : "";
   const description = twitterTags
     ? twitterTags["twitter:description"]
     : metaTags
-    ? metaTags["og:description"]
-    : "";
+      ? metaTags["og:description"]
+      : "";
   const imageUrl = twitterTags
     ? twitterTags["twitter:image"]
     : metaTags
-    ? metaTags["og:image"]
-    : "";
+      ? metaTags["og:image"]
+      : "";
   const siteName = twitterTags
     ? twitterTags["twitter:site"]
     : metaTags
-    ? metaTags["og:site_name"]
-    : url;
+      ? metaTags["og:site_name"]
+      : url;
   const framesIs = frameTags
     ? frameTags["fc:frame:image"]
     : frameTags
-    ? frameTags["fc:frame:button"]
-    : "";
+      ? frameTags["fc:frame:button"]
+      : "";
 
-    
+
   return (
     <div className={`${lable}`}>
       {/* <input
@@ -134,7 +135,7 @@ const EmbedUrls = ({ data, lable }) => {
       {image && (
         <div className="rounded-lg border  ">
           <img
-            src={url}
+            src={image}
             alt="Preview"
             className="w-full h-full object-contain rounded-lg max-h-96"
           />

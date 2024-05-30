@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { IonIcon } from '@ionic/react';
-import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline } from 'ionicons/icons';
+import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline,repeat } from 'ionicons/icons';
 import Link from 'next/link';
 import getRelativeTime, { formatNumber } from '@/lib/utils';
 import UserHoverCard from './UserHoverCard';
@@ -76,16 +76,23 @@ export const PostDetailPage = ({ post }) => {
                 <div className="sm:px-4 p-2.5 pt-0">
                     <p className="font-normal"> {post?.text}</p>
                 </div>
-                
+
                 <MainEmbed data={post} label="post" />
                 <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
-                    <div>
-                        <div className="flex items-center gap-2.5">
-                            <button type="button" className="button-icon text-red-500 bg-red-100 dark:bg-slate-700" onClick={toggleReaction}>
-                                <IonIcon className="text-lg" icon={heart}></IonIcon>
-                            </button>
-                            <a href="#">{formatNumber(post?.reactions.likes_count)}</a>
-                        </div>
+                    <div className="flex items-center gap-2.5">
+                        <button type="button" className="button-icon text-red-500 bg-red-100 dark:bg-slate-700" onClick={toggleReaction}>
+                            <IonIcon className="text-lg" icon={heart}></IonIcon>
+                        </button>
+                        <a href="#">{formatNumber(post?.reactions.likes_count)}</a>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            className="button-icon bg-slate-200/70 dark:bg-slate-700"
+                        >
+                            <IonIcon className="text-lg" icon={repeat}></IonIcon>
+                        </button>
+                        <span >{formatNumber(post?.reactions?.recasts_count)}</span>
                     </div>
                     <div className="flex items-center gap-3">
                         <button type="button" className="button-icon bg-slate-200/70 dark:bg-slate-700" onClick={handleCommentClick}>

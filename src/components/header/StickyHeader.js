@@ -1,12 +1,13 @@
 'use client';
 import { IonIcon } from '@ionic/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PostCards from '../posts/PostCards';
 import PostCardLoader from '../loader/PostCardLoader';
 import PollInputForm from '../poll/PollForm';
 import CreatePost from '../posts/CreatePost';
 import { imageOutline, videocamOutline } from 'ionicons/icons';
 import { getFeed } from '@/lib/farcaster'; 
+import PullToRefresh from 'react-pull-to-refresh';
 
 const StickyHeader = ({ data, cursor }) => {
   const [activeTab, setActiveTab] = useState('All');
@@ -14,6 +15,7 @@ const StickyHeader = ({ data, cursor }) => {
   const [casts, setCasts] = useState(data || []);
   const [loadcasts, setLoadcasts] = useState(false);
   const [endCursorcasts, setEndCursorcasts] = useState(cursor); 
+  const [loader, setLoader] = useState(false);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -30,8 +32,31 @@ const StickyHeader = ({ data, cursor }) => {
       setCasts([...casts, ...feed?.casts]);
       setLoadcasts(false); 
   }; 
+  const refreshData = async () => {
+    setLoader(true);
+    const { feed } = await getFeed(null); // null to get the latest data
+    setCasts(feed?.casts || []);
+    setEndCursorcasts(feed?.next.cursor);
+    setLoader(false);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshData();
+    },60000); // 60000 ms = 1 minute
+
+    // Clear interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
   return (
-    <div className="flex flex-col">
+    
+      <PullToRefresh onRefresh={refreshData}>
+        <div className="flex flex-col">
+          {
+            loader && <div className="flex justify-center align-middle h-20">
+              <div className="w-10 h-10 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
+            </div>
+          }
       <div className="flex items-center justify-between mt-3 border-gray-100 px-2 max-lg:flex-col dark:border-slate-700 sticky top-16 border bg-white dark:bg-gray-800 z-50 my-5">
         <nav className="flex gap-0.5 rounded-xl -mb-px text-gray-600 font-medium text-[15px] dark:text-white max-md:w-full max-md:overflow-x-auto">
           {['All', 'Memes', 'Polls'].map((tab) => (
@@ -49,18 +74,21 @@ const StickyHeader = ({ data, cursor }) => {
         </nav>
       </div>
       {activeTab === 'All' && <>
-        <CreatePost />
-        {casts && casts.map((item) => (
-          <PostCards key={item.id} data={item} />
-        ))}
-        {endCursorcasts && (
-          <div className="flex justify-center my-5">
-            <button onClick={()=>loadmoreCastData()} className="mt-4 font-bold text-base sm:text-lg bg-blue-800 text-white  px-4 sm:px-6 py-1 sm:py-2   min-w-[80px] sm:min-w-[100px] text-center rounded-md">
-              {loadcasts ?  'Loading...!' : "Load More"}
-            </button>
-          </div>
-        )}
-      </>}
+          <CreatePost />
+          {casts && casts.map((item) => (
+            <PostCards key={item.id} data={item} />
+          ))}
+          {endCursorcasts && (
+            <div className="flex justify-center my-5">
+              <button onClick={loadmoreCastData} 
+              className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+              disabled={loadcasts}
+              >
+                {loadcasts ? <div className="w-8 h-8 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div> : "Load More"}
+              </button>
+            </div>
+          )}
+        </>}
       {activeTab === 'Memes' && <>
         <CreatePost />
         {casts && casts.map((item) => (
@@ -106,6 +134,7 @@ const StickyHeader = ({ data, cursor }) => {
         </div>
       )}
     </div>
+    </PullToRefresh>
   );
 };
 

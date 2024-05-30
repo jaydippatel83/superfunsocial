@@ -29,6 +29,7 @@
     "react": "^18",
     "react-datepicker": "^6.5.0",
     "react-dom": "^18",
+    "react-pull-to-refresh": "^2.0.1",
     "react-social-media-embed": "^2.5.13",
     "thirdweb": "^5.24.0",
     "viem": "^2.7.9"
