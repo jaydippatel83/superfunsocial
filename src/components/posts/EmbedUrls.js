@@ -25,7 +25,6 @@ const EmbedUrls = ({ data, lable }) => {
         `/api/metadata?url=${encodeURIComponent(url)}`
       );
       const { metaTags, frameTags, twitterTags, image, video } = response.data;
-      console.log(response.data, "response.data");
       setMetaTags(metaTags);
       setFrameTags(frameTags);
       setImage(image);

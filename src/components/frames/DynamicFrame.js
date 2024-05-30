@@ -38,7 +38,6 @@ const DynamicFrame = ({ metadata }) => {
         await connectMetaMaskAndGetSigner();
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
-       
 
         const response = await fetch(buttonTarget, {
           method: "POST",

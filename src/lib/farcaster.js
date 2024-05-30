@@ -1,4 +1,4 @@
-'use server';
+"use server";
 import neynarClient from "@/clients/neynar";
 import { FeedType, FilterType } from "@neynar/nodejs-sdk";
 import axios from "axios";
@@ -6,10 +6,10 @@ import axios from "axios";
 export async function getFeed(cursor) {
   const feed = await neynarClient.fetchFeed(FeedType.Filter , {
     filterType: FilterType.EmbedUrl,
-    embedUrl: 'farcaster', 
-    limit:20,
+    embedUrl: "farcaster",
+    limit: 20,
     cursor: cursor || "",
-    withRecasts:true,
+    withRecasts: true,
     withReplies: true,
   });
   return { feed };
@@ -24,6 +24,6 @@ export async function getCastByHash(hash) {
   const response = await axios.get(url, {
     headers,
   });
-  const data = response.data; 
+  const data = response.data;
   return data;
 }

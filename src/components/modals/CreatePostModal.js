@@ -24,8 +24,9 @@ const CreatePostModal = () => {
   const videoFileInputRef = useRef(null);
 
   const handleFileChange = async (e) => {
-    let arr = [{ url: "superfunsocial" }];
+    let arr = [];
     let file = e.target.files[0];
+    let fileType = file.type;
     // get secure url from our server
 
     if (file) {
@@ -39,7 +40,7 @@ const CreatePostModal = () => {
         await fetch(url, {
           method: "PUT",
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": fileType,
           },
           body: file,
         });
@@ -55,7 +56,7 @@ const CreatePostModal = () => {
   };
 
   const handleVideoFileChange = async (e) => {
-    let arr = [{ url: "superfunsocial" }];
+    let arr = [];
     let file = e.target.files[0];
     // Get the MIME type of the video file
     let fileType = file.type;
@@ -100,7 +101,7 @@ const CreatePostModal = () => {
     if (!user.signerUuid) {
       setLoading(false);
       return;
-    } 
+    }
 
     const options = {
       method: "POST",
@@ -113,6 +114,7 @@ const CreatePostModal = () => {
         signer_uuid: user.signerUuid,
         text: text,
         embeds,
+        parent: "/superfunsocial",
       }),
     };
 
