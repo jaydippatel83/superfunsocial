@@ -5,15 +5,17 @@ import { closeOutline,videocamOutline , imageOutline, } from 'ionicons/icons';
 import AutoResizeTextarea from '../AutosizeTextArea';
 import { AppContext } from '@/context/AppContext';
 import Image from 'next/image';
+import useLocalStorage from '@/hooks/use-local-storage-state';
 
 const CommentModal = ({ isOpen, onClose, parentPost }) => {
   const appContext = useContext(AppContext);
   const {userData} = appContext;
   const [embeds, setEmbeds] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
   const videoFileInputRef = useRef(null);
-
+  const [user, setUser, removeUser] = useLocalStorage("user");
   const [text, setText]= useState("");
 
   const handleFileChange = async (e) => {
@@ -108,14 +110,13 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
         text: text,
         parent_author_fid: parentPost.author.fid,
         parent:  parentPost.hash,
-        embeds,
-        parent: "/superfunsocial",
+        embeds, 
       }),
     };
 
     fetch("https://api.neynar.com/v2/farcaster/cast", options)
       .then((response) => {
-        alert("Cast created");
+        alert("Succesfully commented on post!");
         setText("");
         setLoading(false);
       })
@@ -124,7 +125,7 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
         setLoading(false);
       });
 
-    toggleModal();
+      onClose();
   }; 
 
   if (!isOpen) return null;
