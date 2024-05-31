@@ -21,11 +21,12 @@ export const AppProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [fid, setFid] = useState();
   const [user, setUser, removeUser] = useLocalStorage("user");
+ 
 
   const lookupUser = useCallback(async () => {
     if (user && user.fid) {
       try {
-        const { data } = await axios.get(`/api/user/${user.fid}`);
+        const { data } = await axios.get(`/api/user/${user.fid}`); 
         setUserData(data.user);
         setFid(user.fid);
       } catch (err) {
@@ -52,8 +53,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     isUserLoggedIn();
-  }, []);
-
+  }, []); 
   const value = useMemo(
     () => ({
       userData,

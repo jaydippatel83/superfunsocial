@@ -49,7 +49,7 @@ const RightSIdeBar = () => {
 
         <div className="box p-5 px-6 border1 dark:bg-dark2 ">
           <div className="flex justify-between text-black dark:text-white">
-            <h3 className="font-bold text-base">Active Users </h3>
+            <h3 className="font-bold text-base">Suggested Users </h3>
             <button type="button"> <IonIcon name={syncOutline} className="text-xl"></IonIcon> </button>
           </div>
           <div className="space-y-4 capitalize text-xs font-normal mt-5 mb-2 text-gray-500 dark:text-white/80">

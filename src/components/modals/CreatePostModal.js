@@ -3,17 +3,19 @@ import React, { useContext, useRef, useState } from "react";
 import { IonIcon } from "@ionic/react";
 import { closeOutline, imageOutline, videocamOutline } from "ionicons/icons";
 import { FarcasterContext } from "@/context/farcaster";
-import { useApp } from "@/context/AppContext";
+import { AppContext, useApp } from "@/context/AppContext";
 import useLocalStorage from "@/hooks/use-local-storage-state";
 import AutoResizeTextarea from "../posts/AutosizeTextArea";
 import SuggestionInput from "../posts/SuggestionInput";
+import Image from "next/image";
 
 const CreatePostModal = () => {
-  const farcasterContext = useContext(FarcasterContext);
+  const farcasterContext = useContext(FarcasterContext); 
   const { isModalOpen, toggleModal } = farcasterContext;
+  const appContext = useContext(AppContext);
+  const  { userData} = appContext;
   if (!isModalOpen) return null;
-
-  const { userData } = useApp();
+ 
   const [user, _1, removeUser] = useLocalStorage("user");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -130,7 +132,7 @@ const CreatePostModal = () => {
       });
 
     toggleModal();
-  };
+  }; 
 
   return (
     <div className="fixed inset-0 z-[99] flex items-center justify-center">
@@ -147,10 +149,11 @@ const CreatePostModal = () => {
         </div>
         <hr />
         <div className="p-6 overflow-y-scroll max-h-96">
-          <div className="space-y-2  p-2">
+          <div className=" flex justify-start">
+            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full "/>
             <AutoResizeTextarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
+              value={text} 
+              setText={setText}
               placeholder="What do you have in mind?"
             />
             {/* <SuggestionInput /> */}

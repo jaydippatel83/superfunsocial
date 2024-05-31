@@ -14,6 +14,7 @@ export function FarcasterContextProvider(props) {
   const [provider, setProvider] = useState();
   const [address, setAddress] = useState();
 
+
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
