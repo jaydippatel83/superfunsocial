@@ -44,7 +44,7 @@ const RecastComponent = ({ data }) => {
 
   fetch("https://api.neynar.com/v2/farcaster/reaction", options)
       .then((response) => {
-          alert("Succesfully commented on post!");
+          alert("Succesfully Recast post!");
           setText("");
           setLoading(false);
       })

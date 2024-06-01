@@ -134,7 +134,7 @@ const PostCards = ({ data }) => {
               {data?.author?.display_name}{" "}
             </h4>
           </Link>
-          <UserHoverCard user={data?.author} isVisible={isHoverCardVisible} />
+          <UserHoverCard user={data?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} />
           <div className="flex items-center">
             <span className="text-sm text-gray-500">
               @{data?.author?.username} {getRelativeTime(data?.timestamp)}

@@ -58,7 +58,7 @@ export const PostDetailPage = ({ post }) => {
                                 <h4 className="text-black dark:text-white" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}> {post?.author?.display_name} </h4>
                             </div>
                         </Link>
-                        <UserHoverCard user={post?.author} isVisible={isHoverCardVisible} />
+                        <UserHoverCard user={post?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} />
                         <div className="flex items-center">
                             <span className="text-sm text-gray-500">@{post?.author?.username} {getRelativeTime(post?.timestamp)}</span>
                         </div>

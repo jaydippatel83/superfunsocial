@@ -92,7 +92,7 @@ const CommentCards = ({ comment,depth = 0 }) => {
                     <span className="text-sm text-gray-500"> @{comment?.author?.username} <span className="text-gray-500 mx-1">|</span> {getRelativeTime(comment?.timestamp)}</span>
                   </div>
                 </div>
-                <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} />
+                <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} />
               </div>
               <div className='relative'>
               <button type="button" className="text-gray-500" onClick={toggleDropdown}>

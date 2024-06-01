@@ -33,10 +33,10 @@ const RepostCast = ({ id, hash, classId }) => {
             {feed && (
                 <div className=" w-full  bg-white border border-gray-300 rounded-lg cursor-pointer">
                     <div className="flex items-start px-4 py-3">
-                        <Link
+                        {/* <Link
                             href={`/profile/${feed?.author?.fid}`}
                             className="mt-1 text-gray-900 break-all w-8 h-8 "
-                        >
+                        > */}
                             <Image
                                 className="w-8 h-8 rounded-full"
                                 src={feed?.author?.pfp_url}
@@ -44,7 +44,7 @@ const RepostCast = ({ id, hash, classId }) => {
                                 width={48}
                                 height={48}
                             />
-                        </Link>
+                        {/* </Link> */}
                         <div className="ml-3">
 
                             <Link
