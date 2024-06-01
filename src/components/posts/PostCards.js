@@ -181,7 +181,7 @@ const PostCards = ({ data }) => {
             }
             onClick={() => {
               publishLike("like", data.hash);
-              // getReactions(data.hash);
+              getReactions(data.hash);
             }}
           >
             <IonIcon className="text-lg" icon={heart}></IonIcon>
