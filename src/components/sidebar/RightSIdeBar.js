@@ -40,7 +40,7 @@ const RightSIdeBar = () => {
         <div className="box p-5 px-6">
 
           <div className="flex items-baseline justify-between text-black dark:text-white">
-            <h3 className="font-bold text-base"> Recent </h3>
+            <h3 className="font-bold text-base"> Recents </h3>
             <a href="#" className="text-sm text-blue-500">See all</a>
           </div>
           <RecentList />
