@@ -4,7 +4,7 @@ import React from 'react';
 import { repeat, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline, bookmarkOutline, notificationsOffOutline, flagOutline, stopCircleOutline, chevronDownOutline } from 'ionicons/icons';
 import { formatNumber } from '@/lib/utils';
 
-const Reactions = ({ data, handleCommentClick }) => {
+const Reactions = ({ data, handleCommentClick ,handleRecastClick}) => {
     return (
         <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
             <div className="flex items-center gap-2.5">
@@ -16,6 +16,7 @@ const Reactions = ({ data, handleCommentClick }) => {
             <div className="flex items-center gap-3">
                 <button
                     type="button"
+                    onClick={handleRecastClick}
                     className="button-icon bg-slate-200/70 dark:bg-slate-700"
                 >
                     <IonIcon className="text-lg" icon={repeat}></IonIcon>

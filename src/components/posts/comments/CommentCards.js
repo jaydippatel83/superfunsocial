@@ -19,6 +19,7 @@ const CommentCards = ({ comment,depth = 0 }) => {
     const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
     const [showReplies, setShowReplies] = useState(false);
+    const [recastModal, setRecastModal]= useState(false);
 
 
     const toggleDropdown = (e) => {
@@ -55,6 +56,10 @@ const CommentCards = ({ comment,depth = 0 }) => {
       e.stopPropagation();
         setShowReplies(!showReplies);
       };
+
+    const handleRecastClick =()=>{
+      setRecastModal(!recastModal)
+    }
  
  
     return (
@@ -106,7 +111,7 @@ const CommentCards = ({ comment,depth = 0 }) => {
               </p>
             </div>
             {comment?.embeds && <CommentEmbed embeds={comment.embeds} />}
-            <Reactions data={comment} handleCommentClick={handleCommentClick} />
+            <Reactions data={comment} handleCommentClick={handleCommentClick} handleRecastClick={handleRecastClick}/>
           </div>
         </div>
         {comment.direct_replies && comment.direct_replies.length > 0 && (

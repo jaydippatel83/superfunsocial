@@ -41,13 +41,13 @@ const StickyHeader = ({ data, cursor }) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    // const interval = setInterval(() => {
       refreshData();
-    },60000); // 60000 ms = 1 minute
+    // },60000); // 60000 ms = 1 minute
 
     // Clear interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+   }, []);
   return (
     
       <PullToRefresh onRefresh={refreshData}>

@@ -35,10 +35,10 @@ const RepostCast = ({ id, hash, classId }) => {
                     <div className="flex items-start px-4 py-3">
                         <Link
                             href={`/profile/${feed?.author?.fid}`}
-                            className="mt-1 text-gray-900 break-all"
+                            className="mt-1 text-gray-900 break-all w-8 h-8 "
                         >
                             <Image
-                                className="w-10 h-10 rounded-full"
+                                className="w-8 h-8 rounded-full"
                                 src={feed?.author?.pfp_url}
                                 alt="Profile Picture"
                                 width={48}

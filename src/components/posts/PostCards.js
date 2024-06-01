@@ -22,6 +22,7 @@ import Reactions from "./Reactions";
 
 import axios from "axios";
 import Image from "next/image";
+import RecastComponent from "./recast/RecastComponent";
 
 const PostCards = ({ data }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -30,12 +31,16 @@ const PostCards = ({ data }) => {
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [reactions, setReactions] = useState([]);
+ 
 
   const [user, _1, removeUser] = useLocalStorage("user");
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+
+
 
   const toggleReaction = () => {
     setIsReactionOpen(!isReactionOpen);
@@ -183,17 +188,7 @@ const PostCards = ({ data }) => {
           </button>
           <a href="#">{formatNumber(data?.reactions.likes_count)}</a>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            className="button-icon bg-slate-200/70 dark:bg-slate-700"
-          >
-            <IonIcon className="text-lg" icon={repeat}></IonIcon>
-          </button>
-          <span onClick={handleCommentClick}>
-            {formatNumber(data?.reactions?.recasts_count)}
-          </span>
-        </div>
+        <RecastComponent data={data}/>
         <div className="flex items-center gap-3">
           <button
             type="button"
