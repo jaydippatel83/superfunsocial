@@ -43,12 +43,12 @@ const Profile = ({user}) => {
 
                         <div className="w-full bottom-0 absolute left-0 bg-gradient-to-t from-black/60 pt-20 z-10"></div>
 
-                        <div className="absolute bottom-0 right-0 m-4 z-20">
+                        {/* <div className="absolute bottom-0 right-0 m-4 z-20">
                             <div className="flex items-center gap-3">
                                 <button className="button bg-white/20 text-white flex items-center gap-2 backdrop-blur-small">Crop</button>
                                 <button className="button bg-black/10 text-white flex items-center gap-2 backdrop-blur-small">Edit</button>
                             </div>
-                        </div>
+                        </div> */}
 
                     </div>
                     <div className="p-3">

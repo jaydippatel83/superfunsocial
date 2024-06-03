@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import useLocalStorage from "@/hooks/use-local-storage-state";
 import { IonIcon } from "@ionic/react";
 import {
@@ -23,24 +23,26 @@ import Reactions from "./Reactions";
 import axios from "axios";
 import Image from "next/image";
 import RecastComponent from "./recast/RecastComponent";
+import { userFollowOrNot } from "@/lib/farcaster";
+import { AppContext } from "@/context/AppContext";
 
 const PostCards = ({ data }) => {
+  const appContext = useContext(AppContext);
+  const {userData}= appContext;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isReactionOpen, setIsReactionOpen] = useState(false);
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [reactions, setReactions] = useState([]);
+  const [follow, setFollow]= useState();
  
 
   const [user, _1, removeUser] = useLocalStorage("user");
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
-
-
-
+  }; 
 
   const toggleReaction = () => {
     setIsReactionOpen(!isReactionOpen);
@@ -50,8 +52,12 @@ const PostCards = ({ data }) => {
     setIsCommentsOpen(!isCommentsOpen);
   };
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = async() => {
+    const fid = data?.author?.fid;
+    const viewer = userData?.fid;
     setIsHoverCardVisible(true);
+    const res = await userFollowOrNot(fid, viewer);
+    setFollow(res.users[0].viewer_context.following); 
   };
 
   const handleMouseLeave = () => {
@@ -102,6 +108,7 @@ const PostCards = ({ data }) => {
       .then((response) => setReactions(response.data.reactions))
       .catch((err) => console.error(err));
   };
+ 
 
   return (
     <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
@@ -134,7 +141,7 @@ const PostCards = ({ data }) => {
               {data?.author?.display_name}{" "}
             </h4>
           </Link>
-          <UserHoverCard user={data?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} />
+          <UserHoverCard user={data?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user.signerUuid}/>
           <div className="flex items-center">
             <span className="text-sm text-gray-500">
               @{data?.author?.username} {getRelativeTime(data?.timestamp)}

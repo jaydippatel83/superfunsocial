@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { ellipsisHorizontal, heart, chatbubbleEllipses, paperPlaneOutline, shareOutline,repeat } from 'ionicons/icons';
 import Link from 'next/link';
@@ -9,12 +9,18 @@ import MainEmbed from './MainEmbed';
 import CommentModal from './comments/CommentModal';
 import Menu from './Menu';
 import FeedComments from './comments/FeedCommnets';
+import { userFollowOrNot } from '@/lib/farcaster';
+import { AppContext } from '@/context/AppContext';
 
 export const PostDetailPage = ({ post }) => {
+    const appContext = useContext(AppContext);
+    const {userData}= appContext;
+    const [follow, setFollow]= useState();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isReactionOpen, setIsReactionOpen] = useState(false);
     const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+
 
     const toggleDropdown = (e) => {
         e.stopPropagation();
@@ -26,9 +32,14 @@ export const PostDetailPage = ({ post }) => {
         setIsReactionOpen(!isReactionOpen);
     };
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = async() => {
+        const fid = post?.author?.fid;
+        const viewer = userData?.fid;
         setIsHoverCardVisible(true);
-    };
+        const res = await userFollowOrNot(fid, viewer);
+        setFollow(res.users[0].viewer_context.following); 
+      };
+    
 
     const handleMouseLeave = () => {
         setIsHoverCardVisible(false);
@@ -58,7 +69,7 @@ export const PostDetailPage = ({ post }) => {
                                 <h4 className="text-black dark:text-white" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}> {post?.author?.display_name} </h4>
                             </div>
                         </Link>
-                        <UserHoverCard user={post?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} />
+                        <UserHoverCard user={post?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow}/>
                         <div className="flex items-center">
                             <span className="text-sm text-gray-500">@{post?.author?.username} {getRelativeTime(post?.timestamp)}</span>
                         </div>
