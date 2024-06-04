@@ -1,12 +1,13 @@
 import { Inter } from "next/font/google";
-import "./globals.css";  
+import "./globals.css";
 
 import { FarcasterContextProvider } from "@/context/farcaster";
 import { AppProvider } from "@/context/AppContext";
 import { PrivyProviderComponent } from "@/components/provider/provider";
 import dynamic from "next/dynamic";
+import { PostcardContextProvider } from "@/context/PostCardContext";
 
-const  ProgressBarProvider = dynamic(()=> import('./ProgressBarProvider'),{
+const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
   ssr: false,
 })
 
@@ -14,7 +15,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "SuperfunSocial",
-  description: "SuperfunSocial", 
+  description: "SuperfunSocial",
 };
 
 
@@ -24,13 +25,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <ProgressBarProvider>
-        <PrivyProviderComponent>
-          <FarcasterContextProvider>
-            <AppProvider>
-              {children}
-            </AppProvider>
-          </FarcasterContextProvider>
-        </PrivyProviderComponent>
+          <PrivyProviderComponent>
+            <FarcasterContextProvider>
+              <PostcardContextProvider>
+                <AppProvider>
+                  {children}
+                </AppProvider>
+              </PostcardContextProvider>
+            </FarcasterContextProvider>
+          </PrivyProviderComponent>
         </ProgressBarProvider>
       </body>
     </html>

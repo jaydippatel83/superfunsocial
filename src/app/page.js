@@ -1,12 +1,5 @@
- 
-import Image from "next/image";
-import Layout from "../components/layout/Layout";
-import PostCardLoader from "../components/loader/PostCardLoader";
-import RightSIdeBar from "../components/sidebar/RightSIdeBar";
- 
-import PostCards from "../components/posts/PostCards";
-import CreatePost from "../components/posts/CreatePost";
-import PostTabs from "@/components/tabs/PostTabs";
+import Layout from "../components/layout/Layout"; 
+import RightSIdeBar from "../components/sidebar/RightSIdeBar"; 
 import StickyHeader from "@/components/header/StickyHeader";
 import CreatePostModal from "@/components/modals/CreatePostModal";
 import { getFeed } from "@/lib/farcaster";
