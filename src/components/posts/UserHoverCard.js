@@ -1,6 +1,6 @@
 'use client';
 import { AppContext } from '@/context/AppContext';
-import { followUser, unfollowUser } from '@/lib/farcaster';
+import { followUser, unfollowUser, userFollowOrNot } from '@/lib/farcaster';
 import { formatNumber } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,35 +11,35 @@ const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid })
     const { signerUuid } = appContext;
 
     const [isFollowing, setIsFollowing] = useState(follow);
+    const [follower, setFollower] = useState(user?.follower_count);
 
     useEffect(() => {
         setIsFollowing(follow);
-    }, [follow]);
+        setFollower(user?.follower_count);
+    }, [follow, user?.follower_count]);
 
     if (!isVisible) return null;
 
     const handleFollow = async () => {
         const id = user?.fid;
         const viewer = uuid;
-        console.log(viewer, "viewer");
         let res;
 
         if (isFollowing) {
             res = await unfollowUser(viewer, id);
-            console.log(res, "ressss");
-            if (res) {
-                alert("Unfollowed", res);
+            if (res) { 
                 setIsFollowing(false);
+                setFollower(follower - 1);
             }
         } else {
             res = await followUser(viewer, id);
-            console.log(res, "ressss");
-            if (res) {
-                alert("Followed", res);
+            if (res) { 
                 setIsFollowing(true);
+                setFollower(follower + 1);
             }
         }
-    }
+    };
+ 
 
     return (
         <div onMouseEnter={() => setIsHoverCardVisible(true)} onMouseLeave={() => setIsHoverCardVisible(false)} className="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-72">
@@ -55,7 +55,7 @@ const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid })
                 <p className="text-gray-700 mt-1">{user?.profile?.bio?.text}</p>
                 <div className="flex items-center mt-2 text-gray-500">
                     <span className="mr-4"><span className='text-black font-bold'>{formatNumber(user?.following_count)}</span> Following</span>
-                    <span><span className='text-black font-bold'>{formatNumber(user?.follower_count)}</span> Followers</span>
+                    <span><span className='text-black font-bold'>{formatNumber(follower)}</span> Followers</span>
                 </div>
             </div>
         </div>

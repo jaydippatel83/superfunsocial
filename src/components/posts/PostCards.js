@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import useLocalStorage from "@/hooks/use-local-storage-state";
 import { IonIcon } from "@ionic/react";
 import {
@@ -8,17 +8,13 @@ import {
   chatbubbleEllipses,
   paperPlaneOutline,
   shareOutline,
-  repeat,
 } from "ionicons/icons";
 import getRelativeTime, { formatNumber } from "@/lib/utils";
-import EmbedUrls from "./EmbedUrls";
 import MainEmbed from "./MainEmbed";
-import FeedComments from "./comments/FeedCommnets";
 import Menu from "./Menu";
 import UserHoverCard from "./UserHoverCard";
 import CommentModal from "./comments/CommentModal";
 import Link from "next/link";
-import Reactions from "./Reactions";
 
 import axios from "axios";
 import Image from "next/image";
@@ -28,36 +24,30 @@ import { AppContext } from "@/context/AppContext";
 
 const PostCards = ({ data }) => {
   const appContext = useContext(AppContext);
-  const {userData}= appContext;
+  const { userData } = appContext;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isReactionOpen, setIsReactionOpen] = useState(false);
-  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [reactions, setReactions] = useState([]);
-  const [follow, setFollow]= useState();
- 
+  const [follow, setFollow] = useState(false);
+  const [likeCount, setLikeCount] = useState(data?.reactions?.likes_count || 0); 
 
   const [user, _1, removeUser] = useLocalStorage("user");
+  const [hasLiked, setHasLiked] = useState(
+    reactions.some((like) => like.user.fid === user?.fid)
+  );
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  }; 
-
-  const toggleReaction = () => {
-    setIsReactionOpen(!isReactionOpen);
   };
 
-  const toggleComments = () => {
-    setIsCommentsOpen(!isCommentsOpen);
-  };
-
-  const handleMouseEnter = async() => {
+  const handleMouseEnter = async () => {
     const fid = data?.author?.fid;
     const viewer = userData?.fid;
     setIsHoverCardVisible(true);
     const res = await userFollowOrNot(fid, viewer);
-    setFollow(res.users[0].viewer_context.following); 
+    console.log(res, "res");
+    setFollow(res?.users[0]?.viewer_context?.following);
   };
 
   const handleMouseLeave = () => {
@@ -105,10 +95,27 @@ const PostCards = ({ data }) => {
         options
       )
       //   .then((response) => response.json())
-      .then((response) => setReactions(response.data.reactions))
+      .then((response) => {
+        setReactions(response.data.reactions);
+        setLikeCount(response.data.reactions.length);
+        setHasLiked(response.data.reactions.some((like) => like.user.fid === user?.fid));
+      })
       .catch((err) => console.error(err));
   };
- 
+
+  const handleLikeButtonClick = () => {
+    const hasUserLiked = reactions.some((like) => like.user.fid === user?.fid);
+    if (!hasUserLiked) {
+      setReactions([...reactions, { user: { fid: user?.fid } }]);
+      setLikeCount(likeCount + 1);
+      setHasLiked(true);
+    } else {
+      setReactions(reactions.filter((like) => like.user.fid !== user?.fid));
+      setLikeCount(likeCount - 1);
+      setHasLiked(false);
+    }
+    publishLike("like", data.hash);
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
@@ -137,11 +144,16 @@ const PostCards = ({ data }) => {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              {" "}
-              {data?.author?.display_name}{" "}
+              {data?.author?.display_name}
             </h4>
           </Link>
-          <UserHoverCard user={data?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user.signerUuid}/>
+          <UserHoverCard
+            user={data?.author}
+            isVisible={isHoverCardVisible}
+            setIsHoverCardVisible={setIsHoverCardVisible}
+            follow={follow}
+            uuid={user.signerUuid}
+          />
           <div className="flex items-center">
             <span className="text-sm text-gray-500">
               @{data?.author?.username} {getRelativeTime(data?.timestamp)}
@@ -166,7 +178,7 @@ const PostCards = ({ data }) => {
         </div>
       </div>
 
-      <div class="sm:px-4 p-2.5 pt-0">
+      <div className="sm:px-4 p-2.5 pt-0">
         <p className="font-normal cursor-pointer">
           <Link
             href={`/${data?.author?.username}/${data?.hash}`}
@@ -182,20 +194,17 @@ const PostCards = ({ data }) => {
           <button
             type="button"
             className={
-              reactions.some((like) => like.user.fid === user.fid)
-                ? "button-icon text-red-500 bg-red-100 dark:bg-slate-700"
-                : "button-icon   dark:bg-slate-700"
+              hasLiked
+                ? "button-icon text-red-500 bg-red-100 dark:bg-slate-700 "
+                : "button-icon  dark:bg-slate-700 bg-slate-200/70"
             }
-            onClick={() => {
-              publishLike("like", data.hash);
-              getReactions(data.hash);
-            }}
+            onClick={handleLikeButtonClick}
           >
             <IonIcon className="text-lg" icon={heart}></IonIcon>
           </button>
-          <a href="#">{formatNumber(data?.reactions.likes_count)}</a>
+          <a href="#">{formatNumber(likeCount)}</a>
         </div>
-        <RecastComponent data={data}/>
+        <RecastComponent data={data} />
         <div className="flex items-center gap-3">
           <button
             type="button"
