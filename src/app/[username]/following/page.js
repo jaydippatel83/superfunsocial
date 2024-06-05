@@ -1,7 +1,7 @@
 import Layout from '@/components/layout/Layout';
 import RightSIdeBar from '@/components/sidebar/RightSIdeBar';
 import FollowerTab from '@/components/tabs/FollowerTab';
-import { fetchFollowing, fetchUserbyname } from '@/lib/farcaster';
+import { fetchFollowing } from '@/lib/farcaster';
 import React from 'react';
 
 const page =async ({params}) => { 

@@ -1,8 +1,39 @@
+'use client';
+import { followUser, unfollowUser, userFollowOrNot } from '@/lib/farcaster';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const Followers = ({ user }) => {
+const Followers = ({ user,uuid }) => {
+    const [isFollowing, setIsFollowing] = useState(false); 
+
+    const handleGetFollow= async()=>{
+        const res = await userFollowOrNot(user.fid, uuid); 
+        setIsFollowing(res?.users[0]?.viewer_context?.following);
+    }
+
+    useEffect(() => {
+        handleGetFollow();
+    }, [user]);
+
+    const handleFollow = async () => {
+        const id = user?.fid;
+        const viewer = uuid;
+        let res;
+
+        if (isFollowing) {
+            res = await unfollowUser(viewer, id);
+            if (res) {
+                setIsFollowing(false); 
+            }
+        } else {
+            res = await followUser(viewer, id);
+            if (res) {
+                setIsFollowing(true); 
+            }
+        }
+    };
+
     return (
         <div className="flex items-start justify-between  border-gray-300 p-4 hover:bg-gray-100 cursor-pointer">
             <Link
@@ -33,8 +64,8 @@ const Followers = ({ user }) => {
                     <p className="text-gray-500">@{user.username}</p>
                     <p className='break-all'>{user.profile.bio.text}</p>
                 </div>
-            </Link>
-            <button className="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery border">Follow</button>
+            </Link> 
+            <button onClick={handleFollow} className="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery border hover:bg-white">{isFollowing ? "Unfollow" : "Follow"}</button>
         </div>
     );
 };

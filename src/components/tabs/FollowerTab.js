@@ -3,6 +3,7 @@ import React, {  useState } from 'react';
 import { fetchFollowing, getFeed } from '@/lib/farcaster';  
 import Link from 'next/link';
 import Followers from '../followers/Followers';
+import useLocalStorage from '@/hooks/use-local-storage-state';
 
 const FollowerTab = ({ data, cursor, filter,username }) => { 
     const [activeTab, setActiveTab] = useState(filter); 
@@ -11,6 +12,7 @@ const FollowerTab = ({ data, cursor, filter,username }) => {
     const [loader, setLoader] = useState(false);
     const [endCursor, setEndCursor] = useState(cursor); 
     const [endCursorFollower, setEndCursorFollower] = useState(cursor); 
+    const [user, setUser, removeUser] = useLocalStorage("user");
 
     const handleTabClick = (tab) => { 
         setActiveTab(tab);
@@ -63,7 +65,7 @@ const FollowerTab = ({ data, cursor, filter,username }) => {
             </div>
             {activeTab === 'followers' && <div className='bg-white border border-gray-200 rounded-lg shadow-lg py-4'> 
                 {follower && follower.map((item) => (
-                     <Followers user={item.user}/>
+                     <Followers user={item.user} uuid={user.uuid}/>
                 ))}
                 {endCursorFollower && (
                     <div className="flex justify-center my-5">

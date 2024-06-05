@@ -45,8 +45,7 @@ const PostCards = ({ data }) => {
     const fid = data?.author?.fid;
     const viewer = userData?.fid;
     setIsHoverCardVisible(true);
-    const res = await userFollowOrNot(fid, viewer);
-    console.log(res, "res");
+    const res = await userFollowOrNot(fid, viewer); 
     setFollow(res?.users[0]?.viewer_context?.following);
   };
 
