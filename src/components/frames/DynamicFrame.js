@@ -1,11 +1,14 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useContext } from "react";
-import { FarcasterContext } from "@/context/farcaster";
+import { FarcasterContext } from "@/context/farcaster"; 
+import Link from "next/link";
 import { ethers } from "ethers";
 
-const DynamicFrame = ({ metadata }) => {
+const DynamicFrame = ({ metadata, link }) => {
   const [loader, setLoader] = useState(false);
+  const [loadingButtonIndex, setLoadingButtonIndex] = useState(null);
+
   const {
     description,
     "fc:frame:image": frameImage,
@@ -20,24 +23,29 @@ const DynamicFrame = ({ metadata }) => {
   const farcasterContext = useContext(FarcasterContext);
   const { connectMetaMaskAndGetSigner } = farcasterContext;
 
-  const handleButtonClick = async (e, buttonAction, buttonTarget) => {
-    e.preventDefault();
-
+  const handleButtonClick = async (buttonAction, buttonTarget, index) => {
     setLoader(true);
+    setLoadingButtonIndex(index);
     console.log(
       `Button clicked: action=${buttonAction}, target=${buttonTarget}`
     );
     if (buttonAction === "post_redirect" && buttonTarget) {
       window.location.href = buttonTarget;
       setLoader(false);
+      setLoadingButtonIndex(null);
     } else if (buttonAction === "post" && buttonTarget) {
       window.open(buttonTarget, "_blank");
       setLoader(false);
+      setLoadingButtonIndex(null);
+    } else if (buttonAction === "link" && buttonTarget) {
+      window.open(buttonTarget, "_blank");
+      setLoader(false);
+      setLoadingButtonIndex(null);
     } else if (buttonAction === "tx" && buttonTarget) {
       try {
         await connectMetaMaskAndGetSigner();
         const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
+        const signer = provider.getSigner();
 
         const response = await fetch(buttonTarget, {
           method: "POST",
@@ -48,8 +56,10 @@ const DynamicFrame = ({ metadata }) => {
         const result = await response.json();
         console.log("API call result:", result);
         setLoader(false);
+        setLoadingButtonIndex(null);
       } catch (error) {
         setLoader(false);
+        setLoadingButtonIndex(null);
         console.error("API call error:", error);
       }
     }
@@ -62,56 +72,49 @@ const DynamicFrame = ({ metadata }) => {
       const buttonAction = buttons[`fc:frame:button:${i}:action`];
       let buttonTarget = buttons[`fc:frame:button:${i}:target`];
 
-      //   Replace part of the URL
       if (buttonTarget) {
         buttonTarget = buttonTarget.replace(
           "https://superfunsocial.vercel.app",
-          "http://localhost:3000"
+          "https://demo.superfun.social"
         );
       }
       buttonElements.push(
         <button
           key={i}
-          onClick={(e) => handleButtonClick(e, buttonAction, buttonTarget)}
+          onClick={() => handleButtonClick(buttonAction, buttonTarget, i)}
           className="px-4 w-full py-2 mb-2 font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 hover:border-gray-400"
         >
-          {buttonText}
+          {loadingButtonIndex === i ? (
+            <div className="w-6 h-6 border-4 border-t-blue-500 border-solid rounded-full animate-spin mx-auto"></div>
+          ) : (
+            buttonText
+          )}
         </button>
       );
     }
     return buttonElements;
   };
+
   const [aspectWidth, aspectHeight] = aspectRatio.split(":").map(Number);
   return (
-    <div className="max-w-4xl mx-auto my-2 bg-white border border-gray-300 rounded-lg  overflow-hidden">
+    <div className="max-w-4xl mx-auto my-2 bg-white border border-gray-300 rounded-lg overflow-hidden">
       {frameImage && (
         <div
           className="relative"
           style={{ paddingTop: `${(aspectHeight / aspectWidth) * 100}%` }}
         >
-          <Image
-            src={frameImage}
-            alt={ogTitle}
-            layout="fill"
-            objectFit="cover"
-            className="absolute inset-0 w-full h-full"
-          />
+          <Link href={link}>
+            <Image
+              src={frameImage}
+              alt={ogTitle}
+              layout="fill"
+              objectFit="cover"
+              className="absolute inset-0 w-full h-full"
+            />
+          </Link>
         </div>
       )}
       <div className="p-2 rounded-b-lg bg-gray-300 flex justify-between">
-        {/* {ogTitle && <h2 className="text-2xl font-bold">{ogTitle}</h2>}
-                {description && <p className="mt-2 text-gray-600">{description}</p>}
-                {ogDescription && <p className="mt-2 text-gray-600">{ogDescription}</p>}
-                {ogUrl && (
-                    <a
-                        href={ogUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-2 text-blue-500"
-                    >
-                        {ogUrl}
-                    </a>
-                )} */}
         {renderButtons()}
       </div>
     </div>

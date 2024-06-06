@@ -11,7 +11,7 @@ import {
     YouTubeEmbed
 } from 'react-social-media-embed';
 
-const  SocialMediaEmbed = ({ url }) => { 
+const  SocialMediaEmbed = ({ url ,link}) => { 
     
   const getEmbedComponent = (url) => {
     if (url.match(/(?:www\.)?facebook\.com/)) {

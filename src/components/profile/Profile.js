@@ -53,7 +53,7 @@ const Profile = ({ user }) => {
                         <PostCardLoader />
                     </div>
                 </div>
-                <RightSIdeBar />
+                <RightSIdeBar /> 
             </div>
         </main>
     );

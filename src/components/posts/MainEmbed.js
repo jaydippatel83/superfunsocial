@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const MainEmbed = ({ data, lable }) => {
   return (
-    <Link href={`/${data?.author?.username}/${data?.hash}`}>
+    <>
       {data?.embeds &&
-        data.embeds.map((embed, index) => {
+        data.embeds.map((embed, index) => { 
           return (
             <>
               {embed?.cast_id && (
@@ -22,13 +22,14 @@ const MainEmbed = ({ data, lable }) => {
                 <EmbedUrls
                   key={index}
                   data={embed.url}
+                  link={`/${data?.author?.username}/${data?.hash}`}
                   lable="max-w-4xl mx-auto px-4"
                 />
               )}
             </>
           );
         })}
-    </Link>
+    </>
   );
 };
 

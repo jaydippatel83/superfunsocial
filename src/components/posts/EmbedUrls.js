@@ -6,7 +6,7 @@ import SocialMediaEmbed from "./SocialMediaEmbed";
 import Link from "next/link";
 import DynamicFrame from "../frames/DynamicFrame";
 
-const EmbedUrls = ({ data, lable }) => {
+const EmbedUrls = ({ data, lable ,link}) => {
   const [url, setUrl] = useState(data);
   const [metaTags, setMetaTags] = useState(null);
   const [frameTags, setFrameTags] = useState(null);
@@ -93,9 +93,9 @@ const EmbedUrls = ({ data, lable }) => {
             {error && <p className="text-red-500">{error}</p>} */}
 
       {framesIs ? (
-        <DynamicFrame metadata={metaTags} />
+        <DynamicFrame metadata={metaTags} link={link} />
       ) : isSocialMediaLink(url) ? (
-        <SocialMediaEmbed url={url} />
+        <SocialMediaEmbed url={url}  link={link} />
       ) : (
         title &&
         imageUrl && (
@@ -133,11 +133,13 @@ const EmbedUrls = ({ data, lable }) => {
       )}
       {image && (
         <div className="rounded-lg border  ">
+          <Link   href={link}> 
           <img
             src={image}
             alt="Preview"
             className="w-full h-full object-contain rounded-lg max-h-96"
           />
+          </Link>
         </div>
       )}
       {video && (
