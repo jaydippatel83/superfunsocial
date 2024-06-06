@@ -11,8 +11,7 @@ const page =async ({params}) => {
         filter:'followers',
         name: username
       }
-    const data =  await fetchFollowing(req);
-    console.log(data);
+    const data =  await fetchFollowing(req); 
     return (
       <Layout>
       <main
