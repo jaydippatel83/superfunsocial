@@ -54,7 +54,7 @@ const ThreadComments = ({ comment }) => {
                                     <span className="text-sm text-gray-500"> @{comment?.author?.username} <span className="text-gray-500 mx-1">|</span> {getRelativeTime(comment?.timestamp)}</span>
                                 </div>
                             </div>
-                            <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user.signerUuid} />
+                            <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user?.signerUuid} />
                         </div>
                         <button type="button" className="text-gray-500" onClick={toggleDropdown}>
                             <IonIcon icon={ellipsisHorizontal} />

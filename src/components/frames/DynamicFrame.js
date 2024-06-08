@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useContext } from "react";
-import { FarcasterContext } from "@/context/farcaster"; 
+import { FarcasterContext } from "@/context/farcaster";
 import Link from "next/link";
 import { ethers } from "ethers";
 
@@ -21,7 +21,7 @@ const DynamicFrame = ({ metadata, link }) => {
   } = metadata;
 
   const farcasterContext = useContext(FarcasterContext);
-  const { connectMetaMaskAndGetSigner } = farcasterContext;
+  const { connectMetaMaskAndGetSigner, castVote } = farcasterContext;
 
   const handleButtonClick = async (buttonAction, buttonTarget, index) => {
     setLoader(true);
@@ -43,18 +43,26 @@ const DynamicFrame = ({ metadata, link }) => {
       setLoadingButtonIndex(null);
     } else if (buttonAction === "tx" && buttonTarget) {
       try {
-        await connectMetaMaskAndGetSigner();
+        await connectMetaMaskAndGetSigner(); 
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = provider.getSigner();
-
-        const response = await fetch(buttonTarget, {
+        const apiUrl = buttonTarget.replace("http://demo.superfun.social", "http://localhost:3002")
+        const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
         });
+        console.log(response,"res");
         const result = await response.json();
-        console.log("API call result:", result);
+        console.log("API call result:", result); 
+        const pId = result.poll;
+        const ch = result.choice;
+        console.log(pId,ch,"chchch");
+       const tx= await castVote(pId,ch);
+       console.log(tx,"txxxx");
+       await tx.wait();
+        
         setLoader(false);
         setLoadingButtonIndex(null);
       } catch (error) {
@@ -75,7 +83,7 @@ const DynamicFrame = ({ metadata, link }) => {
       if (buttonTarget) {
         buttonTarget = buttonTarget.replace(
           "https://superfunsocial.vercel.app",
-          "https://demo.superfun.social"
+          "http://localhost:3002"
         );
       }
       buttonElements.push(

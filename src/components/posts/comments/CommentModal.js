@@ -93,7 +93,7 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
 
   const createCast = async () => {
     setLoading(true);
-    if (!user.signerUuid) {
+    if (!user?.signerUuid) {
       setLoading(false);
       return;
     }
@@ -106,7 +106,7 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        signer_uuid: user.signerUuid,
+        signer_uuid: user?.signerUuid,
         text: text,
         parent_author_fid: parentPost.author.fid,
         parent:  parentPost.hash,

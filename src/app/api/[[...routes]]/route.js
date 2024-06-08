@@ -2,10 +2,10 @@
 
 import { Button, Frog } from "frog";
 import { handle } from "frog/vercel";
-import { getPoll, getVotes } from "../../../utils/poll";
-import contractAbi from "../../../utils/contract";
+import { getPoll, getVotes } from "../../../utils/poll"; 
 import { neynar } from "frog/hubs";
 import { ethers } from "ethers";
+import { contractABI } from "@/utils/contract";
 
 
 const app = new Frog({
@@ -38,7 +38,7 @@ app.frame("/poll/:id", async (c) => {
   var formattedTime;
 
   if (pollData) {
-    const dateString = pollData.endDate;
+    const dateString = pollData.endDate; 
     const date = new Date(dateString);
 
     const days = date.getUTCDate() - 1;
@@ -65,15 +65,21 @@ app.transaction("/vote/:pollId/:choice", async (c) => {
   const pollId = c.req.param("pollId");
   const choice = c.req.param("choice");
   const signer = c.req.body;
-  const pollData = await getPoll(pollId); // Retrieve the poll data based on the link
-  const fid = pollData.fid;
-  return c.contract({
-    abi: contractAbi,
-    chainId: "eip155:84532",
-    functionName: "vote",
-    to: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-    args: [pollId, choice],
-  });
+  const pollData = await getPoll(pollId); // Retrieve the poll data based on the link 
+  const fid = pollData.fid; 
+  const data ={
+    poll:pollId,
+    choice:choice
+  }
+  // return  c.contract({
+  //   abi: contractABI,
+  //   chainId: 'eip155:84532',
+  //   functionName: 'vote',
+  //   gas: 100_000n,
+  //   args: [pollId, choice],
+  //   to: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+  // });
+  return { data };
 });
 
 app.frame("/wait/:id", (c) => {

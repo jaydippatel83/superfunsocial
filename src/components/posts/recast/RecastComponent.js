@@ -35,7 +35,7 @@ const RecastComponent = ({ data }) => {
           "content-type": "application/json",
       },
       body: JSON.stringify({
-          signer_uuid: user.signerUuid, 
+          signer_uuid: user?.signerUuid, 
           reaction_type: 'recast', 
           target: hash
           

@@ -1,6 +1,6 @@
 import { createThirdwebClient, getContract } from "thirdweb";
 import { baseSepolia } from "thirdweb/chains";
-import contractAbi from "./contract.json";
+import  { contractABI } from "./contract.js";
 
 export const client = createThirdwebClient({
   clientId: process.env.NEXT_PUBLIC_TW_CLIENT_ID,
@@ -13,5 +13,5 @@ export const pollContract = getContract({
   chain: baseSepolia,
   // the contract's address
   address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-  abi: contractAbi,
+  abi: contractABI,
 });

@@ -1,7 +1,7 @@
 "use server";
-import axios from "axios";
-import contractAbi from "./contract.json";
+import axios from "axios"; 
 import { ethers } from "ethers";
+import { contractABI } from "./contract";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
@@ -9,7 +9,7 @@ const provider = new ethers.JsonRpcProvider(
   `${process.env.NEXT_PUBLIC_ALCHEMY_URL}`
 );
 const signer = new ethers.Wallet(process.env.NEXT_PUBLIC_PRIVATE_KEY, provider);
-const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
 export async function getPoll(pollId) {
   try {
@@ -47,7 +47,7 @@ export async function giveVote(pollId, choice, signer) {
     if (signer) {
       const contract = new ethers.Contract(
         contractAddress,
-        contractAbi,
+        contractABI,
         signer
       );
       transaction = await contract.vote(pollId, choice);

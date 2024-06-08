@@ -100,7 +100,7 @@ const CreatePostModal = () => {
 
   const createCast = async () => {
     setLoading(true);
-    if (!user.signerUuid) {
+    if (!user?.signerUuid) {
       setLoading(false);
       return;
     }
@@ -113,7 +113,7 @@ const CreatePostModal = () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        signer_uuid: user.signerUuid,
+        signer_uuid: user?.signerUuid,
         text: text,
         embeds,
         parent: "/superfunsocial",

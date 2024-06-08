@@ -62,7 +62,7 @@ const PostCards = ({ data }) => {
   };
 
   const publishLike = async (reactionType, hash) => {
-    if (!user.signerUuid) {
+    if (!user?.signerUuid) {
       return;
     }
 
@@ -72,7 +72,7 @@ const PostCards = ({ data }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        signerUid: user.signerUuid,
+        signerUid: user?.signerUuid,
         reactionType,
         hash,
       }),
@@ -151,7 +151,7 @@ const PostCards = ({ data }) => {
             isVisible={isHoverCardVisible}
             setIsHoverCardVisible={setIsHoverCardVisible}
             follow={follow}
-            uuid={user.signerUuid}
+            uuid={user?.signerUuid}
           />
           <div className="flex items-center">
             <span className="text-sm text-gray-500">

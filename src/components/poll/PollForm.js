@@ -68,7 +68,7 @@ const PollInputForm = ({ togglePollModal }) => {
             "content-type": "application/json",
           },
           body: JSON.stringify({
-            signer_uuid: user.signerUuid,
+            signer_uuid: user?.signerUuid,
             text: text,
             embeds: arr,
           }),

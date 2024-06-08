@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
-import contractAbi from "../utils/contract.json";
+import  { contractABI } from "../utils/contract.js";
 import axios from "axios";
 import { ethers } from "ethers";
 
@@ -88,7 +88,7 @@ export function FarcasterContextProvider(props) {
       if (signer) {
         const contract = new ethers.Contract(
           contractAddress,
-          contractAbi,
+          contractABI,
           signer
         );
         transaction = await contract.createPoll(name, numOfChoice, pollId);
@@ -103,6 +103,25 @@ export function FarcasterContextProvider(props) {
     }
   }
 
+  async function castVote(pollId, choice){
+    console.log(pollId, choice,"pollId, choice");
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum); 
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+      const votes = await contract.vote(pollId, choice);
+      const pollVotes = await votes.map((vote) => vote.toString());
+      console.log(pollVotes,"pollVotes");
+      return pollVotes;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async function getVotes(pollId) {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
@@ -110,7 +129,7 @@ export function FarcasterContextProvider(props) {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(
         contractAddress,
-        contractAbi,
+        contractABI,
         signer
       );
       const votes = await contract.getVotes(pollId);
@@ -128,7 +147,7 @@ export function FarcasterContextProvider(props) {
         isModalOpen,
         setModalOpen,
         toggleModal,
-
+        castVote,
         getPoll,
         CreatePoll,
         getVotes,
