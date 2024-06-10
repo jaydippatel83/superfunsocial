@@ -103,24 +103,31 @@ export function FarcasterContextProvider(props) {
     }
   }
 
-  async function castVote(pollId, choice){
-    console.log(pollId, choice,"pollId, choice");
+  async function castVote(pollId , choice) {
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum); 
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        signer
-      );
-      const votes = await contract.vote(pollId, choice);
-      const pollVotes = await votes.map((vote) => vote.toString());
-      console.log(pollVotes,"pollVotes");
-      return pollVotes;
+      await connectMetaMaskAndGetSigner();
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      var transaction;
+      if (signer) {
+        const contract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        );
+        transaction = await contract.vote(pollId, choice);
+      }
+
+      console.log(transaction, "transaction");
+
+      return transaction;
     } catch (error) {
+      console.log(error);
       return error;
     }
   }
+ 
 
   async function getVotes(pollId) {
     try {
@@ -146,9 +153,9 @@ export function FarcasterContextProvider(props) {
       value={{
         isModalOpen,
         setModalOpen,
-        toggleModal,
-        castVote,
+        toggleModal, 
         getPoll,
+        castVote,
         CreatePoll,
         getVotes,
         getPolls,

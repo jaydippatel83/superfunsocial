@@ -5,7 +5,7 @@ import { handle } from "frog/vercel";
 import { getPoll, getVotes } from "../../../utils/poll"; 
 import { neynar } from "frog/hubs";
 import { ethers } from "ethers";
-import { contractABI } from "@/utils/contract";
+import { contractABI } from "@/utils/contract"; 
 
 
 const app = new Frog({
@@ -67,19 +67,15 @@ app.transaction("/vote/:pollId/:choice", async (c) => {
   const signer = c.req.body;
   const pollData = await getPoll(pollId); // Retrieve the poll data based on the link 
   const fid = pollData.fid; 
-  const data ={
-    poll:pollId,
-    choice:choice
-  }
-  // return  c.contract({
-  //   abi: contractABI,
-  //   chainId: 'eip155:84532',
-  //   functionName: 'vote',
-  //   gas: 100_000n,
-  //   args: [pollId, choice],
-  //   to: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
-  // });
-  return { data };
+   
+  return  c.contract({
+    abi: contractABI,
+    chainId: 'eip155:84532',
+    functionName: 'vote', 
+    args: [pollId, choice],
+    attribution: true,
+    to: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+  }); 
 });
 
 app.frame("/wait/:id", (c) => {
@@ -106,7 +102,7 @@ app.frame("/voted/:id", async (c) => {
   return c.res({
     image: url,
   });
-});
+}); 
 
 export const GET = handle(app);
 export const POST = handle(app);

@@ -4,10 +4,12 @@ import React, { useState, useContext } from "react";
 import { FarcasterContext } from "@/context/farcaster";
 import Link from "next/link";
 import { ethers } from "ethers";
+import { toast } from "react-toastify";
 
 const DynamicFrame = ({ metadata, link }) => {
   const [loader, setLoader] = useState(false);
   const [loadingButtonIndex, setLoadingButtonIndex] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null); 
 
   const {
     description,
@@ -21,7 +23,7 @@ const DynamicFrame = ({ metadata, link }) => {
   } = metadata;
 
   const farcasterContext = useContext(FarcasterContext);
-  const { connectMetaMaskAndGetSigner, castVote } = farcasterContext;
+  const { connectMetaMaskAndGetSigner,castVote } = farcasterContext;
 
   const handleButtonClick = async (buttonAction, buttonTarget, index) => {
     setLoader(true);
@@ -47,6 +49,12 @@ const DynamicFrame = ({ metadata, link }) => {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = provider.getSigner();
         const apiUrl = buttonTarget.replace("http://demo.superfun.social", "http://localhost:3002")
+
+        const urlParts = apiUrl.split('/');
+      const pollId = urlParts[urlParts.length - 2];
+      const choice = urlParts[urlParts.length - 1];
+      console.log(`Extracted pollId: ${pollId}, choice: ${choice}`);
+
         const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
@@ -55,20 +63,20 @@ const DynamicFrame = ({ metadata, link }) => {
         });
         console.log(response,"res");
         const result = await response.json();
-        console.log("API call result:", result); 
-        const pId = result.poll;
-        const ch = result.choice;
-        console.log(pId,ch,"chchch");
-       const tx= await castVote(pId,ch);
-       console.log(tx,"txxxx");
-       await tx.wait();
-        
+        console.log("API call result:", result);  
+      // const trx=  await castVote(pollId,choice); 
+      // if (trx.reason) {
+      //   toast.error(trx.reason);
+      // } else {
+      //   toast.error('Something went wrong! Try again!');
+      // }
         setLoader(false);
         setLoadingButtonIndex(null);
       } catch (error) {
         setLoader(false);
         setLoadingButtonIndex(null);
         console.error("API call error:", error);
+        setErrorMessage(error.reason || error.message || "An error occurred");
       }
     }
   };
@@ -125,6 +133,11 @@ const DynamicFrame = ({ metadata, link }) => {
       <div className="p-2 rounded-b-lg bg-gray-300 flex justify-between">
         {renderButtons()}
       </div>
+      {errorMessage && (
+        <div className="mt-4 text-center text-red-500">
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 };
