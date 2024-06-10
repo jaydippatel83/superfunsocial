@@ -48,14 +48,14 @@ const DynamicFrame = ({ metadata, link }) => {
         await connectMetaMaskAndGetSigner(); 
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = provider.getSigner();
-        // const apiUrl = buttonTarget.replace("http://demo.superfun.social", "http://localhost:3002")
+        const apiUrl = buttonTarget.replace("http://demo.superfun.social", "http://localhost:3002")
 
         const urlParts = apiUrl.split('/');
       const pollId = urlParts[urlParts.length - 2];
       const choice = urlParts[urlParts.length - 1];
       console.log(`Extracted pollId: ${pollId}, choice: ${choice}`);
 
-        const response = await fetch(apiUrl, {
+        const response = await fetch(buttonTarget, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
