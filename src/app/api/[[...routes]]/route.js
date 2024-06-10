@@ -71,8 +71,7 @@ app.transaction("/vote/:pollId/:choice", async (c) => {
   return  c.contract({
     abi: contractABI,
     chainId: 'eip155:84532',
-    functionName: 'vote', 
-    gas: 100_000n,
+    functionName: 'vote',  
     args: [pollId, choice],
     attribution: true,
     to: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
