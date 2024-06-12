@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FarcasterContext } from "@/context/farcaster";
 import Link from "next/link";
 import { ethers } from "ethers";
@@ -10,6 +10,7 @@ import { contractABI } from "@/utils/contract";
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
 const DynamicFrame = ({ metadata, link }) => {
+  const [data, setData] = useState(metadata);
   const [loader, setLoader] = useState(false);
   const [loadingButtonIndex, setLoadingButtonIndex] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -24,17 +25,24 @@ const DynamicFrame = ({ metadata, link }) => {
     "og:image": ogImage,
     "og:url": ogUrl,
     ...buttons
-  } = metadata;
+  } = data;
 
   const farcasterContext = useContext(FarcasterContext);
   const { connectMetaMaskAndGetSigner, castVote } = farcasterContext;
 
-  const handleButtonClick = async (buttonAction, buttonTarget, index) => {
+  useEffect(() => {
+    if (!aspectRatio) {
+      setData(prevData => ({
+        ...prevData,
+        "fc:frame:image:aspect_ratio": "1:1",
+      }));
+    }
+  }, [aspectRatio]);
+
+  const handleButtonClick = async (buttonAction, buttonTarget, index) => { 
     setLoader(true);
     setLoadingButtonIndex(index);
-    console.log(
-      `Button clicked: action=${buttonAction}, target=${buttonTarget}`
-    );
+    
     if (buttonAction === "post_redirect" && buttonTarget) {
       window.location.href = buttonTarget;
       setLoader(false);
@@ -55,24 +63,23 @@ const DynamicFrame = ({ metadata, link }) => {
 
         var baseUrl = postUrl.split("?")[0];
         const apiUrl = buttonTarget.replace(
-          "https://superfunsocial.vercel.app",
+          "http://demo.superfun.social",
           "http://localhost:3002"
         );
-        console.log(baseUrl, "baseUrl---be");
+        
         baseUrl = baseUrl.replace(
-          "https://superfunsocial.vercel.app",
+          "http://demo.superfun.social",
           "http://localhost:3002"
         );
 
-        console.log(baseUrl, "baseUrl- Ad");
+        
 
         const urlParts = apiUrl.split("/");
         const pollId = urlParts[urlParts.length - 2];
-        const choice = urlParts[urlParts.length - 1];
-        console.log(`Extracted pollId: ${pollId}, choice: ${choice}`);
+        const choice = urlParts[urlParts.length - 1]; 
 
         var transaction;
-        if (signer) {
+        if (signer && pollId !== 'voted') {
           const contract = new ethers.Contract(
             contractAddress,
             contractABI,
@@ -80,20 +87,32 @@ const DynamicFrame = ({ metadata, link }) => {
           );
           transaction = await contract.vote(pollId, choice);
         }
-
+         
         if (transaction) {
           const response = await fetch(baseUrl, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
+          }); 
+          const result = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(result, "text/html");
+
+          const metaElements = doc.head.querySelectorAll("meta");
+          const metaTags = Array.from(metaElements).map(meta => ({
+            property: meta.getAttribute("property"),
+            content: meta.getAttribute("content"),
+          }));
+          const updatedData = {};
+          metaTags.forEach(meta => {
+            updatedData[meta.property] = meta.content;
           });
-          // console.log(response, "res");
-          const result = await response.json();
-          console.log("API call result:", result.url);
+          setData(updatedData);
+
           if (result?.url) {
             var resultUrl = result?.url.replace(
-              "https://superfunsocial.vercel.app",
+              "http://demo.superfun.social",
               "http://localhost:3002"
             );
             const response = await fetch(resultUrl, {
@@ -101,21 +120,46 @@ const DynamicFrame = ({ metadata, link }) => {
               headers: {
                 "Content-Type": "application/json",
               },
-            });
-            console.log(response, "res");
+            }); 
             const result = await response.json();
-
-            console.log("API call result:", result);
+            setData(prevData => ({
+              ...prevData,
+              "fc:frame:image": result.image,
+              "fc:frame:image:aspect_ratio": "1:1"
+            })); 
           }
+        }
+
+        if (pollId === 'voted') {
+          const previewUrl = `http://localhost:3002/api/voted/${choice}`;
+          const response = await fetch(previewUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const result = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(result, "text/html");
+
+          const metaElements = doc.head.querySelectorAll("meta");
+          const metaTags = Array.from(metaElements).map(meta => ({
+            property: meta.getAttribute("property"),
+            content: meta.getAttribute("content"),
+          }));
+          const updatedData = {};
+          metaTags.forEach(meta => {
+            updatedData[meta.property] = meta.content;
+          });
+          setData(updatedData);
         }
 
         setLoader(false);
         setLoadingButtonIndex(null);
       } catch (error) {
         setLoader(false);
-        setLoadingButtonIndex(null);
-        console.error("API call error:", error);
-        setErrorMessage(error.reason || error.message || "An error occurred");
+        setLoadingButtonIndex(null); 
+        toast.error(error.reason || error.message || "An error occurred") 
       }
     }
   };
@@ -150,7 +194,7 @@ const DynamicFrame = ({ metadata, link }) => {
     return buttonElements;
   };
 
-  const [aspectWidth, aspectHeight] = aspectRatio.split(":").map(Number);
+  const [aspectWidth, aspectHeight] = aspectRatio ? aspectRatio.split(":").map(Number) : [1, 1];
   return (
     <div className="max-w-4xl mx-auto my-2 bg-white border border-gray-300 rounded-lg overflow-hidden">
       {frameImage && (

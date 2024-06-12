@@ -81,15 +81,16 @@ app.transaction("/vote/:pollId/:choice", async (c) => {
 app.frame("/wait/:id", (c) => {
   const { transactionId } = c;
   const pollId = c.req.param("id");
-  return c.res({
+  return c.res({ 
+    action: `/voted/${pollId}`,
     image: (
-      <div style={{ color: "black", fontSize: 60 }}>
+      <div  style={{fontSize: 48, color:'black', textAlign:'center', padding:'20px'}}>
         {transactionId
           ? `Your vote is being recorded on the blockchain. Thank you :)`
           : "Your vote is being recorded on the blockchain. This may take a few moments."}
       </div>
     ),
-    intents: [<Button action={`/voted/${pollId}`}>View Votes</Button>],
+    intents: [<Button.Transaction target={`/voted/${pollId}`}>View Votes</Button.Transaction>],
   });
 });
 
@@ -97,7 +98,7 @@ app.frame("/voted/:id", async (c) => {
   const pollId = c.req.param("id");
   const pollData = await getPoll(pollId); // Retrieve the poll data based on the link
   let votes = await getVotes(pollId);
-  let url = await generatePlaceholderURL(pollData, votes);
+  let url = await generatePlaceholderURL(pollData, votes); 
 
   return c.res({
     image: url,
