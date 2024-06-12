@@ -5,15 +5,19 @@ import { FarcasterContext } from "@/context/farcaster";
 import Link from "next/link";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
+import { contractABI } from "@/utils/contract";
+
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
 const DynamicFrame = ({ metadata, link }) => {
   const [loader, setLoader] = useState(false);
   const [loadingButtonIndex, setLoadingButtonIndex] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null); 
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const {
     description,
     "fc:frame:image": frameImage,
+    "fc:frame:post_url": postUrl,
     "fc:frame:image:aspect_ratio": aspectRatio,
     "og:title": ogTitle,
     "og:description": ogDescription,
@@ -23,7 +27,7 @@ const DynamicFrame = ({ metadata, link }) => {
   } = metadata;
 
   const farcasterContext = useContext(FarcasterContext);
-  const { connectMetaMaskAndGetSigner,castVote } = farcasterContext;
+  const { connectMetaMaskAndGetSigner, castVote } = farcasterContext;
 
   const handleButtonClick = async (buttonAction, buttonTarget, index) => {
     setLoader(true);
@@ -45,31 +49,66 @@ const DynamicFrame = ({ metadata, link }) => {
       setLoadingButtonIndex(null);
     } else if (buttonAction === "tx" && buttonTarget) {
       try {
-        await connectMetaMaskAndGetSigner(); 
+        await connectMetaMaskAndGetSigner();
         const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = provider.getSigner();
-        const apiUrl = buttonTarget.replace("http://demo.superfun.social", "http://localhost:3002")
+        const signer = await provider.getSigner();
 
-        const urlParts = apiUrl.split('/');
-      const pollId = urlParts[urlParts.length - 2];
-      const choice = urlParts[urlParts.length - 1];
-      console.log(`Extracted pollId: ${pollId}, choice: ${choice}`);
+        var baseUrl = postUrl.split("?")[0];
+        const apiUrl = buttonTarget.replace(
+          "https://superfunsocial.vercel.app",
+          "http://localhost:3002"
+        );
+        console.log(baseUrl, "baseUrl---be");
+        baseUrl = baseUrl.replace(
+          "https://superfunsocial.vercel.app",
+          "http://localhost:3002"
+        );
 
-        const response = await fetch(buttonTarget, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        console.log(response,"res");
-        const result = await response.json();
-        console.log("API call result:", result);  
-      // const trx=  await castVote(pollId,choice); 
-      // if (trx.reason) {
-      //   toast.error(trx.reason);
-      // } else {
-      //   toast.error('Something went wrong! Try again!');
-      // }
+        console.log(baseUrl, "baseUrl- Ad");
+
+        const urlParts = apiUrl.split("/");
+        const pollId = urlParts[urlParts.length - 2];
+        const choice = urlParts[urlParts.length - 1];
+        console.log(`Extracted pollId: ${pollId}, choice: ${choice}`);
+
+        var transaction;
+        if (signer) {
+          const contract = new ethers.Contract(
+            contractAddress,
+            contractABI,
+            signer
+          );
+          transaction = await contract.vote(pollId, choice);
+        }
+
+        if (transaction) {
+          const response = await fetch(baseUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          // console.log(response, "res");
+          const result = await response.json();
+          console.log("API call result:", result.url);
+          if (result?.url) {
+            var resultUrl = result?.url.replace(
+              "https://superfunsocial.vercel.app",
+              "http://localhost:3002"
+            );
+            const response = await fetch(resultUrl, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            console.log(response, "res");
+            const result = await response.json();
+
+            console.log("API call result:", result);
+          }
+        }
+
         setLoader(false);
         setLoadingButtonIndex(null);
       } catch (error) {
@@ -134,9 +173,7 @@ const DynamicFrame = ({ metadata, link }) => {
         {renderButtons()}
       </div>
       {errorMessage && (
-        <div className="mt-4 text-center text-red-500">
-          {errorMessage}
-        </div>
+        <div className="mt-4 text-center text-red-500">{errorMessage}</div>
       )}
     </div>
   );
