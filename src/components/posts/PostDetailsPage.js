@@ -20,6 +20,7 @@ import { userFollowOrNot } from "@/lib/farcaster";
 import { AppContext } from "@/context/AppContext";
 import useLocalStorage from "@/hooks/use-local-storage-state";
 import axios from "axios";
+import RecastComponent from "./recast/RecastComponent";
 
 export const PostDetailPage = ({ post }) => {
   const appContext = useContext(AppContext);
@@ -32,6 +33,8 @@ export const PostDetailPage = ({ post }) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   const [likeCount, setLikeCount] = useState(post?.reactions?.likes_count || 0);
+
+  console.log(post, "details");
 
   const [hasLiked, setHasLiked] = useState(
     post.reactions.likes_count > 0 &&
@@ -208,7 +211,7 @@ export const PostDetailPage = ({ post }) => {
             </button>
             <a href="#">{formatNumber(likeCount)}</a>
           </div>
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <button
               type="button"
               className="button-icon bg-slate-200/70 dark:bg-slate-700"
@@ -216,7 +219,8 @@ export const PostDetailPage = ({ post }) => {
               <IonIcon className="text-lg" icon={repeat}></IonIcon>
             </button>
             <span>{formatNumber(post?.reactions?.recasts_count)}</span>
-          </div>
+          </div> */}
+          <RecastComponent data={post} />
           <div className="flex items-center gap-3">
             <button
               type="button"
