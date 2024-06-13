@@ -32,17 +32,19 @@ const DynamicFrame = ({ metadata, link }) => {
 
   useEffect(() => {
     if (!aspectRatio) {
-      setData(prevData => ({
+      setData((prevData) => ({
         ...prevData,
         "fc:frame:image:aspect_ratio": "1:1",
       }));
     }
   }, [aspectRatio]);
 
-  const handleButtonClick = async (buttonAction, buttonTarget, index) => { 
+  const handleButtonClick = async (buttonAction, buttonTarget, index) => {
     setLoader(true);
     setLoadingButtonIndex(index);
-    
+    var currentPollId;
+    var currentChoice;
+
     if (buttonAction === "post_redirect" && buttonTarget) {
       window.location.href = buttonTarget;
       setLoader(false);
@@ -66,20 +68,20 @@ const DynamicFrame = ({ metadata, link }) => {
           "http://demo.superfun.social",
           "http://localhost:3002"
         );
-        
+
         baseUrl = baseUrl.replace(
           "http://demo.superfun.social",
           "http://localhost:3002"
         );
 
-        
-
         const urlParts = apiUrl.split("/");
         const pollId = urlParts[urlParts.length - 2];
-        const choice = urlParts[urlParts.length - 1]; 
+        currentPollId = pollId;
+        const choice = urlParts[urlParts.length - 1];
+        currentChoice = choice;
 
         var transaction;
-        if (signer && pollId !== 'voted') {
+        if (signer && pollId !== "voted") {
           const contract = new ethers.Contract(
             contractAddress,
             contractABI,
@@ -87,25 +89,25 @@ const DynamicFrame = ({ metadata, link }) => {
           );
           transaction = await contract.vote(pollId, choice);
         }
-         
+
         if (transaction) {
           const response = await fetch(baseUrl, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
-          }); 
+          });
           const result = await response.text();
           const parser = new DOMParser();
           const doc = parser.parseFromString(result, "text/html");
 
           const metaElements = doc.head.querySelectorAll("meta");
-          const metaTags = Array.from(metaElements).map(meta => ({
+          const metaTags = Array.from(metaElements).map((meta) => ({
             property: meta.getAttribute("property"),
             content: meta.getAttribute("content"),
           }));
           const updatedData = {};
-          metaTags.forEach(meta => {
+          metaTags.forEach((meta) => {
             updatedData[meta.property] = meta.content;
           });
           setData(updatedData);
@@ -120,17 +122,17 @@ const DynamicFrame = ({ metadata, link }) => {
               headers: {
                 "Content-Type": "application/json",
               },
-            }); 
+            });
             const result = await response.json();
-            setData(prevData => ({
+            setData((prevData) => ({
               ...prevData,
               "fc:frame:image": result.image,
-              "fc:frame:image:aspect_ratio": "1:1"
-            })); 
+              "fc:frame:image:aspect_ratio": "1:1",
+            }));
           }
         }
 
-        if (pollId === 'voted') {
+        if (pollId === "voted") {
           const previewUrl = `http://localhost:3002/api/voted/${choice}`;
           const response = await fetch(previewUrl, {
             method: "GET",
@@ -143,12 +145,12 @@ const DynamicFrame = ({ metadata, link }) => {
           const doc = parser.parseFromString(result, "text/html");
 
           const metaElements = doc.head.querySelectorAll("meta");
-          const metaTags = Array.from(metaElements).map(meta => ({
+          const metaTags = Array.from(metaElements).map((meta) => ({
             property: meta.getAttribute("property"),
             content: meta.getAttribute("content"),
           }));
           const updatedData = {};
-          metaTags.forEach(meta => {
+          metaTags.forEach((meta) => {
             updatedData[meta.property] = meta.content;
           });
           setData(updatedData);
@@ -157,9 +159,37 @@ const DynamicFrame = ({ metadata, link }) => {
         setLoader(false);
         setLoadingButtonIndex(null);
       } catch (error) {
+        toast.error(error.reason || error.message || "An error occurred");
+        if (error.reason == "You have already voted!") {
+          var getVotesUrl;
+          if (currentPollId !== "voted") {
+            getVotesUrl = `http://localhost:3002/api/voted/${currentPollId}`;
+          } else if (currentPollId == "voted") {
+            getVotesUrl = `http://localhost:3002/api/voted/${currentChoice}`;
+          }
+          const response = await fetch(getVotesUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const result = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(result, "text/html");
+
+          const metaElements = doc.head.querySelectorAll("meta");
+          const metaTags = Array.from(metaElements).map((meta) => ({
+            property: meta.getAttribute("property"),
+            content: meta.getAttribute("content"),
+          }));
+          const updatedData = {};
+          metaTags.forEach((meta) => {
+            updatedData[meta.property] = meta.content;
+          });
+          setData(updatedData);
+        }
         setLoader(false);
-        setLoadingButtonIndex(null); 
-        toast.error(error.reason || error.message || "An error occurred") 
+        setLoadingButtonIndex(null);
       }
     }
   };
@@ -194,7 +224,9 @@ const DynamicFrame = ({ metadata, link }) => {
     return buttonElements;
   };
 
-  const [aspectWidth, aspectHeight] = aspectRatio ? aspectRatio.split(":").map(Number) : [1, 1];
+  const [aspectWidth, aspectHeight] = aspectRatio
+    ? aspectRatio.split(":").map(Number)
+    : [1, 1];
   return (
     <div className="max-w-4xl mx-auto my-2 bg-white border border-gray-300 rounded-lg overflow-hidden">
       {frameImage && (
