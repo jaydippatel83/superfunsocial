@@ -5,14 +5,15 @@ import { fetchFollowing } from '@/lib/farcaster';
 import React from 'react';
 
 const page =async ({params}) => { 
-    const { username } = params; 
+  const { username } = params; 
+  const [user, fid] = username.split('-');  
     const req = {
         cursor: "",
         filter:'following',
-        name: username
+        name: user,
+        viewer: fid
       }
-      const following =  await fetchFollowing(req);
-
+      const following =  await fetchFollowing(req); 
     return (
         <Layout>
        <main
@@ -26,7 +27,7 @@ const page =async ({params}) => {
           <div className="max-w-[1080px] mx-auto">
             <div className="md:w-[580px] md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
             {
-              following && <FollowerTab cursor={following.next.cursor} data={following.users} filter="following" username={username}/>  
+              following && <FollowerTab cursor={following.next.cursor} data={following.users} filter="following" username={user} fid={fid}/>  
             }  
             </div>
           </div>

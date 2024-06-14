@@ -127,7 +127,7 @@ const PostCards = ({ data }) => {
         >
           <Image
             src={data?.author?.pfp_url}
-            alt=""
+            alt={data?.author?.username}
             width={48}
             height={48}
             className="w-9 h-9 rounded-full"

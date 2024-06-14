@@ -211,7 +211,7 @@ const DynamicFrame = ({ metadata, link }) => {
         <button
           key={i}
           onClick={() => handleButtonClick(buttonAction, buttonTarget, i)}
-          className="px-4 w-full py-2 mb-2 font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 hover:border-gray-400"
+          className="px-4 w-full py-2  m-1.5 font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 hover:border-gray-400"
         >
           {loadingButtonIndex === i ? (
             <div className="w-6 h-6 border-4 border-t-blue-500 border-solid rounded-full animate-spin mx-auto"></div>
@@ -245,12 +245,9 @@ const DynamicFrame = ({ metadata, link }) => {
           </Link>
         </div>
       )}
-      <div className="p-2 rounded-b-lg bg-gray-300 flex justify-between">
-        {renderButtons()}
-      </div>
-      {errorMessage && (
-        <div className="mt-4 text-center text-red-500">{errorMessage}</div>
-      )}
+       <div className="rounded-b-lg bg-gray-300 flex justify-between">
+          {renderButtons()}
+        </div>  
     </div>
   );
 };

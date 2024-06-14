@@ -6,10 +6,12 @@ import React from 'react';
 
 const page =async ({params}) => {
     const { username } = params; 
+    const [user, fid] = username.split('-'); 
     const req = {
         cursor: "",
         filter:'followers',
-        name: username
+        name: user,
+        viewer: fid
       }
     const data =  await fetchFollowing(req); 
     return (
@@ -25,7 +27,7 @@ const page =async ({params}) => {
           <div className="max-w-[1080px] mx-auto">
             <div className="md:w-[580px] md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
             {
-              data && <FollowerTab cursor={data.next.cursor} data={data.users} filter="followers" username={username}/>  
+              data && <FollowerTab cursor={data.next.cursor} data={data.users} filter="followers" username={user} fid={fid}/>  
             }  
             </div>
           </div>

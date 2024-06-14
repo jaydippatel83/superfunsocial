@@ -206,7 +206,7 @@ const Profile = () => {
                 <hr className="-mx-2 my-2 dark:border-gray-600/60" />
                 <a href="/">
                   <div className="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
-                    <svg
+     <svg
                       className="w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

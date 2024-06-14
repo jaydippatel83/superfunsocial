@@ -40,9 +40,9 @@ export const fetchFollowing = async (req) => {
   try {
     const {
       result: { users },
-    } = await neynarClient.searchUser(req.name);
+    } = await neynarClient.searchUser(req.name); 
     const fid = users[0].fid; 
-    const url = `https://api.neynar.com/v2/farcaster/${req.filter}?fid=${fid}&limit=20&cursor=${req.cursor}`;
+    const url = `https://api.neynar.com/v2/farcaster/${req.filter}?fid=${fid}&limit=20&cursor=${req.cursor}&viewer_fid=${req.viewer}`;
     const response = await axios.get(url, {
       headers,
     });
@@ -143,6 +143,7 @@ export const unfollowUser = async (signer, fid) => {
 }
 
 export const userFollowOrNot = async (fid, viewer) => {
+  console.log(fid, viewer,"fid, viewer");
   const headers = {
     accept: "application/json",
     api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,

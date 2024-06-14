@@ -92,10 +92,7 @@ export function FarcasterContextProvider(props) {
           signer
         );
         transaction = await contract.createPoll(name, numOfChoice, pollId);
-      }
-
-      console.log(transaction, "transaction");
-
+      } 
       return transaction;
     } catch (error) {
       console.log(error);

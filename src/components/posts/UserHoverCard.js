@@ -8,7 +8,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid }) => {
     const appContext = useContext(AppContext);
-    const { signerUuid } = appContext;
+    const { fid } = appContext;
 
     const [isFollowing, setIsFollowing] = useState(follow);
     const [follower, setFollower] = useState(user?.follower_count);
@@ -54,10 +54,10 @@ const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid })
                 <p className="text-gray-500">@{user?.username}</p>
                 <p className="text-gray-700 mt-1">{user?.profile?.bio?.text}</p>
                 <div className="flex items-center mt-2 text-gray-500">
-                    <Link href={`/${user.username}/following`} className="mt-1 text-gray-900 ">
+                    <Link href={`/${user.username}-${fid}/following`} className="mt-1 text-gray-900 ">
                         <span className="mr-4"><span className='text-black font-bold'>{formatNumber(user?.following_count)}</span> Following</span>
                     </Link>
-                    <Link href={`/${user.username}/followers`} className="mt-1 text-gray-900  ">
+                    <Link href={`/${user.username}-${fid}/followers`} className="mt-1 text-gray-900  ">
                         <span><span className='text-black font-bold'>{formatNumber(follower)}</span> Followers</span>
                     </Link>
                 </div>
