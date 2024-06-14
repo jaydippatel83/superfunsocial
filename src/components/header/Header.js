@@ -28,28 +28,28 @@ const Header = ({isSidebarOpen,toggleSidebar}) => {
                         <div id="logo">
                             <Link href="/">
                                 <Image
-                                    src="/assets/images/logo.png"
+                                    src="/assets/images/icons/sfslogo.png"
                                     alt="Logo"
                                     width={112}
                                     height={28}
                                     className="w-28 md:block hidden dark:!hidden"
                                 />
                                 <Image
-                                    src="/assets/images/logo-light.png"
+                                    src="/assets/images/icons/sfslogobg.png"
                                     alt="Logo"
                                     width={112}
                                     height={28}
                                     className="dark:md:block hidden"
                                 />
                                 <Image
-                                    src="/assets/images/logo-mobile.png"
+                                    src="/assets/images/icons/sfslogo.png"
                                     alt="Logo"
                                     width={80}
                                     height={20}
                                     className="hidden max-md:block w-20 dark:!hidden"
                                 />
                                 <Image
-                                    src="/assets/images/logo-mobile-light.png"
+                                    src="/assets/images/icons/sfslogobg.png"
                                     alt="Logo"
                                     width={80}
                                     height={20}
