@@ -183,3 +183,20 @@ export const getNotifications= async(fid)=>{
   }
   
 }
+
+export const fetchRecentItems = async (req) => {
+  const headers = {
+    accept: "application/json",
+    api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+  };
+  try { 
+    const url = `https://api.neynar.com/v2/farcaster/feed/user/${req.fid}/replies_and_recasts?limit=10&${req.cursor}`;
+    const response = await axios.get(url, {
+      headers,
+    });
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error('Error fetching suggestions:', error);
+  }
+}

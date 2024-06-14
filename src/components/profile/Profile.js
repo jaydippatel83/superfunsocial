@@ -9,8 +9,8 @@ import IntroCard from './IntroCard';
 import Friends from './Friends';
 import StickyTabs from './StickyTabs';
 import axios from 'axios';
-import ProfileHeader from './ProfileCard';
-import RightSIdeBar from '../sidebar/RightSIdeBar';
+import ProfileHeader from './ProfileCard'; 
+import MutualFriends from '../sidebar/MutualFriends';
 
 const Profile = ({ user }) => {
 
@@ -53,7 +53,7 @@ const Profile = ({ user }) => {
                         <PostCardLoader />
                     </div>
                 </div>
-                <RightSIdeBar /> 
+                 <MutualFriends fid={user}/> 
             </div>
         </main>
     );
