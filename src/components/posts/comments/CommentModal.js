@@ -1,22 +1,22 @@
-'use client';
-import React, { useContext, useRef, useState } from 'react';
-import { IonIcon } from '@ionic/react';
-import { closeOutline,videocamOutline , imageOutline, } from 'ionicons/icons';
-import AutoResizeTextarea from '../AutosizeTextArea';
-import { AppContext } from '@/context/AppContext';
-import Image from 'next/image';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+"use client";
+import React, { useContext, useRef, useState } from "react";
+import { IonIcon } from "@ionic/react";
+import { closeOutline, videocamOutline, imageOutline } from "ionicons/icons";
+import AutoResizeTextarea from "../AutosizeTextArea";
+import { AppContext } from "@/context/AppContext";
+import Image from "next/image";
+import useLocalStorage from "@/hooks/use-local-storage-state";
 
-const CommentModal = ({ isOpen, onClose, parentPost }) => {
+const CommentModal = ({ isOpen, onClose, parentPost, updateCommentCount }) => {
   const appContext = useContext(AppContext);
-  const {userData} = appContext;
+  const { userData } = appContext;
   const [embeds, setEmbeds] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
   const videoFileInputRef = useRef(null);
   const [user, setUser, removeUser] = useLocalStorage("user");
-  const [text, setText]= useState("");
+  const [text, setText] = useState("");
 
   const handleFileChange = async (e) => {
     let arr = [];
@@ -109,14 +109,15 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
         signer_uuid: user?.signerUuid,
         text: text,
         parent_author_fid: parentPost.author.fid,
-        parent:  parentPost.hash,
-        embeds, 
+        parent: parentPost.hash,
+        embeds,
       }),
     };
 
     fetch("https://api.neynar.com/v2/farcaster/cast", options)
       .then((response) => {
         alert("Succesfully commented on post!");
+        updateCommentCount();
         setText("");
         setLoading(false);
       })
@@ -125,8 +126,8 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
         setLoading(false);
       });
 
-      onClose();
-  }; 
+    onClose();
+  };
 
   if (!isOpen) return null;
 
@@ -137,22 +138,30 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
           <IonIcon icon={closeOutline} className="text-2xl" />
         </button>
         <div className="flex items-start gap-3 mb-4">
-          <img src={parentPost.author.pfp_url} alt="" className="w-10 h-10 rounded-full" />
+          <img
+            src={parentPost.author.pfp_url}
+            alt=""
+            className="w-10 h-10 rounded-full"
+          />
           <div className="flex-1">
             <h4 className="font-bold">{parentPost.author.display_name}</h4>
             <p className="text-gray-600">@{parentPost.author.username}</p>
             <p className="mt-2 break-all">{parentPost.text}</p>
           </div>
-        </div> 
+        </div>
         <div className="overflow-y-scroll max-h-96">
           <div className=" flex justify-start">
-            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full "/>
+            <Image
+              src={userData?.pfp.url}
+              width={50}
+              height={50}
+              className="w-10 h-10 rounded-full "
+            />
             <AutoResizeTextarea
-              value={text} 
+              value={text}
               setText={setText}
               placeholder="What do you have in mind?"
-            /> 
-             
+            />
           </div>
 
           {embeds.map((embed, index) => (
@@ -194,13 +203,16 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
               >
                 <IonIcon icon={videocamOutline} />
               </div>
-            </div> 
-            <button  onClick={createCast}
+            </div>
+            <button
+              onClick={createCast}
               disabled={!text || uploading}
-               className="bg-blue-500 text-white rounded-full px-4 py-2">{loading ? "Loading..." : "Replay"}</button>
+              className="bg-blue-500 text-white rounded-full px-4 py-2"
+            >
+              {loading ? "Loading..." : "Replay"}
+            </button>
           </div>
         </div>
-        
       </div>
     </div>
   );

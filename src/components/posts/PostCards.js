@@ -31,6 +31,7 @@ const PostCards = ({ data }) => {
   const [reactions, setReactions] = useState([]);
   const [follow, setFollow] = useState(false);
   const [likeCount, setLikeCount] = useState(data?.reactions?.likes_count || 0);
+  const [commentCount, setCommentCount] = useState(data?.replies?.count || 0);
 
   const [user, _1, removeUser] = useLocalStorage("user");
   const [hasLiked, setHasLiked] = useState(
@@ -111,6 +112,11 @@ const PostCards = ({ data }) => {
     setReactions(data.reactions);
     setLikeCount(data.reactions.likes_count);
     setHasLiked(data.reactions.likes.some((like) => like.fid == user?.fid));
+    setCommentCount(data.replies.count);
+  };
+
+  const updateCommentCount = () => {
+    setCommentCount(commentCount + 1);
   };
 
   const handleLikeButtonClick = () => {
@@ -228,9 +234,7 @@ const PostCards = ({ data }) => {
           >
             <IonIcon className="text-lg" icon={chatbubbleEllipses}></IonIcon>
           </button>
-          <span onClick={handleCommentClick}>
-            {formatNumber(data?.replies?.count)}
-          </span>
+          <span onClick={handleCommentClick}>{formatNumber(commentCount)}</span>
         </div>
         <button type="button" className="button-icon ml-auto">
           <IonIcon className="text-xl" icon={paperPlaneOutline}></IonIcon>
@@ -243,6 +247,7 @@ const PostCards = ({ data }) => {
         isOpen={isCommentModalOpen}
         onClose={closeCommentModal}
         parentPost={data}
+        updateCommentCount={updateCommentCount}
       />
     </div>
   );
