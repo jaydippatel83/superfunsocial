@@ -53,6 +53,17 @@ export const fetchFollowing = async (req) => {
   }
 }
 
+export const searchUsers= async(search)=>{
+  try {
+    const {
+      result: { users },
+    } = await neynarClient.searchUser(search);
+    return users;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const fetchFollowers = async () => {
   try {
     const {
