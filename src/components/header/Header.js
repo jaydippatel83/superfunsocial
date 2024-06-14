@@ -8,8 +8,7 @@ import DropDown from './search/DropDown';
 import Create from './create/Create';
 import Notifications from './notification/Notifications';
 import Message from './message/Message';
-import Profile from './user/Profile'; 
-import CreatePostModal from '../modals/CreatePostModal';
+import Profile from './user/Profile';  
 
 const Header = ({isSidebarOpen,toggleSidebar}) => { 
    

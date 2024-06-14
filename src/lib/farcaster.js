@@ -153,8 +153,7 @@ export const unfollowUser = async (signer, fid) => {
   }
 }
 
-export const userFollowOrNot = async (fid, viewer) => {
-  console.log(fid, viewer,"fid, viewer");
+export const userFollowOrNot = async (fid, viewer) => { 
   const headers = {
     accept: "application/json",
     api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
@@ -166,3 +165,21 @@ export const userFollowOrNot = async (fid, viewer) => {
   const data = response.data;
   return data;
 } 
+
+export const getNotifications= async(fid)=>{
+  const headers = {
+    accept: "application/json",
+    api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+  }; 
+  try {
+    const url = `https://api.neynar.com/v2/farcaster/notifications?fid=${fid}`;
+    const response = await axios.get(url, {
+      headers,
+    });
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+  
+}

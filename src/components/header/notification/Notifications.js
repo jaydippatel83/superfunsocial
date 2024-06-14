@@ -1,22 +1,35 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { IonIcon } from '@ionic/react';
-import { notificationsOutline, ellipsisHorizontal, checkmarkCircleOutline, settingsOutline, notificationsOffOutline, addCircleOutline, close } from 'ionicons/icons';
+import { notificationsOutline, close } from 'ionicons/icons';
 import Image from 'next/image';
+import useLocalStorage from '@/hooks/use-local-storage-state';
+import { getNotifications } from '@/lib/farcaster';
+import Link from 'next/link';
+import getRelativeTime from '@/lib/utils';
 
 const Notifications = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
-    const dropdownRef = useRef(null); 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    const [notifications, setNotifications] = useState([]);
+    const [user, _1, removeUser] = useLocalStorage("user");
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
-    };  
+        getNoti();
+    };
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            setIsDropdownOpen(!isDropdownOpen);
-        } 
+            setIsDropdownOpen(false);
+        }
     };
+
+    const getNoti = async () => {
+        const fid = user.fid;
+        const data = await getNotifications(fid);
+        setNotifications(data.notifications); 
+    }
 
     useEffect(() => {
         if (isDropdownOpen) {
@@ -28,8 +41,6 @@ const Notifications = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isDropdownOpen]);
-
-
 
     return (
         <div className='relative'>
@@ -43,23 +54,53 @@ const Notifications = () => {
             </button>
 
             {isDropdownOpen && (
-                <div ref={dropdownRef} className="absolute top-full right-0 mt-2 bg-white pr-1.5 rounded-lg drop-shadow-xl dark:bg-slate-700 md:w-[365px] w-screen border2 z-10">
+                <div ref={dropdownRef} className="absolute top-full right-0 mt-2 bg-white pr-1.5 rounded-lg drop-shadow-xl dark:bg-slate-700 w-[365px] border2 z-10">
                     <div className="flex items-center justify-between gap-2 p-4 pb-2">
                         <h3 className="font-bold text-xl">Notifications</h3>
                     </div>
                     <div className="text-sm h-[400px] w-full overflow-y-auto pr-2">
                         <div className="pl-2 p-1 text-sm font-normal dark:text-white">
-                            <a href="#" className="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
-                                <div className="relative w-12 h-12 shrink-0">
-                                    <Image src="/assets/images/avatars/avatar-3.jpg" alt="Alexa Gray" className="object-cover w-full h-full rounded-full" width={48} height={48} />
-                                </div>
-                                <div className="flex-1">
-                                    <p><b className="font-bold mr-1">Alexa Gray</b> started following you. Welcome him to your profile. 👋</p>
-                                    <div className="text-xs text-gray-500 mt-1.5 dark:text-white/80">4 hours ago</div>
-                                    <div className="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5"></div>
-                                </div>
-                            </a>
-
+                            {notifications && notifications.map((item, index) => {
+                                if (item.type === "mention") {
+                                    return (
+                                        <Link key={index} href={`/${item?.cast?.author?.username}/${item?.cast.hash}`} className="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
+                                            <div className="relative w-8 h-8 shrink-0">
+                                                <Image src={item?.cast?.author?.pfp_url} alt="Profile" className="object-cover w-full h-full rounded-full" width={48} height={48} />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p><b className="font-bold mr-1"> {item?.cast?.author?.display_name}</b> Mentioned you in a post!</p>
+                                                <div className="text-xs text-gray-500 mt-1.5 dark:text-white/80">{getRelativeTime(item?.cast?.timestamp)}</div>
+                                            </div>
+                                        </Link>
+                                    );
+                                }
+                                if (item.type === "follows") { 
+                                    return item?.follows?.map((follow, i) => (
+                                        <Link key={i} href={`/profile/${follow?.user?.fid}`} className="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
+                                            <div className="relative w-8 h-8 shrink-0">
+                                                <Image src={follow?.user?.pfp_url} alt="Profile" className="object-cover w-full h-full rounded-full" width={48} height={48} />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p><b className="font-bold mr-1"> {follow?.user?.display_name}</b> Followed you</p> 
+                                            </div>
+                                        </Link>
+                                    ));
+                                }
+                                if (item.type === "likes") { 
+                                    return item?.reactions?.map((like,index)=> (
+                                        <Link key={index} href={`/${item?.cast?.author?.username}/${like?.cast.hash}`} className="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
+                                            <div className="relative w-8 h-8 shrink-0">
+                                                <Image src={like?.user?.pfp_url} alt="Profile" className="object-cover w-full h-full rounded-full" width={48} height={48} />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p><b className="font-bold mr-1"> {like?.user?.display_name}</b> Liked your post.</p>
+                                                <div className="text-xs text-gray-500 mt-1.5 dark:text-white/80">{getRelativeTime(item?.most_recent_timestamp)}</div>
+                                            </div>
+                                        </Link>
+                                    ));
+                                }
+                                return null;
+                            })}
                         </div>
                     </div>
                 </div>
