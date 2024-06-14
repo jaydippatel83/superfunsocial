@@ -30,12 +30,19 @@ const PostCards = ({ data }) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [reactions, setReactions] = useState([]);
   const [follow, setFollow] = useState(false);
-  const [likeCount, setLikeCount] = useState(data?.reactions?.likes_count || 0); 
+  const [likeCount, setLikeCount] = useState(data?.reactions?.likes_count || 0);
 
   const [user, _1, removeUser] = useLocalStorage("user");
   const [hasLiked, setHasLiked] = useState(
-    reactions.some((like) => like.user.fid === user?.fid)
+    data.reactions.likes_count > 0 &&
+      data.reactions.likes.some((like) => like.fid == user?.fid)
   );
+
+  useEffect(() => {
+    if (data.reactions.likes_count > 0) {
+      getReactions();
+    }
+  }, [data]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -45,7 +52,7 @@ const PostCards = ({ data }) => {
     const fid = data?.author?.fid;
     const viewer = userData?.fid;
     setIsHoverCardVisible(true);
-    const res = await userFollowOrNot(fid, viewer); 
+    const res = await userFollowOrNot(fid, viewer);
     setFollow(res?.users[0]?.viewer_context?.following);
   };
 
@@ -79,41 +86,50 @@ const PostCards = ({ data }) => {
     });
   };
 
-  const getReactions = async (hash) => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
-      },
+  const deleteReaction = async (reactionType, hash) => {
+    if (!user?.signerUuid) {
+      return;
+    }
+
+    const headers = {
+      accept: "application/json",
+      api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+      contentType: "application/json",
     };
 
-    axios
-      .get(
-        `https://api.neynar.com/v2/farcaster/reactions/cast?hash=${hash}&types=likes&limit=100`,
-        options
-      )
-      //   .then((response) => response.json())
-      .then((response) => {
-        setReactions(response.data.reactions);
-        setLikeCount(response.data.reactions.length);
-        setHasLiked(response.data.reactions.some((like) => like.user.fid === user?.fid));
-      })
-      .catch((err) => console.error(err));
+    await axios.delete("https://api.neynar.com/v2/farcaster/reaction", {
+      headers: headers,
+      data: {
+        signer_uuid: user?.signerUuid,
+        reaction_type: reactionType,
+        target: hash,
+      },
+    });
+  };
+
+  const getReactions = async () => {
+    setReactions(data.reactions);
+    setLikeCount(data.reactions.likes_count);
+    setHasLiked(data.reactions.likes.some((like) => like.fid == user?.fid));
   };
 
   const handleLikeButtonClick = () => {
-    const hasUserLiked = reactions.some((like) => like.user.fid === user?.fid);
+    const hasUserLiked = data.reactions.likes.some(
+      (like) => like.fid == user?.fid
+    );
     if (!hasUserLiked) {
-      setReactions([...reactions, { user: { fid: user?.fid } }]);
+      setReactions([...data.reactions.likes, { user: { fid: user?.fid } }]);
       setLikeCount(likeCount + 1);
       setHasLiked(true);
+      publishLike("like", data.hash);
     } else {
-      setReactions(reactions.filter((like) => like.user.fid !== user?.fid));
+      setReactions(
+        data.reactions.likes.filter((like) => like.fid !== user?.fid)
+      );
       setLikeCount(likeCount - 1);
       setHasLiked(false);
+      deleteReaction("like", data.hash);
     }
-    publishLike("like", data.hash);
   };
 
   return (

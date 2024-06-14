@@ -1,8 +1,8 @@
-import Layout from '@/components/layout/Layout';
-import RightSIdeBar from '@/components/sidebar/RightSIdeBar';
-import FollowerTab from '@/components/tabs/FollowerTab';
-import { fetchFollowing } from '@/lib/farcaster';
-import React from 'react';
+import Layout from "@/components/layout/Layout";
+import RightSIdeBar from "@/components/sidebar/RightSIdeBar";
+import FollowerTab from "@/components/tabs/FollowerTab";
+import { fetchFollowing } from "@/lib/farcaster";
+import React from "react";
 
 const page =async ({params}) => {
     const { username } = params; 
@@ -34,8 +34,8 @@ const page =async ({params}) => {
           <RightSIdeBar />
         </div>
       </main>
-  </Layout>   
-    );
+    </Layout>
+  );
 };
 
 export default page;
