@@ -4,6 +4,8 @@ import StickyHeader from "@/components/header/StickyHeader";
 import CreatePostModal from "@/components/modals/CreatePostModal";
 import { getFeed } from "@/lib/farcaster";
 
+
+
 export default async function Home() {
   const cursor ="";
   const feed = await getFeed(cursor); 
