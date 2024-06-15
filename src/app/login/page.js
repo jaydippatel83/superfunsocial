@@ -1,11 +1,13 @@
 'use client';
 import useLocalStorage from '@/hooks/use-local-storage-state';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 
 const page = () => {
     const client_id = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
     const [user, setUser, removeUser] = useLocalStorage("user");
+    const router = useRouter()
 
     const getButton = useCallback(() => {
         return (
@@ -56,6 +58,7 @@ const page = () => {
             signerUuid: data.signer_uuid,
             fid: data.fid,
           }); 
+          router.push('/');
         };
     
         return () => {

@@ -125,7 +125,7 @@ const StickyHeader = ({ data, cursor }) => {
             </div>
           </div>
         </div>
-        <PostCards />
+        {/* <PostCards /> */}
       </>}
       {showPollModal && (
         <div className="fixed inset-0 z-[99] flex items-center justify-center">
