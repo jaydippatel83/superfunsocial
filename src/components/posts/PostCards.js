@@ -35,7 +35,7 @@ const PostCards = ({ data }) => {
   const [user, _1, removeUser] = useLocalStorage("user");
   const [hasLiked, setHasLiked] = useState(
     data.reactions.likes_count > 0 &&
-      data.reactions.likes.some((like) => like.fid == user?.fid)
+      data.reactions.likes.some((like) => like.fid === user?.fid)
   );
 
   useEffect(() => {
@@ -110,7 +110,7 @@ const PostCards = ({ data }) => {
   const getReactions = async () => {
     setReactions(data.reactions);
     setLikeCount(data.reactions.likes_count);
-    setHasLiked(data.reactions.likes.some((like) => like.fid == user?.fid));
+    setHasLiked(data.reactions.likes.some((like) => like.fid === user?.fid));
   };
 
   const handleLikeButtonClick = () => {

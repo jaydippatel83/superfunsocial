@@ -8,6 +8,7 @@ import useLocalStorage from "@/hooks/use-local-storage-state";
 import AutoResizeTextarea from "../posts/AutosizeTextArea";
 import SuggestionInput from "../posts/SuggestionInput";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 const CreatePostModal = () => {
   const farcasterContext = useContext(FarcasterContext); 
@@ -122,7 +123,7 @@ const CreatePostModal = () => {
 
     fetch("https://api.neynar.com/v2/farcaster/cast", options)
       .then((response) => {
-        alert("Cast created");
+        toast.success("Cast sucessfully created");
         setText("");
         setLoading(false);
       })
@@ -151,12 +152,12 @@ const CreatePostModal = () => {
         <div className="p-6 overflow-y-scroll max-h-96">
           <div className=" flex justify-start">
             <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full "/>
-            <AutoResizeTextarea
+            {/* <AutoResizeTextarea
               value={text} 
               setText={setText}
               placeholder="What do you have in mind?"
-            />
-            {/* <SuggestionInput /> */}
+            /> */}
+            <SuggestionInput setValue={setText} value={text}/>
           </div>
 
           {embeds.map((embed, index) => (

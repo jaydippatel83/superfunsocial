@@ -33,8 +33,7 @@ export const PostDetailPage = ({ post }) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   const [likeCount, setLikeCount] = useState(post?.reactions?.likes_count || 0);
-
-  console.log(post, "details");
+ 
 
   const [hasLiked, setHasLiked] = useState(
     post.reactions.likes_count > 0 &&
