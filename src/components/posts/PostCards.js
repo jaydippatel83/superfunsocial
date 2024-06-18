@@ -21,6 +21,7 @@ import Image from "next/image";
 import RecastComponent from "./recast/RecastComponent";
 import { userFollowOrNot } from "@/lib/farcaster";
 import { AppContext } from "@/context/AppContext";
+import MentionComponent from "./mention";
 
 const PostCards = ({ data }) => {
   const appContext = useContext(AppContext);
@@ -131,6 +132,7 @@ const PostCards = ({ data }) => {
       deleteReaction("like", data.hash);
     }
   };
+ 
 
   return (
     <div className="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-2">
@@ -191,18 +193,8 @@ const PostCards = ({ data }) => {
             />
           )}
         </div>
-      </div>
-
-      <div className="sm:px-4 p-2.5 pt-0">
-        <p className="font-normal cursor-pointer">
-          <Link
-            href={`/${data?.author?.username}/${data?.hash}`}
-            className="break-all"
-          >
-            {data?.text}
-          </Link>
-        </p>
-      </div>
+      </div> 
+      <MentionComponent data={data}/>
       <MainEmbed data={data} lable="post" />
       <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
         <div className="flex items-center gap-2.5">

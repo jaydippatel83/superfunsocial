@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { IonIcon } from "@ionic/react";
 import { closeOutline, imageOutline, videocamOutline } from "ionicons/icons";
 import { FarcasterContext } from "@/context/farcaster";
@@ -26,6 +26,20 @@ const CreatePostModal = () => {
 
   const fileInputRef = useRef(null);
   const videoFileInputRef = useRef(null);
+
+  const extractUrls = (text) => {
+    const urlRegex = /https?:\/\/[^\s]+/g;
+    const urls = text.match(urlRegex);
+    return urls ? urls[0] : null; 
+  };
+  
+  useEffect(() => {
+    const urls = extractUrls(text);
+    if (urls) {
+      const array = [{ url: urls, type: "" }];
+      setEmbeds(array);
+    }
+  }, [text]);
 
   const handleFileChange = async (e) => {
     let arr = [...embeds];
@@ -152,30 +166,34 @@ const CreatePostModal = () => {
             <SuggestionInput setValue={setText} value={text} />
           </div>
 
-          {embeds.map((embed, index) => (
-            <div key={index} className="relative mt-4">
-              {embed.type === 'image' && (
-                <img
-                  src={embed.url}
-                  alt={`embed-${index}`}
-                  className="rounded-lg max-h-96"
-                />
-              )}
-              {embed.type === 'video' && (
-                <video
-                  src={embed.url}
-                  controls
-                  className="rounded-lg max-h-96"
-                />
-              )}
-              <button
-                className="absolute top-1 right-1 bg-gray-200 rounded-full p-1 w-8 h-8"
-                onClick={() => removeEmbed(index)}
-              >
-                <IonIcon icon={closeOutline} className="text-gray-600 text-xl" />
-              </button>
-            </div>
-          ))}
+          {embeds.map((embed, index) => {
+            if (embed.type !== '') {
+              return (
+                <div key={index} className="relative mt-4">
+                  {embed.type === 'image' && (
+                    <img
+                      src={embed.url}
+                      alt={`embed-${index}`}
+                      className="rounded-lg max-h-96"
+                    />
+                  )}
+                  {embed.type === 'video' && (
+                    <video
+                      src={embed.url}
+                      controls
+                      className="rounded-lg max-h-96"
+                    />
+                  )}
+                  <button
+                    className="absolute top-1 right-1 bg-gray-200 rounded-full p-1 w-8 h-8"
+                    onClick={() => removeEmbed(index)}
+                  >
+                    <IonIcon icon={closeOutline} className="text-gray-600 text-xl" />
+                  </button>
+                </div>
+              )
+            }
+          })}
           <input
             type="file"
             name="myImage"
