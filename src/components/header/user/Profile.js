@@ -169,7 +169,7 @@ const Profile = () => {
           )}
         </>
       ) : (
-        <div className="flex justify-center align-middle h-10">
+           <div className="flex justify-center align-middle h-10">
               <div className="w-10 h-10 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
             </div>
       )}

@@ -11,17 +11,18 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 
 const CreatePostModal = () => {
-  const farcasterContext = useContext(FarcasterContext); 
+  const farcasterContext = useContext(FarcasterContext);
   const { isModalOpen, toggleModal } = farcasterContext;
   const appContext = useContext(AppContext);
-  const  { userData} = appContext;
+  const { userData } = appContext;
   if (!isModalOpen) return null;
- 
+
   const [user, _1, removeUser] = useLocalStorage("user");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [embeds, setEmbeds] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(false);
 
   const fileInputRef = useRef(null);
   const videoFileInputRef = useRef(null);
@@ -66,7 +67,7 @@ const CreatePostModal = () => {
 
     // Get secure URL from our server
     if (file) {
-      setUploading(true);
+      setVideoLoading(true);
       const { url } = await fetch(
         "https://frame-backend-z2b9.onrender.com/s3/bucket"
       ).then((res) => res.json());
@@ -86,7 +87,7 @@ const CreatePostModal = () => {
 
         arr.push({ url: videoUrl });
         setEmbeds(arr);
-        setUploading(true);
+        setVideoLoading(false);
       }
     }
   };
@@ -133,7 +134,7 @@ const CreatePostModal = () => {
       });
 
     toggleModal();
-  }; 
+  };
 
   return (
     <div className="fixed inset-0 z-[99] flex items-center justify-center">
@@ -151,13 +152,13 @@ const CreatePostModal = () => {
         <hr />
         <div className="p-6 overflow-y-scroll max-h-96">
           <div className=" flex justify-start">
-            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full "/>
+            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full " />
             {/* <AutoResizeTextarea
               value={text} 
               setText={setText}
               placeholder="What do you have in mind?"
             /> */}
-            <SuggestionInput setValue={setText} value={text}/>
+            <SuggestionInput setValue={setText} value={text} />
           </div>
 
           {embeds.map((embed, index) => (
@@ -191,13 +192,21 @@ const CreatePostModal = () => {
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full text-blue-600 bg-blue-100"
                 onClick={handleButtonClick}
               >
-                <IonIcon icon={imageOutline} />
+                {!uploading ? <IonIcon icon={imageOutline} /> :
+                  <div className="flex justify-center align-middle h-6">
+                    <div className="w-6 h-6 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
+                  </div>
+                }
               </button>
               <div
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full text-red-600 bg-red-100"
                 onClick={handleVideoButtonClick}
               >
-                <IonIcon icon={videocamOutline} />
+                {!videoLoading ? <IonIcon icon={videocamOutline} /> :
+                  <div className="flex justify-center align-middle h-6">
+                    <div className="w-6 h-6 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
+                  </div>
+                }
               </div>
             </div>
             <button
