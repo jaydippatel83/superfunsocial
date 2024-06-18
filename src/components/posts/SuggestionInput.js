@@ -74,7 +74,8 @@ const SuggestionInput = ({ value, setValue }) => {
   }, [value]);
 
   return (
-    <div className="flex-1 relative">
+    <div className="flex-1 ">
+      <div className="relative">
       <div
         ref={inputRef}
         contentEditable
@@ -100,6 +101,7 @@ const SuggestionInput = ({ value, setValue }) => {
         className="hidden"
         aria-hidden="true"
       />
+      </div>
 
       {showSuggestions && suggestions?.length > 0 && (
         <ul className="absolute bg-white dark:bg-dark3 border rounded-lg max-w-72 z-50 overflow-y-scroll">

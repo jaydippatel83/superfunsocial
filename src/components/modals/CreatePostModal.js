@@ -28,10 +28,9 @@ const CreatePostModal = () => {
   const videoFileInputRef = useRef(null);
 
   const handleFileChange = async (e) => {
-    let arr = [];
+    let arr = [...embeds];
     let file = e.target.files[0];
     let fileType = file.type;
-    // get secure url from our server
 
     if (file) {
       setUploading(true);
@@ -39,7 +38,6 @@ const CreatePostModal = () => {
         "https://frame-backend-z2b9.onrender.com/s3/bucket"
       ).then((res) => res.json());
 
-      // post the image direclty to the s3 bucket
       if (url) {
         await fetch(url, {
           method: "PUT",
@@ -49,10 +47,8 @@ const CreatePostModal = () => {
           body: file,
         });
 
-        const imageUrl = url.split("?")[0];
-        // console.log(imageUrl, "imageUrl");
-
-        arr.push({ url: imageUrl });
+        const fileUrl = url.split("?")[0];
+        arr.push({ url: fileUrl, type: 'image' });
         setEmbeds(arr);
         setUploading(false);
       }
@@ -60,32 +56,27 @@ const CreatePostModal = () => {
   };
 
   const handleVideoFileChange = async (e) => {
-    let arr = [];
+    let arr = [...embeds];
     let file = e.target.files[0];
-    // Get the MIME type of the video file
     let fileType = file.type;
 
-    // Get secure URL from our server
     if (file) {
       setVideoLoading(true);
       const { url } = await fetch(
         "https://frame-backend-z2b9.onrender.com/s3/bucket"
       ).then((res) => res.json());
 
-      // POST the video directly to the S3 bucket
       if (url) {
         await fetch(url, {
           method: "PUT",
           headers: {
-            "Content-Type": fileType, // Use the correct MIME type for the video file
+            "Content-Type": fileType,
           },
           body: file,
         });
 
         const videoUrl = url.split("?")[0];
-        // console.log(videoUrl, "videoUrl");
-
-        arr.push({ url: videoUrl });
+        arr.push({ url: videoUrl, type: 'video' });
         setEmbeds(arr);
         setVideoLoading(false);
       }
@@ -98,6 +89,10 @@ const CreatePostModal = () => {
 
   const handleVideoButtonClick = () => {
     videoFileInputRef.current.click();
+  };
+
+  const removeEmbed = (index) => {
+    setEmbeds(embeds.filter((_, i) => i !== index));
   };
 
   const createCast = async () => {
@@ -124,8 +119,9 @@ const CreatePostModal = () => {
 
     fetch("https://api.neynar.com/v2/farcaster/cast", options)
       .then((response) => {
-        toast.success("Cast sucessfully created");
+        toast.success("Cast successfully created");
         setText("");
+        setEmbeds([]);
         setLoading(false);
       })
       .catch((err) => {
@@ -142,7 +138,7 @@ const CreatePostModal = () => {
         className="fixed inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-sm"
         onClick={toggleModal}
       ></div>
-      <div className="bg-white dark:bg-dark3 rounded-lg shadow-lg  w-full max-w-2xl mx-auto z-10">
+      <div className="bg-white dark:bg-dark3 rounded-lg shadow-lg w-full max-w-2xl mx-auto z-10">
         <div className="flex justify-between items-center pb-2 mb-4 p-6">
           <h2 className="text-lg font-semibold">Create Post</h2>
           <button onClick={toggleModal} className="text-xl">
@@ -151,23 +147,33 @@ const CreatePostModal = () => {
         </div>
         <hr />
         <div className="p-6 overflow-y-scroll max-h-96">
-          <div className=" flex justify-start">
-            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full " />
-            {/* <AutoResizeTextarea
-              value={text} 
-              setText={setText}
-              placeholder="What do you have in mind?"
-            /> */}
+          <div className="flex justify-start">
+            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full" />
             <SuggestionInput setValue={setText} value={text} />
           </div>
 
           {embeds.map((embed, index) => (
-            <div key={index} className="mt-4">
-              <img
-                src={embed.url}
-                alt={`embed-${index}`}
-                className="rounded-lg max-h-96"
-              />
+            <div key={index} className="relative mt-4">
+              {embed.type === 'image' && (
+                <img
+                  src={embed.url}
+                  alt={`embed-${index}`}
+                  className="rounded-lg max-h-96"
+                />
+              )}
+              {embed.type === 'video' && (
+                <video
+                  src={embed.url}
+                  controls
+                  className="rounded-lg max-h-96"
+                />
+              )}
+              <button
+                className="absolute top-1 right-1 bg-gray-200 rounded-full p-1 w-8 h-8"
+                onClick={() => removeEmbed(index)}
+              >
+                <IonIcon icon={closeOutline} className="text-gray-600 text-xl" />
+              </button>
             </div>
           ))}
           <input
@@ -212,7 +218,7 @@ const CreatePostModal = () => {
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={createCast}
-              disabled={!text || uploading}
+              disabled={!text || uploading || videoLoading}
             >
               {loading ? "Creating..." : "Create"}
             </button>
