@@ -39,8 +39,8 @@ const MentionComponent = ({ data }) => {
     const fid = userData?.fid;
     const viewer = user?.fid;
     setIsHoverCardVisible(true);
-    // const res = await userFollowOrNot(fid, viewer);
-    // setFollow(res?.users[0]?.viewer_context?.following);
+    const res = await userFollowOrNot(fid, viewer);
+    setFollow(res?.users[0]?.viewer_context?.following);
   };
 
   const handleMouseLeave = () => {
@@ -56,7 +56,7 @@ const MentionComponent = ({ data }) => {
         {
               hoverData && <UserHoverCard
                 user={hoverData}
-                follow={false}
+                follow={follow}
                 isVisible={isHoverCardVisible}
                 setIsHoverCardVisible={setIsHoverCardVisible}
                 uuid={user?.signerUuid}
