@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useContext, useEffect, useState } from 'react';
 
-const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid }) => {
+const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid , mention}) => {
     const appContext = useContext(AppContext);
     const { fid } = appContext;
 
@@ -42,7 +42,7 @@ const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid })
 
 
     return (
-        <div onMouseEnter={() => setIsHoverCardVisible(true)} onMouseLeave={() => setIsHoverCardVisible(false)} className="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-72">
+        <div onMouseEnter={() => setIsHoverCardVisible(true)} onMouseLeave={() => setIsHoverCardVisible(false)} className={`absolute ${mention && "top-5 right-0 left-0"} z-10 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-72`}>
             <div className="flex items-center">
                 <Image width={50} height={50} src={user?.pfp_url} alt={user?.display_name} className="w-12 h-12 rounded-full" />
                 <button onClick={handleFollow} className="ml-auto bg-gray-100 text-gray-700 px-2 py-1 rounded-md">{isFollowing ? "Unfollow" : "Follow"}</button>

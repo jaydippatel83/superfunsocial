@@ -170,6 +170,7 @@ const PostCards = ({ data }) => {
             setIsHoverCardVisible={setIsHoverCardVisible}
             follow={follow}
             uuid={user?.signerUuid}
+            mention={false}
           />
           <div className="flex items-center">
             <span className="text-sm text-gray-500">

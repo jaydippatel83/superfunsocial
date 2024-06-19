@@ -12,20 +12,32 @@ const MentionComponent = ({ data }) => {
   const [hoverData, setHoverData] = useState(null);
 
   const parseText = (text) => {
-    const parts = text.split(/(@[\w.]+)/g);
+    const parts = text.split(/(@[\w.-]+)/g);
     return parts.map((part, index) => {
       if (part.startsWith('@')) {
         const username = part.substring(1);
         const userData = data?.mentioned_profiles?.find((profile) => profile.username === username);
         return (
-          <span
+         <span className='relative'>
+           <span
             key={index}
-            className="text-blue-500 cursor-pointer relative"
+            className="text-blue-500 cursor-pointer"
             onMouseEnter={(e) => handleMouseEnter(e, userData)}
             onMouseLeave={handleMouseLeave}
           >
             {part} 
           </span>
+          {
+            hoverData && hoverData.username === username &&<UserHoverCard
+                 user={hoverData}
+                 follow={follow}
+                 isVisible={isHoverCardVisible}
+                 setIsHoverCardVisible={setIsHoverCardVisible}
+                 uuid={user?.signerUuid}
+                 mention={true}
+               />
+         }
+         </span>
         );
       } else {
         return <span key={index}>{part}</span>;
@@ -52,16 +64,7 @@ const MentionComponent = ({ data }) => {
       <p className="font-normal cursor-pointer ">
         <Link href={`/${data?.author?.username}/${data?.hash}`} className="break-all " >
           {parseText(data?.text)}
-        </Link>
-        {
-              hoverData && <UserHoverCard
-                user={hoverData}
-                follow={follow}
-                isVisible={isHoverCardVisible}
-                setIsHoverCardVisible={setIsHoverCardVisible}
-                uuid={user?.signerUuid}
-              />
-            }
+        </Link> 
       </p>
     </div>
   );
