@@ -21,6 +21,7 @@ import { AppContext } from "@/context/AppContext";
 import useLocalStorage from "@/hooks/use-local-storage-state";
 import axios from "axios";
 import RecastComponent from "./recast/RecastComponent";
+import MentionComponent from "./mention";
 
 export const PostDetailPage = ({ post }) => {
   const appContext = useContext(AppContext);
@@ -190,9 +191,7 @@ export const PostDetailPage = ({ post }) => {
           </div>
         </div>
 
-        <div className="sm:px-4 p-2.5 pt-0">
-          <p className="font-normal"> {post?.text}</p>
-        </div>
+        <MentionComponent data={post}/>
 
         <MainEmbed data={post} label="post" />
         <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">

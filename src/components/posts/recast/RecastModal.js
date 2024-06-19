@@ -7,6 +7,7 @@ import AutoResizeTextarea from '../AutosizeTextArea';
 import { AppContext } from '@/context/AppContext';
 import useLocalStorage from '@/hooks/use-local-storage-state';
 import RepostCast from '../RepostCast';
+import SuggestionInput from '../SuggestionInput';
 
 const RecastModal = ({ isOpen, onClose, parentPost }) => {
     const appContext = useContext(AppContext);
@@ -140,11 +141,7 @@ const RecastModal = ({ isOpen, onClose, parentPost }) => {
                 </button>
                 <div className=" flex justify-start">
                     <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full " />
-                    <AutoResizeTextarea
-                        value={text}
-                        setText={setText}
-                        placeholder="What do you have in mind?"
-                    />
+                     <SuggestionInput setValue={setText} value={text}/>
 
                 </div>
 
