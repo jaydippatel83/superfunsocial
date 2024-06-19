@@ -6,6 +6,7 @@ import AutoResizeTextarea from '../AutosizeTextArea';
 import { AppContext } from '@/context/AppContext';
 import Image from 'next/image';
 import useLocalStorage from '@/hooks/use-local-storage-state';
+import SuggestionInput from '../SuggestionInput';
 
 const CommentModal = ({ isOpen, onClose, parentPost }) => {
   const appContext = useContext(AppContext);
@@ -146,13 +147,8 @@ const CommentModal = ({ isOpen, onClose, parentPost }) => {
         </div> 
         <div className="overflow-y-scroll max-h-96">
           <div className=" flex justify-start">
-            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full "/>
-            <AutoResizeTextarea
-              value={text} 
-              setText={setText}
-              placeholder="What do you have in mind?"
-            /> 
-             
+            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full "/> 
+             <SuggestionInput setValue={setText} value={text} />
           </div>
 
           {embeds.map((embed, index) => (

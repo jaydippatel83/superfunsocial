@@ -45,8 +45,7 @@ const MentionComponent = ({ data }) => {
     });
   };
 
-  const handleMouseEnter = async (e, userData) => {
-    const rect = e.target.getBoundingClientRect();
+  const handleMouseEnter = async (e, userData) => { 
     setHoverData(userData);
     const fid = userData?.fid;
     const viewer = user?.fid;

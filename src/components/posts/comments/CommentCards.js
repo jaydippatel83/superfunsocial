@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { userFollowOrNot } from '@/lib/farcaster';
 import { AppContext } from '@/context/AppContext';
 import useLocalStorage from '@/hooks/use-local-storage-state';
+import MentionComponent from '../mention';
 
 const CommentCards = ({ comment, depth = 0 }) => {
   const appContext = useContext(AppContext);
@@ -115,14 +116,8 @@ const CommentCards = ({ comment, depth = 0 }) => {
                 <Menu />
               )}
             </div>
-          </div>
-          <div className="">
-            <p className="font-normal cursor-pointer  break-all">
-              <Link href={`/${comment?.author.username}/${comment?.hash}`}>
-                {comment?.text}
-              </Link>
-            </p>
-          </div>
+          </div> 
+          <MentionComponent data={comment}/>
           {comment?.embeds && <CommentEmbed embeds={comment.embeds} />}
           <Reactions data={comment} handleCommentClick={handleCommentClick} handleRecastClick={handleRecastClick} />
         </div>
