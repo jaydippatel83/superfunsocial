@@ -11,14 +11,11 @@ import CommentEmbed from './CommentEmbed';
 import CommentModal from './CommentModal';
 import Menu from '../Menu';
 import Image from 'next/image';
-import { userFollowOrNot } from '@/lib/farcaster';
-import { AppContext } from '@/context/AppContext'; 
+import { userFollowOrNot } from '@/lib/farcaster'; 
 import MentionComponent from '../mention';
 import { useNeynarContext } from '@neynar/react';
 
-const CommentCards = ({ comment, depth = 0 }) => {
-  const appContext = useContext(AppContext);
-  const { userData } = appContext;
+const CommentCards = ({ comment, depth = 0 }) => { 
   const [follow, setFollow] = useState();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isReactionOpen, setIsReactionOpen] = useState(false);

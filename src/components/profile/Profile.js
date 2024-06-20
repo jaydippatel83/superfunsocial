@@ -17,7 +17,7 @@ const Profile = async({ user }) => {
             >
                 <div className="max-w-[1080px] ">
                     <div className="md:w-[580px] md:max-w-[580px] flex-1 xl:space-y-6 relative">
-                        <ProfileHeader user={user} />
+                        <ProfileHeader userData={user} />
                         <StickyTabs /> 
                         {
                             feed && feed.map((item,i) => <PostCards data={item} key={i} />)
