@@ -1,14 +1,14 @@
 'use client';
 import Link from 'next/link';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import UserHoverCard from './UserHoverCard';
-import { userFollowOrNot } from '@/lib/farcaster';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+import { userFollowOrNot } from '@/lib/farcaster'; 
+import { useNeynarContext } from '@neynar/react';
 
 const MentionComponent = ({ data }) => {
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
   const [follow, setFollow] = useState(false);
-  const [user, _1, removeUser] = useLocalStorage("user");
+ const {user}= useNeynarContext()
   const [hoverData, setHoverData] = useState(null);
 
   const parseText = (text) => {
@@ -29,11 +29,11 @@ const MentionComponent = ({ data }) => {
           </span>
           {
             hoverData && hoverData.username === username &&<UserHoverCard
-                 user={hoverData}
+                 userData={hoverData}
                  follow={follow}
                  isVisible={isHoverCardVisible}
                  setIsHoverCardVisible={setIsHoverCardVisible}
-                 uuid={user?.signerUuid}
+                 uuid={user?.signer_uuid}
                  mention={true}
                />
          }

@@ -17,17 +17,15 @@ import CommentModal from "./comments/CommentModal";
 import Menu from "./Menu";
 import FeedComments from "./comments/FeedCommnets";
 import { userFollowOrNot } from "@/lib/farcaster";
-import { AppContext } from "@/context/AppContext";
-import useLocalStorage from "@/hooks/use-local-storage-state";
+import { AppContext } from "@/context/AppContext"; 
 import axios from "axios";
 import RecastComponent from "./recast/RecastComponent";
 import MentionComponent from "./mention";
+import { useNeynarContext } from "@neynar/react";
 
-export const PostDetailPage = ({ post }) => {
-  const appContext = useContext(AppContext);
-  const { userData } = appContext;
+export const PostDetailPage = ({ post }) => { 
   const [follow, setFollow] = useState();
-  const [user, _1, removeUser] = useLocalStorage("user");
+  const {user}= useNeynarContext()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isReactionOpen, setIsReactionOpen] = useState(false);
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
@@ -48,7 +46,7 @@ export const PostDetailPage = ({ post }) => {
   }, [post]);
 
   const publishLike = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user?.signer_uuid) {
       return;
     }
 
@@ -58,7 +56,7 @@ export const PostDetailPage = ({ post }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        signerUid: user?.signerUuid,
+        signerUid: user?.signer_uuid,
         reactionType,
         hash,
       }),
@@ -66,7 +64,7 @@ export const PostDetailPage = ({ post }) => {
   };
 
   const deleteReaction = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
@@ -79,7 +77,7 @@ export const PostDetailPage = ({ post }) => {
     await axios.delete("https://api.neynar.com/v2/farcaster/reaction", {
       headers: headers,
       data: {
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },
@@ -118,7 +116,7 @@ export const PostDetailPage = ({ post }) => {
 
   const handleMouseEnter = async () => {
     const fid = post?.author?.fid;
-    const viewer = userData?.fid;
+    const viewer = user?.fid;
     setIsHoverCardVisible(true);
     const res = await userFollowOrNot(fid, viewer);
     setFollow(res.users[0].viewer_context.following);
@@ -168,7 +166,7 @@ export const PostDetailPage = ({ post }) => {
               </div>
             </Link>
             <UserHoverCard
-              user={post?.author}
+              userData={post?.author}
               isVisible={isHoverCardVisible}
               setIsHoverCardVisible={setIsHoverCardVisible}
               follow={follow}

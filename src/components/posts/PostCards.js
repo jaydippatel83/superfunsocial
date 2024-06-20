@@ -1,6 +1,5 @@
 "use client";
-import React, { useContext, useState, useEffect } from "react";
-import useLocalStorage from "@/hooks/use-local-storage-state";
+import React, { useContext, useState, useEffect } from "react"; 
 import { IonIcon } from "@ionic/react";
 import {
   ellipsisHorizontal,
@@ -19,13 +18,11 @@ import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import RecastComponent from "./recast/RecastComponent";
-import { userFollowOrNot } from "@/lib/farcaster";
-import { AppContext } from "@/context/AppContext";
+import { userFollowOrNot } from "@/lib/farcaster"; 
 import MentionComponent from "./mention";
+import { useNeynarContext } from "@neynar/react";
 
-const PostCards = ({ data }) => {
-  const appContext = useContext(AppContext);
-  const { userData } = appContext;
+const PostCards = ({ data }) => { 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
@@ -33,7 +30,7 @@ const PostCards = ({ data }) => {
   const [follow, setFollow] = useState(false);
   const [likeCount, setLikeCount] = useState(data?.reactions?.likes_count || 0);
 
-  const [user, _1, removeUser] = useLocalStorage("user");
+  const {user}= useNeynarContext()
   const [hasLiked, setHasLiked] = useState(
     data.reactions.likes_count > 0 &&
       data.reactions.likes.some((like) => like.fid === user?.fid)
@@ -51,7 +48,7 @@ const PostCards = ({ data }) => {
 
   const handleMouseEnter = async () => {
     const fid = data?.author?.fid;
-    const viewer = userData?.fid;
+    const viewer = user?.fid;
     setIsHoverCardVisible(true);
     const res = await userFollowOrNot(fid, viewer);
     setFollow(res?.users[0]?.viewer_context?.following);
@@ -70,7 +67,7 @@ const PostCards = ({ data }) => {
   };
 
   const publishLike = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
@@ -80,7 +77,7 @@ const PostCards = ({ data }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        signerUid: user?.signerUuid,
+        signerUid: user?.signer_uuid,
         reactionType,
         hash,
       }),
@@ -88,7 +85,7 @@ const PostCards = ({ data }) => {
   };
 
   const deleteReaction = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
@@ -101,7 +98,7 @@ const PostCards = ({ data }) => {
     await axios.delete("https://api.neynar.com/v2/farcaster/reaction", {
       headers: headers,
       data: {
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },
@@ -165,11 +162,11 @@ const PostCards = ({ data }) => {
             </h4>
           </Link>
           <UserHoverCard
-            user={data?.author}
+            userData={data?.author}
             isVisible={isHoverCardVisible}
             setIsHoverCardVisible={setIsHoverCardVisible}
             follow={follow}
-            uuid={user?.signerUuid}
+            uuid={user?.signer_uuid}
             mention={false}
           />
           <div className="flex items-center">
@@ -189,7 +186,7 @@ const PostCards = ({ data }) => {
           {isDropdownOpen && (
             <Menu
               hash={data?.hash}
-              uuid={user?.signerUuid}
+              uuid={user?.signer_uuid}
               isCurrentUser={data.author.fid == user.fid}
             />
           )}

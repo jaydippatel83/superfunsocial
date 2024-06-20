@@ -6,21 +6,17 @@ import {
   heart,
   chatbubbleEllipses,
   paperPlaneOutline,
-  shareOutline,
-  bookmarkOutline,
-  notificationsOffOutline,
-  flagOutline,
-  stopCircleOutline,
-  chevronDownOutline,
+  shareOutline, 
 } from "ionicons/icons";
 import { formatNumber } from "@/lib/utils";
 import axios from "axios";
-import useLocalStorage from "@/hooks/use-local-storage-state";
+import { useNeynarContext } from "@neynar/react";
+ 
 
 const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
   const [likeCount, setLikeCount] = useState(data?.reactions?.likes_count || 0);
 
-  const [user, _1, removeUser] = useLocalStorage("user");
+  const {user}= useNeynarContext()
   const [hasLiked, setHasLiked] = useState(
     data.reactions.likes_count > 0 &&
       data.reactions.likes.some((like) => like.fid == user?.fid)
@@ -33,7 +29,7 @@ const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
   }, [data]);
 
   const publishLike = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
@@ -43,7 +39,7 @@ const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        signerUid: user?.signerUuid,
+        signerUid: user?.signer_uuid,
         reactionType,
         hash,
       }),
@@ -51,7 +47,7 @@ const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
   };
 
   const deleteReaction = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
@@ -64,7 +60,7 @@ const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
     await axios.delete("https://api.neynar.com/v2/farcaster/reaction", {
       headers: headers,
       data: {
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },

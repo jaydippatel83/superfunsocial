@@ -1,10 +1,8 @@
 'use client';
 import Layout from '@/components/layout/Layout';
-import Profile from '@/components/profile/Profile';
-import useLocalStorage from '@/hooks/use-local-storage-state';
-import { getUserById } from '@/lib/user'; 
+import Profile from '@/components/profile/Profile';  
 import { useNeynarContext } from '@neynar/react';
-import React, { useEffect, useState } from 'react';
+import React  from 'react';
 
 const page = () => {
     const {user}=useNeynarContext(); 

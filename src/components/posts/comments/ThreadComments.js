@@ -1,23 +1,21 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, {  useState } from 'react';
 import { IonIcon } from '@ionic/react';
-import { ellipsisHorizontal, bookmarkOutline, notificationsOffOutline, flagOutline, shareOutline, stopCircleOutline } from 'ionicons/icons';
+import { ellipsisHorizontal  } from 'ionicons/icons';
 import getRelativeTime from '@/lib/utils';
 import UserHoverCard from '../UserHoverCard';
-import CommentEmbed from './CommentEmbed';
-import CommentCards from './CommentCards';
-import Menu from '../Menu';
-import { AppContext } from '@/context/AppContext';
+import CommentEmbed from './CommentEmbed'; 
+import Menu from '../Menu'; 
 import { userFollowOrNot } from '@/lib/farcaster';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+import { useNeynarContext } from '@neynar/react';
+import MentionComponent from '../mention';
+ 
 
-const ThreadComments = ({ comment }) => {
-    const appContext = useContext(AppContext);
-    const {userData}= appContext;
+const ThreadComments = ({ comment }) => { 
     const [follow, setFollow]= useState();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
-    const [user, setUser, removeUser] = useLocalStorage("user");
+const {user}= useNeynarContext();
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -26,7 +24,7 @@ const ThreadComments = ({ comment }) => {
     const handleMouseEnter = async(e) => {
         e.stopPropagation();
         const fid = comment?.author?.fid;
-        const viewer = userData?.fid;
+        const viewer = user?.fid;
         setIsHoverCardVisible(true);
         const res = await userFollowOrNot(fid, viewer);
         setFollow(res.users[0].viewer_context.following); 
@@ -54,7 +52,7 @@ const ThreadComments = ({ comment }) => {
                                     <span className="text-sm text-gray-500"> @{comment?.author?.username} <span className="text-gray-500 mx-1">|</span> {getRelativeTime(comment?.timestamp)}</span>
                                 </div>
                             </div>
-                            <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user?.signerUuid} />
+                            <UserHoverCard userData={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user?.signerUuid} />
                         </div>
                         <button type="button" className="text-gray-500" onClick={toggleDropdown}>
                             <IonIcon icon={ellipsisHorizontal} />
@@ -63,11 +61,12 @@ const ThreadComments = ({ comment }) => {
                             <Menu />
                         )}
                     </div>
-                    <div className="">
+                    {/* <div className="">
                         <p className="font-normal cursor-pointer break-all">
                             {comment?.text}
                         </p>
-                    </div>
+                    </div> */}
+                    <MentionComponent data={comment}/>
                     {comment.embeds && <CommentEmbed embeds={comment.embeds} />}
                 </div>
             </div>

@@ -12,9 +12,9 @@ import CommentModal from './CommentModal';
 import Menu from '../Menu';
 import Image from 'next/image';
 import { userFollowOrNot } from '@/lib/farcaster';
-import { AppContext } from '@/context/AppContext';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+import { AppContext } from '@/context/AppContext'; 
 import MentionComponent from '../mention';
+import { useNeynarContext } from '@neynar/react';
 
 const CommentCards = ({ comment, depth = 0 }) => {
   const appContext = useContext(AppContext);
@@ -27,7 +27,7 @@ const CommentCards = ({ comment, depth = 0 }) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [recastModal, setRecastModal] = useState(false);
-  const [user, setUser, removeUser] = useLocalStorage("user");
+  const {user}= useNeynarContext()
   
 
 
@@ -48,7 +48,7 @@ const CommentCards = ({ comment, depth = 0 }) => {
   const handleMouseEnter = async (e) => {
     e.stopPropagation();
     const fid = comment?.author?.fid;
-    const viewer = userData?.fid;
+    const viewer = user?.fid;
     setIsHoverCardVisible(true);
     const res = await userFollowOrNot(fid, viewer);
     setFollow(res.users[0].viewer_context.following);
@@ -106,7 +106,7 @@ const CommentCards = ({ comment, depth = 0 }) => {
                   <span className="text-sm text-gray-500"> @{comment?.author?.username} <span className="text-gray-500 mx-1">|</span> {getRelativeTime(comment?.timestamp)}</span>
                 </div>
               </div>
-              <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user?.signerUuid}/>
+              <UserHoverCard userData={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user?.signer_uuid}/>
             </div>
             <div className='relative'>
               <button type="button" className="text-gray-500" onClick={toggleDropdown}>

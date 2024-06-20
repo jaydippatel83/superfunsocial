@@ -2,22 +2,19 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { IonIcon } from "@ionic/react";
 import { closeOutline, imageOutline, videocamOutline } from "ionicons/icons";
-import { FarcasterContext } from "@/context/farcaster";
-import { AppContext, useApp } from "@/context/AppContext";
-import useLocalStorage from "@/hooks/use-local-storage-state";
-import AutoResizeTextarea from "../posts/AutosizeTextArea";
+import { FarcasterContext } from "@/context/farcaster"; 
 import SuggestionInput from "../posts/SuggestionInput";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import { useNeynarContext } from "@neynar/react";
 
 const CreatePostModal = () => {
   const farcasterContext = useContext(FarcasterContext);
   const { isModalOpen, toggleModal } = farcasterContext;
-  const appContext = useContext(AppContext);
-  const { userData } = appContext;
+  
   if (!isModalOpen) return null;
 
-  const [user, _1, removeUser] = useLocalStorage("user");
+  const {user}=useNeynarContext(); 
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [embeds, setEmbeds] = useState([]);
@@ -111,7 +108,7 @@ const CreatePostModal = () => {
 
   const createCast = async () => {
     setLoading(true);
-    if (!user?.signerUuid) {
+    if (user) {
       setLoading(false);
       return;
     }
@@ -124,7 +121,7 @@ const CreatePostModal = () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         text: text,
         embeds,
         parent: "/superfunsocial",
@@ -162,7 +159,7 @@ const CreatePostModal = () => {
         <hr />
         <div className="p-6 overflow-y-scroll max-h-96">
           <div className="flex justify-start">
-            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full" />
+            <Image src={user?.pfp_url} width={50} height={50} className="w-10 h-10 rounded-full" />
             <SuggestionInput setValue={setText} value={text} />
           </div>
 

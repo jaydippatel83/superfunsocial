@@ -2,17 +2,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { IonIcon } from '@ionic/react';
 import { notificationsOutline, close } from 'ionicons/icons';
-import Image from 'next/image';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+import Image from 'next/image'; 
 import { getNotifications } from '@/lib/farcaster';
 import Link from 'next/link';
 import getRelativeTime from '@/lib/utils';
+import { useNeynarContext } from '@neynar/react';
 
 const Notifications = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const [notifications, setNotifications] = useState([]);
-    const [user, _1, removeUser] = useLocalStorage("user");
+    const {user}=useNeynarContext(); 
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);

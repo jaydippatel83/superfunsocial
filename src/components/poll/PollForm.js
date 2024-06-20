@@ -9,16 +9,14 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FarcasterContext } from "@/context/farcaster";
-import { usePrivy } from "@privy-io/react-auth";
-import { ethers } from "ethers";
-import useLocalStorage from "@/hooks/use-local-storage-state";
+import { FarcasterContext } from "@/context/farcaster"; 
+import { useNeynarContext } from "@neynar/react";
 
 const PollInputForm = ({ togglePollModal }) => {
   const farcasterContext = useContext(FarcasterContext);
   const { CreatePoll } = farcasterContext;
 
-  const [user, _1, removeUser] = useLocalStorage("user");
+   const {user}= useNeynarContext();
 
   const [pollOptions, setPollOptions] = useState([{ id: 1, value: "" }]);
   const [pollQuestion, setPollQuestion] = useState("");
@@ -68,7 +66,7 @@ const PollInputForm = ({ togglePollModal }) => {
             "content-type": "application/json",
           },
           body: JSON.stringify({
-            signer_uuid: user?.signerUuid,
+            signer_uuid: user?.signer_uuid,
             text: text,
             embeds: arr,
           }),

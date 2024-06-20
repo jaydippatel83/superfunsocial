@@ -1,19 +1,15 @@
-'use client'
-import { IonIcon } from '@ionic/react';
-import { syncOutline } from 'ionicons/icons';
-import Image from 'next/image';
+'use client' 
 import React, { useEffect, useState } from 'react';
 import RecentList from '../animation/RecentList';
-import axios from 'axios';
-import Link from 'next/link';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+import axios from 'axios'; 
 import SuggestedUsers from './SuggestedUsers';
+import { useNeynarContext } from '@neynar/react';
 
 
 
 const RightSIdeBar = () => {
-  const [user, setUser, removeUser] = useLocalStorage("user"); 
-  const [userData, setUserData] = useState(null);
+const {user}= useNeynarContext()
+const [userData,setUserData]=useState([]);
 
   const getActiveUser = async (id) => {
     const headers = {

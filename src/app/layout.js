@@ -1,15 +1,13 @@
 'use client' 
-import "./globals.css"; 
+
 import { useRouter } from "next/navigation"; 
-import { FarcasterContextProvider } from "@/context/farcaster";
-import { AppProvider } from "@/context/AppContext";
-import { PrivyProviderComponent } from "@/components/provider/provider";
-import dynamic from "next/dynamic";
-import { PostcardContextProvider } from "@/context/PostCardContext";
-import { ToastContainer } from 'react-toastify';
+import { FarcasterContextProvider } from "@/context/farcaster";  
+import dynamic from "next/dynamic"; 
+import { ToastContainer } from 'react-toastify'; 
+import { NeynarContextProvider, Theme } from "@neynar/react"; 
 import 'react-toastify/dist/ReactToastify.css';
 import "@neynar/react/dist/style.css"; 
-import { NeynarContextProvider, Theme } from "@neynar/react"; 
+import "./globals.css"; 
 
 const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
   ssr: false,
@@ -36,16 +34,10 @@ export default function RootLayout({ children }) {
                 },
               },
             }}
-          >
-            <PrivyProviderComponent>
-              <FarcasterContextProvider>
-                <PostcardContextProvider>
-                  <AppProvider>
-                    {children}
-                  </AppProvider>
-                </PostcardContextProvider>
-              </FarcasterContextProvider>
-            </PrivyProviderComponent>
+          > 
+              <FarcasterContextProvider> 
+                    {children} 
+              </FarcasterContextProvider> 
           </NeynarContextProvider>
         </ProgressBarProvider>
       </body>
