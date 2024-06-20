@@ -32,6 +32,35 @@ export async function getCastByHash(hash) {
   return data;
 }
 
+export  const getFeedByHash = async (fid) => {
+  const headers = {
+      accept: 'application/json', api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY
+  }
+  const url = `https://api.neynar.com/v2/farcaster/feed?feed_type=filter&filter_type=fids&fids=${fid}&limit=10`
+  try {
+      const response = await axios.get(url, {
+          headers
+      })
+      const data = response.data?.casts; 
+      return data;
+  } catch (error) {
+      console.log(error);
+  }
+}
+
+export async function getTrendingFeeds(fid){ 
+  const headers = {
+    accept: "application/json",
+    api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+  };
+  const url = `https://api.neynar.com/v2/farcaster/feed/trending?limit=10&viewer_fid=${fid}&time_window=24h`;
+  const response = await axios.get(url, {
+    headers,
+  });
+  const data = response.data;
+  return data;
+}
+
 export const fetchFollowing = async (req) => {
   const headers = {
     accept: "application/json",

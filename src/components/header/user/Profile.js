@@ -3,37 +3,22 @@ import Link from "next/link";
 import React, {
   useState,
   useRef,
-  useEffect,
-  useContext,
-  useCallback,
-} from "react";
-import { useRouter } from "next/navigation";
-import { FarcasterContext } from "@/context/farcaster";
-import { useApp } from "@/context/AppContext";
-import useLocalStorage from "@/hooks/use-local-storage-state";
+  useEffect, 
+} from "react"; 
 import Image from "next/image";
+import { useNeynarContext} from "@neynar/react";
 
 const Profile = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNightMode, setIsNightMode] = useState(false);
-  const dropdownRef = useRef(null);
-  const router = useRouter();
-
-  const client_id = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
-
-  const { userData, fid, setSignerUuid, setFid } = useApp();
-  const [user, setUser, removeUser] = useLocalStorage("user");
+  const dropdownRef = useRef(null);  
+  const {user, logoutUser}=useNeynarContext(); 
  
  
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-
-  const handleSignout = () => {
-    setUser(null); 
-    removeUser();
-    router.push("/login");
-  };
+ 
 
   const toggleNightMode = () => {
     setIsNightMode(!isNightMode);
@@ -65,7 +50,7 @@ const Profile = () => {
 
   return (
     <div className="relative">
-      {userData ? (
+      {user ? (
         <>
           <div
             className="rounded-full relative bg-secondery cursor-pointer shrink-0"
@@ -73,8 +58,8 @@ const Profile = () => {
           >
             <Image
               src={
-                userData?.pfp.url !== ""
-                  ? userData?.pfp.url
+                user?.pfp_url !== ""
+                  ? user?.pfp_url
                   : "assets/images/avatars/avatar-2.jpg"
               }
               alt=""
@@ -89,12 +74,12 @@ const Profile = () => {
               ref={dropdownRef}
               className="absolute top-full right-0 mt-2 bg-white rounded-lg drop-shadow-xl dark:bg-slate-700 w-64 border2 z-10"
             >
-              <Link href={`/profile/${userData.fid}`}>
+              <Link href={`/profile/${user.fid}`}>
                 <div className="p-4 py-5 flex items-center gap-4">
                   <Image
                     src={
-                      userData?.pfp.url !== ""
-                        ? userData?.pfp.url
+                      user?.pfp_url !== ""
+                        ? user?.pfp_url
                         : "assets/images/avatars/avatar-2.jpg"
                     }
                     alt=""
@@ -104,10 +89,10 @@ const Profile = () => {
                   />
                   <div className="flex-1">
                     <h4 className="text-sm font-medium text-black">
-                      {userData?.displayName}
+                      {user?.display_name}
                     </h4>
                     <div className="text-sm mt-1 text-blue-600 font-light dark:text-white/70">
-                      @{userData?.username}
+                      @{user?.username}
                     </div>
                   </div>
                 </div>
@@ -147,7 +132,7 @@ const Profile = () => {
                   </div>
                 </button>
                 <hr className="-mx-2 my-2 dark:border-gray-600/60" />
-                <div onClick={()=>handleSignout()} className="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
+                <div onClick={logoutUser} className="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
                     <svg
                       className="w-6"
                       xmlns="http://www.w3.org/2000/svg"

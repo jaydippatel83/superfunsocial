@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@ionic/react": "^8.1.2",
-    "@neynar/nodejs-sdk": "^1.24.0",
+    "@neynar/nodejs-sdk": "^1.31.0",
+    "@neynar/react": "^0.4.3",
     "@privy-io/react-auth": "^1.59.5",
     "autoprefixer": "^10.4.19",
     "axios": "^1.6.8",
