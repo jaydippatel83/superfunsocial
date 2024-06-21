@@ -4,15 +4,19 @@ import React, { useEffect, useState } from 'react';
 const ScrollTop = () => {
     const [isVisible, setIsVisible] = useState(false)
 
-    useEffect(() => {
-        const toggleVisibility = () => {
-            window.scrollY > 400 ? setIsVisible(true) : setIsVisible(false)
-        }
-        window.addEventListener("scroll", toggleVisibility)
-
-        return () => {
-            window.removeEventListener("scroll", toggleVisibility)
-        }
+    useEffect(() => { 
+        if (typeof window !== 'undefined') {
+            const toggleVisibility = () => {
+            
+                window.scrollY > 400 ? setIsVisible(true) : setIsVisible(false)
+            }
+            window.addEventListener("scroll", toggleVisibility)
+    
+            return () => {
+                window.removeEventListener("scroll", toggleVisibility)
+            }
+          } 
+        
     }, [])
 
     const scrollToTop = () => {

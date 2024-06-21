@@ -3,6 +3,7 @@ import { createContext, useState, useEffect } from "react";
 import  { contractABI } from "../utils/contract.js";
 import axios from "axios";
 import { ethers } from "ethers";
+import { toast } from "react-toastify";
 
 export const FarcasterContext = createContext();
 
@@ -50,32 +51,34 @@ export function FarcasterContextProvider(props) {
   }; // Get data from our own backend..
 
   async function connectMetaMaskAndGetSigner() {
-    const { ethereum } = window;
+    if(typeof window != "undefined" ){
+      const { ethereum } = window;
 
-    if (!ethereum) {
-      alert("Please install the Metamask Extension!");
-    }
-    try {
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      console.log("Found an account! Address: ", accounts[0]);
-      console.log(accounts);
-      setAddress(accounts[0]);
-    } catch (err) {
-      console.log(err);
-      if (err.code === 4902) {
-        try {
-          const accounts = await ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          console.log(accounts);
-          setAddress(accounts[0]);
-        } catch (err) {
-          alert(err.message);
+      if (!ethereum) {
+        toast.error("Please install the Metamask Extension!");
+      }
+      try {
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        console.log("Found an account! Address: ", accounts[0]);
+        console.log(accounts);
+        setAddress(accounts[0]);
+      } catch (err) {
+        console.log(err);
+        if (err.code === 4902) {
+          try {
+            const accounts = await ethereum.request({
+              method: "eth_requestAccounts",
+            });
+            console.log(accounts);
+            setAddress(accounts[0]);
+          } catch (err) {
+            alert(err.message);
+          }
         }
       }
-    }
+    } 
   }
 
   async function CreatePoll(name, numOfChoice, pollId) {

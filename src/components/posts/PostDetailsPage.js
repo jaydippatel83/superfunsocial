@@ -45,20 +45,23 @@ export const PostDetailPage = ({ post }) => {
   }, [post]);
 
   const publishLike = async (reactionType, hash) => {
-    if (!user?.signer_uuid) {
+    if (!user) {
       return;
     }
 
-    await fetch("/api/casts/reactions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const headers = {
+      accept: "application/json",
+      api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+      contentType: "application/json",
+    };
+
+    await axios.post("https://api.neynar.com/v2/farcaster/reaction", {
+      headers: headers,
+      data: {
+        signer_uuid: user?.signer_uuid,
+        reaction_type: reactionType,
+        target: hash,
       },
-      body: JSON.stringify({
-        signerUid: user?.signer_uuid,
-        reactionType,
-        hash,
-      }),
     });
   };
 

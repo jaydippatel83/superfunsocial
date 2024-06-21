@@ -21,6 +21,7 @@ import RecastComponent from "./recast/RecastComponent";
 import { userFollowOrNot } from "@/lib/farcaster"; 
 import MentionComponent from "./mention";
 import { useNeynarContext } from "@neynar/react";
+ 
 
 const PostCards = ({ data }) => { 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -71,17 +72,20 @@ const PostCards = ({ data }) => {
       return;
     }
 
-    await fetch("/api/casts/reactions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const headers = {
+      accept: "application/json",
+      api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+      contentType: "application/json",
+    };
+
+    await axios.post("https://api.neynar.com/v2/farcaster/reaction", {
+      headers: headers,
+      data: {
+        signer_uuid: user?.signer_uuid,
+        reaction_type: reactionType,
+        target: hash,
       },
-      body: JSON.stringify({
-        signerUid: user?.signer_uuid,
-        reactionType,
-        hash,
-      }),
-    });
+    }); 
   };
 
   const deleteReaction = async (reactionType, hash) => {

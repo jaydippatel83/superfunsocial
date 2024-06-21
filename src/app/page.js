@@ -1,25 +1,15 @@
-'use client'
+'use server'
 import Layout from "../components/layout/Layout"; 
 import RightSIdeBar from "../components/sidebar/RightSIdeBar"; 
 import StickyHeader from "@/components/header/StickyHeader";
 import CreatePostModal from "@/components/modals/CreatePostModal";
-import { getFeed } from "@/lib/farcaster"; 
-import { useEffect, useState } from "react";
+import { getFeed } from "@/lib/farcaster";  
 
 
 
-export default function Home() { 
-  const [feed, setFeed]= useState([]);
-
-  useEffect(() => {  
-    getFeedData();
-  }, []);
-
-  const getFeedData = async()=>{
-     const cursor ="";
-     const data = await getFeed(cursor); 
-     setFeed(data);
-  }
+export default async function Home() { 
+  const cursor ="";
+  const feed = await getFeed(cursor);  
 
   return (
     <Layout>
