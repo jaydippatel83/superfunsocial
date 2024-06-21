@@ -29,8 +29,9 @@ export default function RootLayout({ children }) {
                 onAuthSuccess: (params) => {
                   if(params.user){
                     router.push('/');
-                  }
-                  router.push('/login');
+                  } else{
+                    router.push('/login');
+                  } 
                 },
                 onSignout() { 
                   router.push('/login');
