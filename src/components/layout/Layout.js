@@ -1,11 +1,11 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../header/Header'; 
 import Sidebar from '../sidebar/Sidebar';
-import ScrollTop from '../footer/ScrollTop';
+import ScrollTop from '../footer/ScrollTop'; 
 
 const Layout = ({ children }) => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);

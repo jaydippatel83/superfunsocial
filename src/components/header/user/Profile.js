@@ -3,22 +3,22 @@ import Link from "next/link";
 import React, {
   useState,
   useRef,
-  useEffect, 
-} from "react"; 
+  useEffect,
+} from "react";
 import Image from "next/image";
-import { useNeynarContext} from "@neynar/react";
+import { useNeynarContext } from "@neynar/react";
+import { useRouter } from "next/navigation";
 
 const Profile = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNightMode, setIsNightMode] = useState(false);
-  const dropdownRef = useRef(null);  
-  const {user, logoutUser}=useNeynarContext(); 
- 
- 
+  const dropdownRef = useRef(null);
+  const { user, logoutUser } = useNeynarContext(); 
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
- 
+
 
   const toggleNightMode = () => {
     setIsNightMode(!isNightMode);
@@ -46,7 +46,7 @@ const Profile = () => {
     };
   }, [isDropdownOpen]);
 
- 
+
 
   return (
     <div className="relative">
@@ -124,39 +124,38 @@ const Profile = () => {
                     Night mode
                     <span className="bg-slate-200/40 ml-auto p-0.5 rounded-full w-9 dark:hover:bg-white/20">
                       <span
-                        className={`bg-white block h-4 relative rounded-full shadow-md w-2 w-4 ${
-                          isNightMode ? "dark:bg-blue-600" : ""
-                        }`}
+                        className={`bg-white block h-4 relative rounded-full shadow-md w-2 w-4 ${isNightMode ? "dark:bg-blue-600" : ""
+                          }`}
                       ></span>
                     </span>
                   </div>
                 </button>
                 <hr className="-mx-2 my-2 dark:border-gray-600/60" />
                 <div onClick={logoutUser} className="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
-                    <svg
-                      className="w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor" 
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      ></path>
-                    </svg>
-                    Log Out
-                  </div>
+                  <svg
+                    className="w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    ></path>
+                  </svg>
+                  Log Out
+                </div>
               </nav>
             </div>
           )}
         </>
       ) : (
-           <div className="flex justify-center align-middle h-10">
-              <div className="w-10 h-10 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
-            </div>
+        <div className="flex justify-center align-middle h-10">
+          <div className="w-10 h-10 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
+        </div>
       )}
     </div>
   );
