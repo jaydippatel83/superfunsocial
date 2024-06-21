@@ -22,12 +22,15 @@ export default function RootLayout({ children }) {
         <ToastContainer />
         <ProgressBarProvider>
           <NeynarContextProvider 
-            settings={{
+            settings={{ 
               clientId: process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID || "",
               defaultTheme: Theme.Light, 
               eventsCallbacks: {
-                onAuthSuccess: () => {
-                  router.push('/');
+                onAuthSuccess: (params) => {
+                  if(params.user){
+                    router.push('/');
+                  }
+                  router.push('/login');
                 },
                 onSignout() { 
                   router.push('/login');
