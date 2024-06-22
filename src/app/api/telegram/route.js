@@ -1,0 +1,42 @@
+import axios from 'axios';
+
+const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN;
+const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
+const WEB_APP_URL = 'https://demo.superfun.social';
+
+export default async function POST(req, res) {
+  if (req.method === 'POST') {
+    const { message } = req.body;
+
+    if (message && message.text === '/start') {
+      const chatId = message.chat.id;
+      
+      try {
+        const response = await axios.post(`${TELEGRAM_API}/sendMessage`, {
+          chat_id: chatId,
+          text: 'Welcome to the Telegram Mini App!',
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: 'Open Mini App',
+                  web_app: {
+                    url: WEB_APP_URL
+                  }
+                }
+              ]
+            ]
+          }
+        });
+        res.status(200).json(response.data);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error sending message' });
+      }
+    } else {
+      res.status(200).send('No message received');
+    }
+  } else {
+    res.status(405).send('Method Not Allowed');
+  }
+}
