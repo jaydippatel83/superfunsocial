@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { NextResponse } from 'next/server';
 
 const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN;
 const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
@@ -28,15 +29,15 @@ export default async function POST(req, res) {
             ]
           }
         });
-        res.status(200).json(response.data);
+        return NextResponse.json({response: response.data});
       } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Error sending message' });
+        return NextResponse.json({ error: 'Error sending message' });
       }
     } else {
-      res.status(200).send('No message received');
+      return NextResponse.json({message: 'No message received'});
     }
   } else {
-    res.status(405).send('Method Not Allowed');
+    return NextResponse.json({message: 'Method Not Allowed'});
   }
 }
