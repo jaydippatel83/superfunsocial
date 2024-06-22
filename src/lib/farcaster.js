@@ -1,11 +1,8 @@
 "use server";
 import neynarClient from "@/clients/neynar";
 import { FeedType, FilterType } from "@neynar/nodejs-sdk";
-import axios from "axios";
-
-import axios from 'axios';
-import { Telegraf } from 'telegraf';
-import { NextApiRequest, NextApiResponse } from 'next';
+import axios from "axios"; 
+import { Telegraf } from 'telegraf'; 
 
 const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN || "";
 const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
