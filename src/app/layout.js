@@ -8,14 +8,37 @@ import { NeynarContextProvider, Theme } from "@neynar/react";
 import 'react-toastify/dist/ReactToastify.css';
 import "@neynar/react/dist/style.css"; 
 import "./globals.css"; 
+import { useEffect } from "react";
 
 const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
   ssr: false,
 })
 
+// `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TG_TOKEN}/setWebhook?url=https://demo.superfun.social/api/telegram`
+
 
 export default function RootLayout({ children }) { 
   const router = useRouter()
+  useEffect(() => {
+    const setWebhook = async () => {
+      try {
+        const response = await fetch('/api/webhook', {
+          method: 'POST',
+        });
+        const data = await response.json();
+        if (data.ok) {
+          console.log('Webhook set successfully!');
+        } else {
+          console.log('Failed to set webhook');
+        }
+      } catch (error) {
+        console.error('Error setting webhook:', error);
+      }
+    };
+
+    setWebhook();
+  }, []);
+
   return (
     <html lang="en">
       <body >

@@ -6,7 +6,6 @@ const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 const WEB_APP_URL = 'https://demo.superfun.social';
 
 export default async function POST(req, res) {
-  if (req.method === 'POST') {
     const { message } = req.body;
 
     if (message && message.text === '/start') {
@@ -37,7 +36,4 @@ export default async function POST(req, res) {
     } else {
       return NextResponse.json({message: 'No message received'});
     }
-  } else {
-    return NextResponse.json({message: 'Method Not Allowed'});
-  }
 }
