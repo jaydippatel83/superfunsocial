@@ -19,8 +19,9 @@ const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
 
 export default function RootLayout({ children }) { 
   const router = useRouter()
+
   useEffect(() => {
-    const setWebhook = async () => {
+    const setWebhookUrl = async () => {
       try {
         const response = await fetch('/api/webhook', {
           method: 'POST',
@@ -36,7 +37,7 @@ export default function RootLayout({ children }) {
       }
     };
 
-    setWebhook();
+    setWebhookUrl();
   }, []);
 
   return (
