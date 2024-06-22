@@ -5,7 +5,7 @@ const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN;
 const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 const WEBHOOK_URL = `https://demo.superfun.social/api/telegram`;
 
-export default async function POST(req, res) {
+export  async function POST(req, res) {
     try {
         const response = await axios.post(`${TELEGRAM_API}/setWebhook`, {
           url: WEBHOOK_URL,

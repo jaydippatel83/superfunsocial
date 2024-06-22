@@ -5,7 +5,7 @@ const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN;
 const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 const WEB_APP_URL = 'https://demo.superfun.social';
 
-export default async function POST(req, res) {
+export  async function POST(req, res) {
     const { message } = req.body;
 
     if (message && message.text === '/start') {
