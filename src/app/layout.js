@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "@neynar/react/dist/style.css"; 
 import "./globals.css"; 
 import { useEffect } from "react";
+import { initTelegram } from "@/lib/farcaster";
 
 const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
   ssr: false,
@@ -20,24 +21,8 @@ const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
 export default function RootLayout({ children }) { 
   const router = useRouter()
 
-  useEffect(() => {
-    const setWebhookUrl = async () => {
-      try {
-        const response = await fetch('/api/webhook', {
-          method: 'POST',
-        });
-        const data = await response.json();
-        if (data.ok) {
-          console.log('Webhook set successfully!');
-        } else {
-          console.log('Failed to set webhook');
-        }
-      } catch (error) {
-        console.error('Error setting webhook:', error);
-      }
-    };
-
-    setWebhookUrl();
+  useEffect(() => { 
+    initTelegram()
   }, []);
 
   return (

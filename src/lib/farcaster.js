@@ -3,6 +3,31 @@ import neynarClient from "@/clients/neynar";
 import { FeedType, FilterType } from "@neynar/nodejs-sdk";
 import axios from "axios";
 
+import axios from 'axios';
+import { Telegraf } from 'telegraf';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN || "";
+const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
+const WEB_APP_URL = 'https://demo.superfun.social';
+
+const bot = new Telegraf(TELEGRAM_TOKEN);
+
+export async function initTelegram(){
+  bot.start((ctx) => {
+    ctx.reply("Welcome to the SuperfunSocial Telegram Mini App!)", {
+        reply_markup: {
+            keyboard: [[{ text: "SuperFunSocial App", web_app: { url: WEB_APP_URL } }]],
+        },
+    });
+});
+
+bot.launch()
+}
+ 
+ 
+
+
 export async function getFeed(cursor) {
   try {
     const feed = await neynarClient.fetchFeed(FeedType.Filter, {
