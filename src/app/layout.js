@@ -10,6 +10,7 @@ import "@neynar/react/dist/style.css";
 import "./globals.css"; 
 import { useEffect } from "react";
 import { initTelegram } from "@/lib/farcaster";
+import Script from "next/script";
 
 const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
   ssr: false,
@@ -25,15 +26,17 @@ export default function RootLayout({ children }) {
     initTelegram()
   }, []);
 
+  
+
   return (
     <html lang="en">
       <body >
         <ToastContainer />
         <ProgressBarProvider>
-          <NeynarContextProvider 
+          <NeynarContextProvider  
             settings={{ 
               clientId: process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID || "",
-              defaultTheme: Theme.Light, 
+              defaultTheme: Theme.Light,  
               eventsCallbacks: {
                 onAuthSuccess: (params) => {
                   if(params.user){
@@ -54,6 +57,7 @@ export default function RootLayout({ children }) {
           </NeynarContextProvider>
         </ProgressBarProvider>
       </body>
+      <Script strategy="lazyOnload" src="https://neynarxyz.github.io/siwn/raw/1.2.0/index.js" async></Script>
     </html>
   );
 }
