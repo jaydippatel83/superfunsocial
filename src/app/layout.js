@@ -9,16 +9,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import "@neynar/react/dist/style.css"; 
 import "./globals.css"; 
 import { useEffect } from "react";
-import { initTelegram } from "@/lib/farcaster";
-import Script from "next/script";
+import { initTelegram } from "@/lib/farcaster"; 
 
 const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
   ssr: false,
 })
-
-// `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TG_TOKEN}/setWebhook?url=https://demo.superfun.social/api/telegram`
-
-
+  
 export default function RootLayout({ children }) { 
   const router = useRouter()
 
@@ -26,7 +22,7 @@ export default function RootLayout({ children }) {
     initTelegram()
   }, []);
 
-  
+
 
   return (
     <html lang="en">
@@ -41,9 +37,7 @@ export default function RootLayout({ children }) {
                 onAuthSuccess: (params) => {
                   if(params.user){
                     router.push('/');
-                  } else{
-                    router.push('/login');
-                  } 
+                  }  
                 },
                 onSignout() { 
                   router.push('/login');
@@ -56,8 +50,7 @@ export default function RootLayout({ children }) {
               </FarcasterContextProvider> 
           </NeynarContextProvider>
         </ProgressBarProvider>
-      </body>
-      <Script strategy="lazyOnload" src="https://neynarxyz.github.io/siwn/raw/1.2.0/index.js" async></Script>
+      </body> 
     </html>
   );
 }
