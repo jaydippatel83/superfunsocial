@@ -1,32 +1,9 @@
 'use client'; 
 import Link from 'next/link'; 
 import React, { useEffect } from 'react';
-import { NeynarAuthButton , useNeynarContext } from "@neynar/react";
-import { useRouter } from 'next/navigation';
+import { NeynarAuthButton  } from "@neynar/react"; 
 
-const page = () => {  
-  const {user}= useNeynarContext();
-  const router = useRouter();
-
-  useEffect(()=>{
-    if(user){
-      router.push('/')
-    } else{
-      initiateNeynarLogin();  
-    } 
-  },[])
-
-  const initiateNeynarLogin = () => {
-    const tg = window.Telegram?.WebApp;
-    const loginUrl = `https://app.neynar.com/login?client_id=${process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID}`
-    if (tg) {
-      tg.openLink(loginUrl);
-      router.push('/')
-    } else {
-      window.location.href = loginUrl;
-    }
-  };
-  
+const page = () => {   
     return (
       <div className="sm:flex">
         <div className="relative lg:w-[580px] md:w-96 w-full p-10 min-h-screen bg-white shadow-xl flex items-center pt-10 dark:bg-slate-900 z-10">
