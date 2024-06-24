@@ -47,7 +47,7 @@ const Profile = ({ user }) => {
                         <ProfileHeader user={user} />
                         <StickyTabs /> 
                         {
-                            feed && feed.map((item) => <PostCards data={item} />)
+                            feed && feed.map((item,i) => <PostCards data={item} key={i} />)
                         }
 
                         <PostCardLoader />

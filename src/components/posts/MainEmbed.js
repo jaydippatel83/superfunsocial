@@ -9,7 +9,7 @@ const MainEmbed = ({ data, lable }) => {
       {data?.embeds &&
         data.embeds.map((embed, index) => { 
           return (
-            <>
+            <div key={index}>
               {embed?.cast_id && (
                 <RepostCast
                   key={index}
@@ -26,7 +26,7 @@ const MainEmbed = ({ data, lable }) => {
                   lable="max-w-4xl mx-auto px-4"
                 />
               )}
-            </>
+            </div>
           );
         })}
     </>

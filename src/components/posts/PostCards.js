@@ -35,12 +35,12 @@ const PostCards = ({ data }) => {
 
   const [user, _1, removeUser] = useLocalStorage("user");
   const [hasLiked, setHasLiked] = useState(
-    data.reactions.likes_count > 0 &&
-      data.reactions.likes.some((like) => like.fid == user?.fid)
+    data?.reactions.likes_count > 0 &&
+      data?.reactions.likes.some((like) => like.fid == user?.fid)
   );
 
   useEffect(() => {
-    if (data.reactions.likes_count > 0) {
+    if (data?.reactions.likes_count > 0) {
       getReactions();
     }
   }, [data]);
@@ -149,7 +149,7 @@ const PostCards = ({ data }) => {
         >
           <Image
             src={data?.author?.pfp_url}
-            alt=""
+            alt={data?.author?.username}
             width={48}
             height={48}
             className="w-9 h-9 rounded-full"

@@ -75,8 +75,8 @@ const StickyHeader = ({ data, cursor }) => {
       </div>
       {activeTab === 'All' && <>
           <CreatePost />
-          {casts && casts.map((item) => (
-            <PostCards key={item.id} data={item} />
+          {casts && casts.map((item,i) => (
+            <PostCards key={i} data={item} />
           ))}
           {endCursorcasts && (
             <div className="flex justify-center my-5">
@@ -91,8 +91,8 @@ const StickyHeader = ({ data, cursor }) => {
         </>}
       {activeTab === 'Memes' && <>
         <CreatePost />
-        {casts && casts.map((item) => (
-          <PostCards key={item.id} data={item} />
+        {casts && casts.map((item,i) => (
+          <PostCards key={i} data={item} />
         ))}
         {endCursorcasts && (
           <div className="flex justify-center">

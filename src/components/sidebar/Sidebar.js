@@ -24,37 +24,37 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                             <ul>
                                 <li className={` ${isActive('/') ? 'active' : ' '}`}>
                                     <Link href="/">
-                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/feed.png" alt="fun feed" className="w-6" />
                                         <span>Fun Feed </span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/questions') ? 'active' : ' '}`}>
                                     <Link href="/questions">
-                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/question.png" alt="q & a" className="w-6" />
                                         <span>Q & A </span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/superplay') ? 'active' : ' '}`}>
                                     <Link href="/superplay">
-                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/game.png" alt="super play" className="w-6" />
                                         <span>Super Play </span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/contest') ? 'active' : ' '}`}>
                                     <Link href="/contest">
-                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/trophy.png" alt="contest" className="w-6" />
                                         <span>Contest</span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/leaderboard') ? 'active' : ' '}`}>
                                     <Link href="/leaderboard">
-                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/rank.png" alt="leaderboard" className="w-6" />
                                         <span>Leaderboard</span>
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/profile') ? 'active' : ' '}`}>
                                     <Link href="/profile">
-                                        <Image width={50} height={50} src="/assets/images/icons/home.png" alt="feeds" className="w-6" />
+                                        <Image width={50} height={50} src="/assets/images/icons/user.png" alt="profile" className="w-6" />
                                         <span>Profile</span>
                                     </Link>
                                 </li>

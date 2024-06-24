@@ -56,7 +56,7 @@ const RightSIdeBar = () => {
             {
               userData && userData.map((user) => { 
                 return (
-                  <div className="flex items-center gap-3">
+                  <div key={user.fid} className="flex items-center gap-3">
                     <Link href={`/profile/${user.fid}`}>
                       <img src={user.pfp_url} alt="" className="bg-gray-200 rounded-full w-10 h-10" />
                     </Link>

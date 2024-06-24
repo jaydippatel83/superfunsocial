@@ -28,33 +28,19 @@ const Header = ({isSidebarOpen,toggleSidebar}) => {
                         <div id="logo">
                             <Link href="/">
                                 <Image
-                                    src="/assets/images/logo.png"
+                                    src="/assets/images/icons/sfslogo.png"
                                     alt="Logo"
                                     width={112}
                                     height={28}
-                                    className="w-28 md:block hidden dark:!hidden"
-                                />
+                                    className="w-28 md:block hidden"
+                                /> 
                                 <Image
-                                    src="/assets/images/logo-light.png"
-                                    alt="Logo"
-                                    width={112}
-                                    height={28}
-                                    className="dark:md:block hidden"
-                                />
-                                <Image
-                                    src="/assets/images/logo-mobile.png"
+                                    src="/assets/images/icons/sfslogo.png"
                                     alt="Logo"
                                     width={80}
                                     height={20}
-                                    className="hidden max-md:block w-20 dark:!hidden"
-                                />
-                                <Image
-                                    src="/assets/images/logo-mobile-light.png"
-                                    alt="Logo"
-                                    width={80}
-                                    height={20}
-                                    className="hidden dark:max-md:block w-20"
-                                />
+                                    className="hidden max-md:block w-20"
+                                /> 
                             </Link>
                         </div>
                     </div>
@@ -62,11 +48,11 @@ const Header = ({isSidebarOpen,toggleSidebar}) => {
 
                 <div className="flex-1 ">
                     <div className="max-w-[1220px] mx-auto flex items-center">
-                        {/* <DropDown /> */}
+                        <DropDown />
                         <div className="flex items-center sm:gap-4 gap-2 absolute right-5 top-1/2 -translate-y-1/2 text-black">
-                            {/* <button type="button" className="sm:hidden sm:p-2 p-1 rounded-full  sm:bg-secondery dark:text-white">
+                            <button type="button" className="sm:hidden sm:p-2 p-1 rounded-full  sm:bg-secondery dark:text-white">
                                 <IonIcon icon={search} className="sm:hidden text-2xl" />
-                            </button> */}
+                            </button>
                             <Create  />
                             <Notifications />
                             <Message />
