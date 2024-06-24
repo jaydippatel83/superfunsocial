@@ -12,8 +12,7 @@ const page = () => {
     if(user){
       router.push('/')
     } else{
-      initiateNeynarLogin(); 
-      router.push('/')
+      initiateNeynarLogin();  
     } 
   },[])
 
@@ -22,6 +21,7 @@ const page = () => {
     const loginUrl = `https://app.neynar.com/login?client_id=${process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID}`
     if (tg) {
       tg.openLink(loginUrl);
+      router.push('/')
     } else {
       window.location.href = loginUrl;
     }
