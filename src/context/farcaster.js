@@ -23,6 +23,8 @@ export function FarcasterContextProvider(props) {
   useEffect(() => {
     if (!user) {
       router.push('/login')
+    }else{
+      router.push('/')
     }
   }, [user])
 
