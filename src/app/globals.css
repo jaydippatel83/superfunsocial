@@ -17,6 +17,7 @@
   word-break: break-word; 
 }
 
+
 .animate-spin {
   animation: spin 1s linear infinite;
 }
@@ -76,6 +77,10 @@
     /* Basic */
     body {
         @apply text-gray-600 font-normal bg-bgbody dark:text-white 
+    }
+
+    .highlight{
+      @apply text-blue-500;
     }
     
      /* Basic */ 

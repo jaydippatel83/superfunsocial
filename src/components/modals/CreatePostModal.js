@@ -1,35 +1,47 @@
 "use client";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { IonIcon } from "@ionic/react";
 import { closeOutline, imageOutline, videocamOutline } from "ionicons/icons";
-import { FarcasterContext } from "@/context/farcaster";
-import { AppContext, useApp } from "@/context/AppContext";
-import useLocalStorage from "@/hooks/use-local-storage-state";
-import AutoResizeTextarea from "../posts/AutosizeTextArea";
+import { FarcasterContext } from "@/context/farcaster"; 
 import SuggestionInput from "../posts/SuggestionInput";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { useNeynarContext } from "@neynar/react";
 
 const CreatePostModal = () => {
-  const farcasterContext = useContext(FarcasterContext); 
+  const farcasterContext = useContext(FarcasterContext);
   const { isModalOpen, toggleModal } = farcasterContext;
-  const appContext = useContext(AppContext);
-  const  { userData} = appContext;
+  
   if (!isModalOpen) return null;
- 
-  const [user, _1, removeUser] = useLocalStorage("user");
+
+  const {user}=useNeynarContext(); 
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [embeds, setEmbeds] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(false);
 
   const fileInputRef = useRef(null);
   const videoFileInputRef = useRef(null);
 
+  const extractUrls = (text) => {
+    const urlRegex = /https?:\/\/[^\s]+/g;
+    const urls = text.match(urlRegex);
+    return urls ? urls[0] : null; 
+  };
+  
+  useEffect(() => {
+    const urls = extractUrls(text);
+    if (urls) {
+      const array = [{ url: urls, type: "" }];
+      setEmbeds(array);
+    }
+  }, [text]);
+
   const handleFileChange = async (e) => {
-    let arr = [];
+    let arr = [...embeds];
     let file = e.target.files[0];
     let fileType = file.type;
-    // get secure url from our server
 
     if (file) {
       setUploading(true);
@@ -37,7 +49,6 @@ const CreatePostModal = () => {
         "https://frame-backend-z2b9.onrender.com/s3/bucket"
       ).then((res) => res.json());
 
-      // post the image direclty to the s3 bucket
       if (url) {
         await fetch(url, {
           method: "PUT",
@@ -47,10 +58,8 @@ const CreatePostModal = () => {
           body: file,
         });
 
-        const imageUrl = url.split("?")[0];
-        // console.log(imageUrl, "imageUrl");
-
-        arr.push({ url: imageUrl });
+        const fileUrl = url.split("?")[0];
+        arr.push({ url: fileUrl, type: 'image' });
         setEmbeds(arr);
         setUploading(false);
       }
@@ -58,34 +67,29 @@ const CreatePostModal = () => {
   };
 
   const handleVideoFileChange = async (e) => {
-    let arr = [];
+    let arr = [...embeds];
     let file = e.target.files[0];
-    // Get the MIME type of the video file
     let fileType = file.type;
 
-    // Get secure URL from our server
     if (file) {
-      setUploading(true);
+      setVideoLoading(true);
       const { url } = await fetch(
         "https://frame-backend-z2b9.onrender.com/s3/bucket"
       ).then((res) => res.json());
 
-      // POST the video directly to the S3 bucket
       if (url) {
         await fetch(url, {
           method: "PUT",
           headers: {
-            "Content-Type": fileType, // Use the correct MIME type for the video file
+            "Content-Type": fileType,
           },
           body: file,
         });
 
         const videoUrl = url.split("?")[0];
-        // console.log(videoUrl, "videoUrl");
-
-        arr.push({ url: videoUrl });
+        arr.push({ url: videoUrl, type: 'video' });
         setEmbeds(arr);
-        setUploading(true);
+        setVideoLoading(false);
       }
     }
   };
@@ -98,9 +102,13 @@ const CreatePostModal = () => {
     videoFileInputRef.current.click();
   };
 
+  const removeEmbed = (index) => {
+    setEmbeds(embeds.filter((_, i) => i !== index));
+  };
+
   const createCast = async () => {
     setLoading(true);
-    if (!user?.signerUuid) {
+    if (user) {
       setLoading(false);
       return;
     }
@@ -113,7 +121,7 @@ const CreatePostModal = () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         text: text,
         embeds,
         parent: "/superfunsocial",
@@ -122,8 +130,9 @@ const CreatePostModal = () => {
 
     fetch("https://api.neynar.com/v2/farcaster/cast", options)
       .then((response) => {
-        alert("Cast created");
+        toast.success("Cast successfully created");
         setText("");
+        setEmbeds([]);
         setLoading(false);
       })
       .catch((err) => {
@@ -132,7 +141,7 @@ const CreatePostModal = () => {
       });
 
     toggleModal();
-  }; 
+  };
 
   return (
     <div className="fixed inset-0 z-[99] flex items-center justify-center">
@@ -140,7 +149,7 @@ const CreatePostModal = () => {
         className="fixed inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-sm"
         onClick={toggleModal}
       ></div>
-      <div className="bg-white dark:bg-dark3 rounded-lg shadow-lg  w-full max-w-2xl mx-auto z-10">
+      <div className="bg-white dark:bg-dark3 rounded-lg shadow-lg w-full max-w-2xl mx-auto z-10">
         <div className="flex justify-between items-center pb-2 mb-4 p-6">
           <h2 className="text-lg font-semibold">Create Post</h2>
           <button onClick={toggleModal} className="text-xl">
@@ -149,25 +158,39 @@ const CreatePostModal = () => {
         </div>
         <hr />
         <div className="p-6 overflow-y-scroll max-h-96">
-          <div className=" flex justify-start">
-            <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full "/>
-            <AutoResizeTextarea
-              value={text} 
-              setText={setText}
-              placeholder="What do you have in mind?"
-            />
-            {/* <SuggestionInput /> */}
+          <div className="flex justify-start">
+            <Image src={user?.pfp_url} width={50} height={50} className="w-10 h-10 rounded-full" />
+            <SuggestionInput setValue={setText} value={text} />
           </div>
 
-          {embeds.map((embed, index) => (
-            <div key={index} className="mt-4">
-              <img
-                src={embed.url}
-                alt={`embed-${index}`}
-                className="rounded-lg max-h-96"
-              />
-            </div>
-          ))}
+          {embeds.map((embed, index) => {
+            if (embed.type !== '') {
+              return (
+                <div key={index} className="relative mt-4">
+                  {embed.type === 'image' && (
+                    <img
+                      src={embed.url}
+                      alt={`embed-${index}`}
+                      className="rounded-lg max-h-96"
+                    />
+                  )}
+                  {embed.type === 'video' && (
+                    <video
+                      src={embed.url}
+                      controls
+                      className="rounded-lg max-h-96"
+                    />
+                  )}
+                  <button
+                    className="absolute top-1 right-1 bg-gray-200 rounded-full p-1 w-8 h-8"
+                    onClick={() => removeEmbed(index)}
+                  >
+                    <IonIcon icon={closeOutline} className="text-gray-600 text-xl" />
+                  </button>
+                </div>
+              )
+            }
+          })}
           <input
             type="file"
             name="myImage"
@@ -190,19 +213,27 @@ const CreatePostModal = () => {
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full text-blue-600 bg-blue-100"
                 onClick={handleButtonClick}
               >
-                <IonIcon icon={imageOutline} />
+                {!uploading ? <IonIcon icon={imageOutline} /> :
+                  <div className="flex justify-center align-middle h-6">
+                    <div className="w-6 h-6 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
+                  </div>
+                }
               </button>
               <div
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full text-red-600 bg-red-100"
                 onClick={handleVideoButtonClick}
               >
-                <IonIcon icon={videocamOutline} />
+                {!videoLoading ? <IonIcon icon={videocamOutline} /> :
+                  <div className="flex justify-center align-middle h-6">
+                    <div className="w-6 h-6 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
+                  </div>
+                }
               </div>
             </div>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={createCast}
-              disabled={!text || uploading}
+              disabled={!text || uploading || videoLoading}
             >
               {loading ? "Creating..." : "Create"}
             </button>

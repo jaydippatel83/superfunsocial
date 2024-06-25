@@ -11,13 +11,11 @@ import CommentEmbed from './CommentEmbed';
 import CommentModal from './CommentModal';
 import Menu from '../Menu';
 import Image from 'next/image';
-import { userFollowOrNot } from '@/lib/farcaster';
-import { AppContext } from '@/context/AppContext';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+import { userFollowOrNot } from '@/lib/farcaster'; 
+import MentionComponent from '../mention';
+import { useNeynarContext } from '@neynar/react';
 
-const CommentCards = ({ comment, depth = 0 }) => {
-  const appContext = useContext(AppContext);
-  const { userData } = appContext;
+const CommentCards = ({ comment, depth = 0 }) => { 
   const [follow, setFollow] = useState();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isReactionOpen, setIsReactionOpen] = useState(false);
@@ -26,7 +24,7 @@ const CommentCards = ({ comment, depth = 0 }) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [recastModal, setRecastModal] = useState(false);
-  const [user, setUser, removeUser] = useLocalStorage("user");
+  const {user}= useNeynarContext()
   
 
 
@@ -47,7 +45,7 @@ const CommentCards = ({ comment, depth = 0 }) => {
   const handleMouseEnter = async (e) => {
     e.stopPropagation();
     const fid = comment?.author?.fid;
-    const viewer = userData?.fid;
+    const viewer = user?.fid;
     setIsHoverCardVisible(true);
     const res = await userFollowOrNot(fid, viewer);
     setFollow(res.users[0].viewer_context.following);
@@ -105,7 +103,7 @@ const CommentCards = ({ comment, depth = 0 }) => {
                   <span className="text-sm text-gray-500"> @{comment?.author?.username} <span className="text-gray-500 mx-1">|</span> {getRelativeTime(comment?.timestamp)}</span>
                 </div>
               </div>
-              <UserHoverCard user={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user?.signerUuid}/>
+              <UserHoverCard userData={comment?.author} isVisible={isHoverCardVisible} setIsHoverCardVisible={setIsHoverCardVisible} follow={follow} uuid={user?.signer_uuid}/>
             </div>
             <div className='relative'>
               <button type="button" className="text-gray-500" onClick={toggleDropdown}>
@@ -115,14 +113,8 @@ const CommentCards = ({ comment, depth = 0 }) => {
                 <Menu />
               )}
             </div>
-          </div>
-          <div className="">
-            <p className="font-normal cursor-pointer  break-all">
-              <Link href={`/${comment?.author.username}/${comment?.hash}`}>
-                {comment?.text}
-              </Link>
-            </p>
-          </div>
+          </div> 
+          <MentionComponent data={comment}/>
           {comment?.embeds && <CommentEmbed embeds={comment.embeds} />}
           <Reactions data={comment} handleCommentClick={handleCommentClick} handleRecastClick={handleRecastClick} />
         </div>

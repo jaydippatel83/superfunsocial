@@ -4,84 +4,21 @@ import React, {
   useState,
   useRef,
   useEffect,
-  useContext,
-  useCallback,
 } from "react";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { FarcasterContext } from "@/context/farcaster";
-import { useApp } from "@/context/AppContext";
-import useLocalStorage from "@/hooks/use-local-storage-state";
 import Image from "next/image";
+import { useNeynarContext } from "@neynar/react";
+import { useRouter } from "next/navigation";
 
 const Profile = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNightMode, setIsNightMode] = useState(false);
   const dropdownRef = useRef(null);
-
-  const client_id = process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID;
-
-  const { userData, fid, setSignerUuid, setFid } = useApp();
-  const [user, setUser, removeUser] = useLocalStorage("user");
-
-  const farcasterContext = useContext(FarcasterContext);
-  const { setEthreumProvider } = farcasterContext;
-
-  // const { login, connectWallet } = usePrivy();
-  // const { wallets } = useWallets();
-
-  useEffect(() => {
-    let script = document.getElementById("siwn-script");
-
-    if (!script) {
-      script = document.createElement("script");
-      script.id = "siwn-script";
-      document.body.appendChild(script);
-    }
-
-    script.src = "https://neynarxyz.github.io/siwn/raw/1.2.0/index.js";
-    script.async = true;
-
-    document.body.appendChild(script);
-
-    return () => {
-      if (document.body && script) {
-        document.body.removeChild(script);
-      }
-
-      let button = document.getElementById("siwn-button");
-      if (button && button.parentElement) {
-        button.parentElement.removeChild(button);
-      }
-    };
-  }, []);
-
-  if (!client_id) {
-    throw new Error("NEXT_PUBLIC_NEYNAR_CLIENT_ID is not defined in .env");
-  }
-
-  useEffect(() => {
-    window.onSignInSuccess = (data) => {
-      setUser({
-        signerUuid: data.signer_uuid,
-        fid: data.fid,
-      });
-      setSignerUuid(data.signer_uuid);
-      setFid(data.fid);
-    };
-
-    return () => {
-      delete window.onSignInSuccess;
-    };
-  }, []);
+  const { user, logoutUser } = useNeynarContext(); 
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleSignout = () => {
-    removeUser();
-    window.location.reload();
-  };
 
   const toggleNightMode = () => {
     setIsNightMode(!isNightMode);
@@ -109,21 +46,11 @@ const Profile = () => {
     };
   }, [isDropdownOpen]);
 
-  const getButton = useCallback(() => {
-    return (
-      <div
-        className="neynar_signin text-sm"
-        data-client_id={client_id}
-        data-success-callback="onSignInSuccess"
-      />
-    );
-  }, []);
-
 
 
   return (
     <div className="relative">
-      {userData ? (
+      {user ? (
         <>
           <div
             className="rounded-full relative bg-secondery cursor-pointer shrink-0"
@@ -131,8 +58,8 @@ const Profile = () => {
           >
             <Image
               src={
-                userData?.pfp.url !== ""
-                  ? userData?.pfp.url
+                user?.pfp_url !== ""
+                  ? user?.pfp_url
                   : "assets/images/avatars/avatar-2.jpg"
               }
               alt=""
@@ -147,23 +74,25 @@ const Profile = () => {
               ref={dropdownRef}
               className="absolute top-full right-0 mt-2 bg-white rounded-lg drop-shadow-xl dark:bg-slate-700 w-64 border2 z-10"
             >
-              <Link href={`/profile/${userData.fid}`}>
+              <Link href={`/profile/${user.fid}`}>
                 <div className="p-4 py-5 flex items-center gap-4">
-                  <img
+                  <Image
                     src={
-                      userData?.pfp.url !== ""
-                        ? userData?.pfp.url
+                      user?.pfp_url !== ""
+                        ? user?.pfp_url
                         : "assets/images/avatars/avatar-2.jpg"
                     }
                     alt=""
+                    width={40}
+                    height={40}
                     className="w-10 h-10 rounded-full shadow"
                   />
                   <div className="flex-1">
                     <h4 className="text-sm font-medium text-black">
-                      {userData?.displayName}
+                      {user?.display_name}
                     </h4>
                     <div className="text-sm mt-1 text-blue-600 font-light dark:text-white/70">
-                      @{userData?.username}
+                      @{user?.username}
                     </div>
                   </div>
                 </div>
@@ -172,7 +101,6 @@ const Profile = () => {
               <hr className="dark:border-gray-600/60" />
 
               <nav className="p-2 text-sm text-black font-normal dark:text-white">
-                
                 <button
                   type="button"
                   className="w-full"
@@ -196,42 +124,38 @@ const Profile = () => {
                     Night mode
                     <span className="bg-slate-200/40 ml-auto p-0.5 rounded-full w-9 dark:hover:bg-white/20">
                       <span
-                        className={`bg-white block h-4 relative rounded-full shadow-md w-2 w-4 ${
-                          isNightMode ? "dark:bg-blue-600" : ""
-                        }`}
+                        className={`bg-white block h-4 relative rounded-full shadow-md w-2 w-4 ${isNightMode ? "dark:bg-blue-600" : ""
+                          }`}
                       ></span>
                     </span>
                   </div>
                 </button>
                 <hr className="-mx-2 my-2 dark:border-gray-600/60" />
-                <a href="/">
-                  <div className="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
-     <svg
-                      className="w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      onClick={() => {
-                        handleSignout();
-                      }}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      ></path>
-                    </svg>
-                    Log Out
-                  </div>
-                </a>
+                <div onClick={logoutUser} className="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
+                  <svg
+                    className="w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    ></path>
+                  </svg>
+                  Log Out
+                </div>
               </nav>
             </div>
           )}
         </>
       ) : (
-        <div>{getButton()}</div>
+        <div className="flex justify-center align-middle h-10">
+          <div className="w-10 h-10 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
+        </div>
       )}
     </div>
   );

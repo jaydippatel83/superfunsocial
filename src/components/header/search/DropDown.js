@@ -52,10 +52,10 @@ const DropDown = () => {
 
   return (
     <div className="flex-1 relative">
-      <div className="max-w-[1220px] mx-auto flex items-center">
+      <div className="max-w-[1080px] mx-auto flex items-center">
         <div
           id="search--box"
-          className="xl:w-[680px] sm:w-96 sm:relative rounded-xl overflow-hidden z-20 bg-secondery max-md:hidden w-screen left-0 max-sm:fixed max-sm:top-2 dark:!bg-white/5"
+          className="xl:w-[680px] sm:w-96 sm:relative rounded-xl overflow-hidden z-20 bg-secondery max-md:hidden left-0 max-sm:fixed max-sm:top-2 dark:!bg-white/5"
         >
           <IonIcon icon={search} className="absolute left-4 top-1/2 -translate-y-1/2" />
           <input
@@ -76,7 +76,7 @@ const DropDown = () => {
         {searchData.length !== 0 && (
           <div ref={dropdownRef} className="absolute top-full left-0 mt-2 xl:w-[694px] sm:w-96 bg-white dark:bg-dark3 w-screen p-2 rounded-lg shadow-lg z-10">
             <div className="flex justify-between px-2 py-2.5 text-sm font-medium">
-              <div className="text-black dark:text-white">Recent</div>
+              <div className="text-black dark:text-white">Search</div>
               <button type="button" className="text-blue-500" onClick={handleClearHistory}>Clear</button>
             </div>
             <nav className="text-sm font-medium text-black dark:text-white">

@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { fetchFollowing } from '@/lib/farcaster';
 import Link from 'next/link';
-import Followers from '../followers/Followers';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+import Followers from '../followers/Followers'; 
+import { useNeynarContext } from '@neynar/react';
 
 const FollowerTab = ({ data, cursor, filter, username, fid }) => {
     const [activeTab, setActiveTab] = useState(filter);
@@ -12,7 +12,7 @@ const FollowerTab = ({ data, cursor, filter, username, fid }) => {
     const [loader, setLoader] = useState(false);
     const [endCursor, setEndCursor] = useState(cursor);
     const [endCursorFollower, setEndCursorFollower] = useState(cursor);
-    const [user, setUser, removeUser] = useLocalStorage("user");
+const {user} = useNeynarContext()
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -78,7 +78,7 @@ const FollowerTab = ({ data, cursor, filter, username, fid }) => {
                         <Followers
                             key={i}
                             user={item?.user}
-                            uuid={user?.signerUuid}
+                            uuid={user?.signer_uuid}
                         />
                     ))}
                     {endCursorFollower && (
@@ -100,7 +100,7 @@ const FollowerTab = ({ data, cursor, filter, username, fid }) => {
                         <Followers
                             key={i}
                             user={item.user}
-                            uuid={user.signerUuid}
+                            uuid={user.signer_uuid}
                         />
                     ))}
                     {endCursor && (

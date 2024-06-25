@@ -1,6 +1,5 @@
 "use client";
 import React, { useContext, useState, useEffect } from "react";
-import useLocalStorage from "@/hooks/use-local-storage-state";
 import { IonIcon } from "@ionic/react";
 import {
   ellipsisHorizontal,
@@ -20,11 +19,10 @@ import axios from "axios";
 import Image from "next/image";
 import RecastComponent from "./recast/RecastComponent";
 import { userFollowOrNot } from "@/lib/farcaster";
-import { AppContext } from "@/context/AppContext";
+import MentionComponent from "./mention";
+import { useNeynarContext } from "@neynar/react";
 
 const PostCards = ({ data }) => {
-  const appContext = useContext(AppContext);
-  const { userData } = appContext;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
@@ -33,7 +31,7 @@ const PostCards = ({ data }) => {
   const [likeCount, setLikeCount] = useState(data?.reactions?.likes_count || 0);
   const [commentCount, setCommentCount] = useState(data?.replies?.count || 0);
 
-  const [user, _1, removeUser] = useLocalStorage("user");
+  const { user } = useNeynarContext();
   const [hasLiked, setHasLiked] = useState(
     data?.reactions.likes_count > 0 &&
       data?.reactions.likes.some((like) => like.fid == user?.fid)
@@ -51,7 +49,7 @@ const PostCards = ({ data }) => {
 
   const handleMouseEnter = async () => {
     const fid = data?.author?.fid;
-    const viewer = userData?.fid;
+    const viewer = user?.fid;
     setIsHoverCardVisible(true);
     const res = await userFollowOrNot(fid, viewer);
     setFollow(res?.users[0]?.viewer_context?.following);
@@ -70,25 +68,28 @@ const PostCards = ({ data }) => {
   };
 
   const publishLike = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
-    await fetch("/api/casts/reactions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const headers = {
+      accept: "application/json",
+      api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+      contentType: "application/json",
+    };
+
+    await axios.post("https://api.neynar.com/v2/farcaster/reaction", {
+      headers: headers,
+      data: {
+        signer_uuid: user?.signer_uuid,
+        reaction_type: reactionType,
+        target: hash,
       },
-      body: JSON.stringify({
-        signerUid: user?.signerUuid,
-        reactionType,
-        hash,
-      }),
     });
   };
 
   const deleteReaction = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
@@ -101,7 +102,7 @@ const PostCards = ({ data }) => {
     await axios.delete("https://api.neynar.com/v2/farcaster/reaction", {
       headers: headers,
       data: {
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },
@@ -169,11 +170,12 @@ const PostCards = ({ data }) => {
             </h4>
           </Link>
           <UserHoverCard
-            user={data?.author}
+            userData={data?.author}
             isVisible={isHoverCardVisible}
             setIsHoverCardVisible={setIsHoverCardVisible}
             follow={follow}
-            uuid={user?.signerUuid}
+            uuid={user?.signer_uuid}
+            mention={false}
           />
           <div className="flex items-center">
             <span className="text-sm text-gray-500">
@@ -192,23 +194,13 @@ const PostCards = ({ data }) => {
           {isDropdownOpen && (
             <Menu
               hash={data?.hash}
-              uuid={user?.signerUuid}
+              uuid={user?.signer_uuid}
               isCurrentUser={data.author.fid == user.fid}
             />
           )}
         </div>
       </div>
-
-      <div className="sm:px-4 p-2.5 pt-0">
-        <p className="font-normal cursor-pointer">
-          <Link
-            href={`/${data?.author?.username}/${data?.hash}`}
-            className="break-all"
-          >
-            {data?.text}
-          </Link>
-        </p>
-      </div>
+      <MentionComponent data={data} />
       <MainEmbed data={data} lable="post" />
       <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
         <div className="flex items-center gap-2.5">

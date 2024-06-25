@@ -1,22 +1,19 @@
 'use client';
 import { IonIcon } from '@ionic/react';
-import React, { useContext, useRef, useState } from 'react';
+import React, {  useRef, useState } from 'react';
 import { closeOutline, videocamOutline, imageOutline, } from 'ionicons/icons';
-import Image from 'next/image';
-import AutoResizeTextarea from '../AutosizeTextArea';
-import { AppContext } from '@/context/AppContext';
-import useLocalStorage from '@/hooks/use-local-storage-state';
+import Image from 'next/image';  
 import RepostCast from '../RepostCast';
+import SuggestionInput from '../SuggestionInput';
+import { useNeynarContext } from '@neynar/react';
 
-const RecastModal = ({ isOpen, onClose, parentPost }) => {
-    const appContext = useContext(AppContext);
-    const { userData } = appContext;
+const RecastModal = ({ isOpen, onClose, parentPost }) => { 
     const [embeds, setEmbeds] = useState([]);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef(null);
-    const videoFileInputRef = useRef(null);
-    const [user, setUser, removeUser] = useLocalStorage("user");
+    const videoFileInputRef = useRef(null); 
+    const {user}= useNeynarContext()
     const [text, setText] = useState("");
 
     const handleFileChange = async (e) => {
@@ -94,7 +91,7 @@ const RecastModal = ({ isOpen, onClose, parentPost }) => {
 
     const createCast = async () => {
         setLoading(true);
-        if (!user?.signerUuid) {
+        if (!user) {
             setLoading(false);
             return;
         }
@@ -112,7 +109,7 @@ const RecastModal = ({ isOpen, onClose, parentPost }) => {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                signer_uuid: user?.signerUuid,
+                signer_uuid: user?.signer_uuid,
                 text: text,
                 embeds,
             }),
@@ -139,12 +136,8 @@ const RecastModal = ({ isOpen, onClose, parentPost }) => {
                     <IonIcon icon={closeOutline} className="text-2xl" />
                 </button>
                 <div className=" flex justify-start">
-                    <Image src={userData?.pfp.url} width={50} height={50} className="w-10 h-10 rounded-full " />
-                    <AutoResizeTextarea
-                        value={text}
-                        setText={setText}
-                        placeholder="What do you have in mind?"
-                    />
+                    <Image src={user?.pfp_url} width={50} height={50} className="w-10 h-10 rounded-full " />
+                     <SuggestionInput setValue={setText} value={text}/>
 
                 </div>
 

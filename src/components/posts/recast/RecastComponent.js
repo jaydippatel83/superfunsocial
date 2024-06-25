@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 import { flagOutline, repeat, shareOutline } from "ionicons/icons";
 import { formatNumber } from "@/lib/utils";
 import RecastModal from "./RecastModal";
-import axios from "axios";
-import useLocalStorage from "@/hooks/use-local-storage-state";
+import axios from "axios"; 
+import { useNeynarContext } from "@neynar/react";
 
 const RecastComponent = ({ data }) => {
   const [isOpenReact, SetIsOpenReact] = useState(false);
   const [open, setOpen] = useState(false);
-  const [user, setUser, removeUser] = useLocalStorage("user");
+const {user}= useNeynarContext();
   const [loading, setLoading] = useState(false);
   const [recastCount, setRecastCount] = useState(0);
   const [hasRecasted, setHasRecasted] = useState(
@@ -40,7 +40,7 @@ const RecastComponent = ({ data }) => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         reaction_type: "recast",
         target: hash,
       }),
@@ -59,7 +59,7 @@ const RecastComponent = ({ data }) => {
   };
 
   const deleteReaction = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
@@ -72,7 +72,7 @@ const RecastComponent = ({ data }) => {
     await axios.delete("https://api.neynar.com/v2/farcaster/reaction", {
       headers: headers,
       data: {
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },

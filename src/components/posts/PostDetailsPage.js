@@ -16,25 +16,22 @@ import MainEmbed from "./MainEmbed";
 import CommentModal from "./comments/CommentModal";
 import Menu from "./Menu";
 import FeedComments from "./comments/FeedCommnets";
-import { userFollowOrNot } from "@/lib/farcaster";
-import { AppContext } from "@/context/AppContext";
-import useLocalStorage from "@/hooks/use-local-storage-state";
+import { userFollowOrNot } from "@/lib/farcaster"; 
 import axios from "axios";
 import RecastComponent from "./recast/RecastComponent";
+import MentionComponent from "./mention";
+import { useNeynarContext } from "@neynar/react";
 
-export const PostDetailPage = ({ post }) => {
-  const appContext = useContext(AppContext);
-  const { userData } = appContext;
+export const PostDetailPage = ({ post }) => { 
   const [follow, setFollow] = useState();
-  const [user, _1, removeUser] = useLocalStorage("user");
+  const {user}= useNeynarContext()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isReactionOpen, setIsReactionOpen] = useState(false);
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   const [likeCount, setLikeCount] = useState(post?.reactions?.likes_count || 0);
-
-  console.log(post, "details");
+ 
 
   const [hasLiked, setHasLiked] = useState(
     post.reactions.likes_count > 0 &&
@@ -48,25 +45,28 @@ export const PostDetailPage = ({ post }) => {
   }, [post]);
 
   const publishLike = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
-    await fetch("/api/casts/reactions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const headers = {
+      accept: "application/json",
+      api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+      contentType: "application/json",
+    };
+
+    await axios.post("https://api.neynar.com/v2/farcaster/reaction", {
+      headers: headers,
+      data: {
+        signer_uuid: user?.signer_uuid,
+        reaction_type: reactionType,
+        target: hash,
       },
-      body: JSON.stringify({
-        signerUid: user?.signerUuid,
-        reactionType,
-        hash,
-      }),
     });
   };
 
   const deleteReaction = async (reactionType, hash) => {
-    if (!user?.signerUuid) {
+    if (!user) {
       return;
     }
 
@@ -79,7 +79,7 @@ export const PostDetailPage = ({ post }) => {
     await axios.delete("https://api.neynar.com/v2/farcaster/reaction", {
       headers: headers,
       data: {
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },
@@ -118,7 +118,7 @@ export const PostDetailPage = ({ post }) => {
 
   const handleMouseEnter = async () => {
     const fid = post?.author?.fid;
-    const viewer = userData?.fid;
+    const viewer = user?.fid;
     setIsHoverCardVisible(true);
     const res = await userFollowOrNot(fid, viewer);
     setFollow(res.users[0].viewer_context.following);
@@ -168,7 +168,7 @@ export const PostDetailPage = ({ post }) => {
               </div>
             </Link>
             <UserHoverCard
-              user={post?.author}
+              userData={post?.author}
               isVisible={isHoverCardVisible}
               setIsHoverCardVisible={setIsHoverCardVisible}
               follow={follow}
@@ -191,9 +191,7 @@ export const PostDetailPage = ({ post }) => {
           </div>
         </div>
 
-        <div className="sm:px-4 p-2.5 pt-0">
-          <p className="font-normal"> {post?.text}</p>
-        </div>
+        <MentionComponent data={post}/>
 
         <MainEmbed data={post} label="post" />
         <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">

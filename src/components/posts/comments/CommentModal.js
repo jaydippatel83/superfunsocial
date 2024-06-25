@@ -1,22 +1,19 @@
-"use client";
-import React, { useContext, useRef, useState } from "react";
-import { IonIcon } from "@ionic/react";
-import { closeOutline, videocamOutline, imageOutline } from "ionicons/icons";
-import AutoResizeTextarea from "../AutosizeTextArea";
-import { AppContext } from "@/context/AppContext";
-import Image from "next/image";
-import useLocalStorage from "@/hooks/use-local-storage-state";
+'use client';
+import React, { useRef, useState } from 'react';
+import { IonIcon } from '@ionic/react';
+import { closeOutline,videocamOutline , imageOutline, } from 'ionicons/icons';  
+import Image from 'next/image'; 
+import SuggestionInput from '../SuggestionInput';
+import { useNeynarContext } from '@neynar/react';
 
-const CommentModal = ({ isOpen, onClose, parentPost, updateCommentCount }) => {
-  const appContext = useContext(AppContext);
-  const { userData } = appContext;
+const CommentModal = ({ isOpen, onClose, parentPost }) => { 
   const [embeds, setEmbeds] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
   const videoFileInputRef = useRef(null);
-  const [user, setUser, removeUser] = useLocalStorage("user");
-  const [text, setText] = useState("");
+const {user}= useNeynarContext()
+  const [text, setText]= useState("");
 
   const handleFileChange = async (e) => {
     let arr = [];
@@ -93,7 +90,7 @@ const CommentModal = ({ isOpen, onClose, parentPost, updateCommentCount }) => {
 
   const createCast = async () => {
     setLoading(true);
-    if (!user?.signerUuid) {
+    if (!user) {
       setLoading(false);
       return;
     }
@@ -106,7 +103,7 @@ const CommentModal = ({ isOpen, onClose, parentPost, updateCommentCount }) => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        signer_uuid: user?.signerUuid,
+        signer_uuid: user.signer_uuid,
         text: text,
         parent_author_fid: parentPost.author.fid,
         parent: parentPost.hash,
@@ -151,17 +148,8 @@ const CommentModal = ({ isOpen, onClose, parentPost, updateCommentCount }) => {
         </div>
         <div className="overflow-y-scroll max-h-96">
           <div className=" flex justify-start">
-            <Image
-              src={userData?.pfp.url}
-              width={50}
-              height={50}
-              className="w-10 h-10 rounded-full "
-            />
-            <AutoResizeTextarea
-              value={text}
-              setText={setText}
-              placeholder="What do you have in mind?"
-            />
+            <Image src={user.pfp_url} width={50} height={50} className="w-10 h-10 rounded-full "/> 
+             <SuggestionInput setValue={setText} value={text} />
           </div>
 
           {embeds.map((embed, index) => (

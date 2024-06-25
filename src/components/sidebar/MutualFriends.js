@@ -2,12 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import RecentList from '../animation/RecentList';
 import axios from 'axios'; 
+import Friends from '../profile/Friends';
 import SuggestedUsers from './SuggestedUsers';
 import { useNeynarContext } from '@neynar/react';
 
-
-
-const RightSIdeBar = () => {
+const MutualFriends = ({fid}) => {
 const {user}= useNeynarContext()
 const [userData,setUserData]=useState([]);
 
@@ -29,26 +28,26 @@ const [userData,setUserData]=useState([]);
 
   useEffect(() => {
     getActiveUser();
-  }, [user]) 
+  }, [fid]) 
 
   return (
     <div className="flex-1">
       <div className="lg:space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6"
         uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
-        <div className="box p-5 px-6">
-
+        <div className="box p-5 px-6"> 
           <div className="flex items-baseline justify-between text-black dark:text-white">
             <h3 className="font-bold text-base"> Recents </h3>
             <a href="#" className="text-sm text-blue-500">See all</a>
           </div>
           <RecentList /> 
         </div> 
-        <SuggestedUsers userData={userData}/> 
+         <Friends fid={fid} login={user.fid}/> 
+         <SuggestedUsers userData={userData}/>
       </div>
     </div>
 
   );
 };
 
-export default RightSIdeBar;
+export default MutualFriends;

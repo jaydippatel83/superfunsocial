@@ -1,8 +1,11 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
-import  { contractABI } from "../utils/contract.js";
+import { contractABI } from "../utils/contract.js";
 import axios from "axios";
 import { ethers } from "ethers";
+import { toast } from "react-toastify";
+import { useNeynarContext } from "@neynar/react";
+import { useRouter } from "next/navigation.js";
 
 export const FarcasterContext = createContext();
 
@@ -13,6 +16,15 @@ export function FarcasterContextProvider(props) {
   const [polls, setPolls] = useState([]);
   const [provider, setProvider] = useState();
   const [address, setAddress] = useState();
+  const { user } = useNeynarContext();
+  const router = useRouter();
+
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login')
+    }
+  }, [user])
 
 
   const toggleModal = () => {
@@ -50,29 +62,31 @@ export function FarcasterContextProvider(props) {
   }; // Get data from our own backend..
 
   async function connectMetaMaskAndGetSigner() {
-    const { ethereum } = window;
+    if (typeof window != "undefined") {
+      const { ethereum } = window;
 
-    if (!ethereum) {
-      alert("Please install the Metamask Extension!");
-    }
-    try {
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      console.log("Found an account! Address: ", accounts[0]);
-      console.log(accounts);
-      setAddress(accounts[0]);
-    } catch (err) {
-      console.log(err);
-      if (err.code === 4902) {
-        try {
-          const accounts = await ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          console.log(accounts);
-          setAddress(accounts[0]);
-        } catch (err) {
-          alert(err.message);
+      if (!ethereum) {
+        toast.error("Please install the Metamask Extension!");
+      }
+      try {
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        console.log("Found an account! Address: ", accounts[0]);
+        console.log(accounts);
+        setAddress(accounts[0]);
+      } catch (err) {
+        console.log(err);
+        if (err.code === 4902) {
+          try {
+            const accounts = await ethereum.request({
+              method: "eth_requestAccounts",
+            });
+            console.log(accounts);
+            setAddress(accounts[0]);
+          } catch (err) {
+            alert(err.message);
+          }
         }
       }
     }
@@ -92,7 +106,7 @@ export function FarcasterContextProvider(props) {
           signer
         );
         transaction = await contract.createPoll(name, numOfChoice, pollId);
-      } 
+      }
       return transaction;
     } catch (error) {
       console.log(error);
@@ -100,7 +114,7 @@ export function FarcasterContextProvider(props) {
     }
   }
 
-  async function castVote(pollId , choice) {
+  async function castVote(pollId, choice) {
     try {
       await connectMetaMaskAndGetSigner();
       const provider = new ethers.BrowserProvider(window.ethereum);
@@ -124,7 +138,7 @@ export function FarcasterContextProvider(props) {
       return error;
     }
   }
- 
+
 
   async function getVotes(pollId) {
     try {
@@ -150,7 +164,7 @@ export function FarcasterContextProvider(props) {
       value={{
         isModalOpen,
         setModalOpen,
-        toggleModal, 
+        toggleModal,
         getPoll,
         castVote,
         CreatePoll,

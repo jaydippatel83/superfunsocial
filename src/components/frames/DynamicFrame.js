@@ -40,6 +40,7 @@ const DynamicFrame = ({ metadata, link }) => {
   }, [aspectRatio]);
 
   const handleButtonClick = async (buttonAction, buttonTarget, index) => {
+    if (typeof window !== 'undefined') { 
     setLoader(true);
     setLoadingButtonIndex(index);
     var currentPollId;
@@ -130,6 +131,7 @@ const DynamicFrame = ({ metadata, link }) => {
               "fc:frame:image:aspect_ratio": "1:1",
             }));
           }
+        
         }
 
         if (pollId === "voted") {
@@ -192,6 +194,7 @@ const DynamicFrame = ({ metadata, link }) => {
         setLoadingButtonIndex(null);
       }
     }
+  }
   };
 
   const renderButtons = () => {

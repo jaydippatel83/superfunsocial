@@ -1,42 +1,54 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
+"use client";
 
+import { useRouter } from "next/navigation";
 import { FarcasterContextProvider } from "@/context/farcaster";
-import { AppProvider } from "@/context/AppContext";
-import { PrivyProviderComponent } from "@/components/provider/provider";
 import dynamic from "next/dynamic";
-import { PostcardContextProvider } from "@/context/PostCardContext";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import { NeynarContextProvider, Theme } from "@neynar/react";
+import "react-toastify/dist/ReactToastify.css";
+import "@neynar/react/dist/style.css";
+import "./globals.css";
+import { useEffect } from "react";
+import { initTelegram } from "@/lib/farcaster";
 
-const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
+const ProgressBarProvider = dynamic(() => import("./ProgressBarProvider"), {
   ssr: false,
-})
+});
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "SuperfunSocial",
-  description: "SuperfunSocial",
-};
-
-
+// `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TG_TOKEN}/setWebhook?url=https://demo.superfun.social/api/telegram`
 
 export default function RootLayout({ children }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    initTelegram();
+  }, []);
+
   return (
     <html lang="en">
-      <body className={inter.className}>
-      <ToastContainer/>
+      <body>
+        <ToastContainer />
         <ProgressBarProvider>
-          <PrivyProviderComponent>
-            <FarcasterContextProvider>
-              <PostcardContextProvider>
-                <AppProvider>
-                  {children}
-                </AppProvider>
-              </PostcardContextProvider>
-            </FarcasterContextProvider>
-          </PrivyProviderComponent>
+          <NeynarContextProvider
+            settings={{
+              clientId: process.env.NEXT_PUBLIC_NEYNAR_CLIENT_ID || "",
+              defaultTheme: Theme.Light,
+              eventsCallbacks: {
+                onAuthSuccess: (params) => {
+                  if (params.user) {
+                    router.push("/");
+                  } else {
+                    router.push("/login");
+                  }
+                },
+                onSignout() {
+                  router.push("/login");
+                },
+              },
+            }}
+          >
+            <FarcasterContextProvider>{children}</FarcasterContextProvider>
+          </NeynarContextProvider>
         </ProgressBarProvider>
       </body>
     </html>

@@ -1,27 +1,25 @@
-'use client';
-import { AppContext } from '@/context/AppContext';
-import { followUser, unfollowUser, userFollowOrNot } from '@/lib/farcaster';
+'use client'; 
+import { followUser, unfollowUser } from '@/lib/farcaster';
 import { formatNumber } from '@/lib/utils';
+import { useNeynarContext } from '@neynar/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid }) => {
-    const appContext = useContext(AppContext);
-    const { fid } = appContext;
-
+const UserHoverCard = ({ userData, isVisible, setIsHoverCardVisible, follow, uuid , mention}) => { 
+const {user}= useNeynarContext();
     const [isFollowing, setIsFollowing] = useState(follow);
-    const [follower, setFollower] = useState(user?.follower_count);
+    const [follower, setFollower] = useState(userData?.follower_count);
 
     useEffect(() => {
         setIsFollowing(follow);
-        setFollower(user?.follower_count);
-    }, [follow, user?.follower_count]);
+        setFollower(userData?.follower_count);
+    }, [follow, userData?.follower_count]);
 
     if (!isVisible) return null;
 
     const handleFollow = async () => {
-        const id = user?.fid;
+        const id = userData?.fid;
         const viewer = uuid;
         let res;
 
@@ -42,22 +40,22 @@ const UserHoverCard = ({ user, isVisible, setIsHoverCardVisible, follow, uuid })
 
 
     return (
-        <div onMouseEnter={() => setIsHoverCardVisible(true)} onMouseLeave={() => setIsHoverCardVisible(false)} className="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-72">
+        <div onMouseEnter={() => setIsHoverCardVisible(true)} onMouseLeave={() => setIsHoverCardVisible(false)} className={`absolute ${mention && "top-5 right-0 left-0"} z-10 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-72`}>
             <div className="flex items-center">
-                <Image width={50} height={50} src={user?.pfp_url} alt={user?.display_name} className="w-12 h-12 rounded-full" />
+                <Image width={50} height={50} src={userData?.pfp_url} alt={userData?.display_name} className="w-12 h-12 rounded-full" />
                 <button onClick={handleFollow} className="ml-auto bg-gray-100 text-gray-700 px-2 py-1 rounded-md">{isFollowing ? "Unfollow" : "Follow"}</button>
             </div>
             <div className="mt-2">
-                <Link href={`/profile/${user?.fid}`} className="mt-1 text-gray-900 w-8 h-8">
-                    <h3 className="font-bold text-lg">{user?.display_name}</h3>
+                <Link href={`/profile/${userData?.fid}`} className="mt-1 text-gray-900 w-8 h-8">
+                    <h3 className="font-bold text-lg">{userData?.display_name}</h3>
                 </Link>
-                <p className="text-gray-500">@{user?.username}</p>
-                <p className="text-gray-700 mt-1">{user?.profile?.bio?.text}</p>
+                <p className="text-gray-500">@{userData?.username}</p>
+                <p className="text-gray-700 mt-1">{userData?.profile?.bio?.text}</p>
                 <div className="flex items-center mt-2 text-gray-500">
-                    <Link href={`/${user.username}-${fid}/following`} className="mt-1 text-gray-900 ">
-                        <span className="mr-4"><span className='text-black font-bold'>{formatNumber(user?.following_count)}</span> Following</span>
+                    <Link href={`/${userData.username}-${user.fid}/following`} className="mt-1 text-gray-900 ">
+                        <span className="mr-4"><span className='text-black font-bold'>{formatNumber(userData?.following_count)}</span> Following</span>
                     </Link>
-                    <Link href={`/${user.username}-${fid}/followers`} className="mt-1 text-gray-900  ">
+                    <Link href={`/${userData.username}-${user.fid}/followers`} className="mt-1 text-gray-900  ">
                         <span><span className='text-black font-bold'>{formatNumber(follower)}</span> Followers</span>
                     </Link>
                 </div>
