@@ -20,7 +20,7 @@ export default async function CastDetailPage({ params }) {
                     id="js-oversized"
                 >
                     <div className="max-w-[1080px] mx-auto">
-                        <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3"> 
+                        <div className="md:max-w-[580px] min-w-md mx-auto flex-1 xl:space-y-6 space-y-3"> 
                           {
                             castdata && <PostDetailPage post={castdata}/> 
                           }  

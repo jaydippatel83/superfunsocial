@@ -50,10 +50,9 @@ const RightSIdeBar = () => {
   }, [user]);
 
   return (
-    <div className="flex-1 max-w-[400px] mx-auto">
+    <div className="flex-1 w-full lg:max-w-[400px] mx-auto">
       <div
-        className="lg:space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6"
-        uk-sticky="media: 1024; end: #js-oversized; offset: 80"
+        className="lg:space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6" 
       >
         <div className="box p-5 px-6">
           <div className="flex items-baseline justify-between text-black dark:text-white">
