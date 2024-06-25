@@ -12,12 +12,14 @@ const bot = new Telegraf(TELEGRAM_TOKEN);
 
 export async function initTelegram(){
   bot.start((ctx) => {
-    ctx.reply("Welcome to the SuperfunSocial Telegram Mini App!)", {
-        reply_markup: {
-            keyboard: [[{ text: "SuperFunSocial App", web_app: { url: WEB_APP_URL } }]],
-        },
+    ctx.reply("Welcome to the SuperfunSocial Telegram Mini App!", {
+      reply_markup: {
+        keyboard: [[{ text: "Open Web App", web_app: { url: WEB_APP_URL } }]],
+        resize_keyboard: true,
+        one_time_keyboard: true,
+      },
     });
-});
+  });
 
 bot.launch()
 }

@@ -10,6 +10,7 @@ import "@neynar/react/dist/style.css";
 import "./globals.css"; 
 import { useEffect } from "react";
 import { initTelegram } from "@/lib/farcaster";
+import Script from "next/script";
 
 const ProgressBarProvider = dynamic(() => import('./ProgressBarProvider'), {
   ssr: false,
@@ -54,6 +55,7 @@ export default function RootLayout({ children }) {
           </NeynarContextProvider>
         </ProgressBarProvider>
       </body>
+      <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
     </html>
   );
 }

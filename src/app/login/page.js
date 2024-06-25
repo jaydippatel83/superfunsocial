@@ -1,10 +1,11 @@
 'use client'; 
 import Link from 'next/link'; 
 import React from 'react';
-import { NeynarAuthButton  } from "@neynar/react";
+import { NeynarAuthButton} from "@neynar/react";
+import WebView from '@/components/telegram/Webview';
 
 const page = () => {  
-  
+   
     return (
       <div className="sm:flex">
         <div className="relative lg:w-[580px] md:w-96 w-full p-10 min-h-screen bg-white shadow-xl flex items-center pt-10 dark:bg-slate-900 z-10">
@@ -32,9 +33,10 @@ const page = () => {
             </div>
   
             {/* form */}
-            <div className="col-span-2 mt-2">
+            <WebView/>
+            {/* <div className="col-span-2 mt-2">
                   <NeynarAuthButton style={{backgroundColor:'#3B82F6',color:'white'}} variant='farcaster' />
-                </div>
+                </div> */}
             </div>
           </div>
         </div>
