@@ -54,14 +54,17 @@ export const PostDetailPage = ({ post }) => {
       contentType: "application/json",
     };
 
-    await axios.post("https://api.neynar.com/v2/farcaster/reaction", {
-      headers: headers,
-      data: {
+    await axios.post(
+      "https://api.neynar.com/v2/farcaster/reaction",
+      {
         signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },
-    });
+      {
+        headers: headers,
+      }
+    );
   };
 
   const deleteReaction = async (reactionType, hash) => {
