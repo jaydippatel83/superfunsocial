@@ -1,10 +1,10 @@
 'use client'; 
 import Link from 'next/link'; 
 import React from 'react';
-import { NeynarAuthButton  } from "@neynar/react";
+import { NeynarAuthButton} from "@neynar/react"; 
 
 const page = () => {  
-  
+   
     return (
       <div className="sm:flex">
         <div className="relative lg:w-[580px] md:w-96 w-full p-10 min-h-screen bg-white shadow-xl flex items-center pt-10 dark:bg-slate-900 z-10">
@@ -31,9 +31,8 @@ const page = () => {
             <div  >
             <div>
               <h2 className="text-2xl font-semibold mb-1.5">Sign in to get started</h2> 
-            </div>
-  
-            {/* form */}
+            </div> 
+         
             <div className="col-span-2 mt-2">
                   <NeynarAuthButton style={{backgroundColor:'#3B82F6',color:'white'}} variant='farcaster' />
                 </div>

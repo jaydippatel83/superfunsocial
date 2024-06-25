@@ -4,23 +4,25 @@ import { FeedType, FilterType } from "@neynar/nodejs-sdk";
 import axios from "axios"; 
 import { Telegraf } from 'telegraf'; 
 
-const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN || "";
-const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
-const WEB_APP_URL = 'https://demo.superfun.social';
+// const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN || "";
+// const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
+// const WEB_APP_URL = 'https://demo.superfun.social';
 
-const bot = new Telegraf(TELEGRAM_TOKEN);
+// const bot = new Telegraf(TELEGRAM_TOKEN);
 
-export async function initTelegram(){
-  bot.start((ctx) => {
-    ctx.reply("Welcome to the SuperfunSocial Telegram Mini App!)", {
-        reply_markup: {
-            keyboard: [[{ text: "SuperFunSocial App", web_app: { url: WEB_APP_URL } }]],
-        },
-    });
-});
+// export async function initTelegram(){
+//   bot.start((ctx) => {
+//     ctx.reply("Welcome to the SuperfunSocial Telegram Mini App!", {
+//       reply_markup: {
+//         keyboard: [[{ text: "Open Web App", web_app: { url: WEB_APP_URL } }]],
+//         resize_keyboard: true,
+//         one_time_keyboard: true,
+//       },
+//     });
+//   });
 
-bot.launch()
-}
+// bot.launch()
+// }
  
  
 

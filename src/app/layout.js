@@ -7,9 +7,8 @@ import { ToastContainer } from "react-toastify";
 import { NeynarContextProvider, Theme } from "@neynar/react";
 import "react-toastify/dist/ReactToastify.css";
 import "@neynar/react/dist/style.css";
-import "./globals.css";
-import { useEffect } from "react";
-import { initTelegram } from "@/lib/farcaster";
+import "./globals.css"; 
+import Script from "next/script";
 
 const ProgressBarProvider = dynamic(() => import("./ProgressBarProvider"), {
   ssr: false,
@@ -20,9 +19,7 @@ const ProgressBarProvider = dynamic(() => import("./ProgressBarProvider"), {
 export default function RootLayout({ children }) {
   const router = useRouter();
 
-  useEffect(() => {
-    initTelegram();
-  }, []);
+ 
 
   return (
     <html lang="en">
@@ -51,6 +48,7 @@ export default function RootLayout({ children }) {
           </NeynarContextProvider>
         </ProgressBarProvider>
       </body>
+      <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
     </html>
   );
 }
