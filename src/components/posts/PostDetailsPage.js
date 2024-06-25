@@ -16,22 +16,21 @@ import MainEmbed from "./MainEmbed";
 import CommentModal from "./comments/CommentModal";
 import Menu from "./Menu";
 import FeedComments from "./comments/FeedCommnets";
-import { userFollowOrNot } from "@/lib/farcaster"; 
+import { userFollowOrNot } from "@/lib/farcaster";
 import axios from "axios";
 import RecastComponent from "./recast/RecastComponent";
 import MentionComponent from "./mention";
 import { useNeynarContext } from "@neynar/react";
 
-export const PostDetailPage = ({ post }) => { 
+export const PostDetailPage = ({ post }) => {
   const [follow, setFollow] = useState();
-  const {user}= useNeynarContext()
+  const { user } = useNeynarContext();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isReactionOpen, setIsReactionOpen] = useState(false);
   const [isHoverCardVisible, setIsHoverCardVisible] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   const [likeCount, setLikeCount] = useState(post?.reactions?.likes_count || 0);
- 
 
   const [hasLiked, setHasLiked] = useState(
     post.reactions.likes_count > 0 &&
@@ -95,7 +94,7 @@ export const PostDetailPage = ({ post }) => {
     const hasUserLiked = post.reactions.likes.some(
       (like) => like.fid == user?.fid
     );
-    if (!hasUserLiked) {
+    if (!hasUserLiked && !hasLiked) {
       setLikeCount(likeCount + 1);
       setHasLiked(true);
       publishLike("like", post.hash);
@@ -191,7 +190,7 @@ export const PostDetailPage = ({ post }) => {
           </div>
         </div>
 
-        <MentionComponent data={post}/>
+        <MentionComponent data={post} />
 
         <MainEmbed data={post} label="post" />
         <div className="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">

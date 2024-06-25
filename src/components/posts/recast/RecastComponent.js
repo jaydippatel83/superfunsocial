@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 import { flagOutline, repeat, shareOutline } from "ionicons/icons";
 import { formatNumber } from "@/lib/utils";
 import RecastModal from "./RecastModal";
-import axios from "axios"; 
+import axios from "axios";
 import { useNeynarContext } from "@neynar/react";
 
 const RecastComponent = ({ data }) => {
   const [isOpenReact, SetIsOpenReact] = useState(false);
   const [open, setOpen] = useState(false);
-const {user}= useNeynarContext();
+  const { user } = useNeynarContext();
   const [loading, setLoading] = useState(false);
   const [recastCount, setRecastCount] = useState(0);
   const [hasRecasted, setHasRecasted] = useState(
@@ -87,10 +87,10 @@ const {user}= useNeynarContext();
   };
 
   const handleRecastButtonClick = () => {
-    const hasRecasted = data.reactions.recasts.some(
+    const hasRecast = data.reactions.recasts.some(
       (recast) => recast.fid == user?.fid
     );
-    if (!hasRecasted) {
+    if (!hasRecast && !hasRecasted) {
       setRecastCount(recastCount + 1);
       handleRecast();
     } else {

@@ -78,14 +78,17 @@ const PostCards = ({ data }) => {
       contentType: "application/json",
     };
 
-    await axios.post("https://api.neynar.com/v2/farcaster/reaction", {
-      headers: headers,
-      data: {
+    await axios.post(
+      "https://api.neynar.com/v2/farcaster/reaction",
+      {
         signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },
-    });
+      {
+        headers: headers,
+      }
+    );
   };
 
   const deleteReaction = async (reactionType, hash) => {
@@ -124,7 +127,8 @@ const PostCards = ({ data }) => {
     const hasUserLiked = data.reactions.likes.some(
       (like) => like.fid == user?.fid
     );
-    if (!hasUserLiked) {
+
+    if (!hasUserLiked && !hasLiked) {
       setReactions([...data.reactions.likes, { user: { fid: user?.fid } }]);
       setLikeCount(likeCount + 1);
       setHasLiked(true);

@@ -6,17 +6,16 @@ import {
   heart,
   chatbubbleEllipses,
   paperPlaneOutline,
-  shareOutline, 
+  shareOutline,
 } from "ionicons/icons";
 import { formatNumber } from "@/lib/utils";
 import axios from "axios";
 import { useNeynarContext } from "@neynar/react";
- 
 
 const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
   const [likeCount, setLikeCount] = useState(data?.reactions?.likes_count || 0);
 
-  const {user}= useNeynarContext()
+  const { user } = useNeynarContext();
   const [hasLiked, setHasLiked] = useState(
     data.reactions.likes_count > 0 &&
       data.reactions.likes.some((like) => like.fid == user?.fid)
@@ -79,7 +78,7 @@ const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
     const hasUserLiked = data.reactions.likes.some(
       (like) => like.fid == user?.fid
     );
-    if (!hasUserLiked) {
+    if (!hasUserLiked && !hasLiked) {
       setLikeCount(likeCount + 1);
       setHasLiked(true);
       publishLike("like", data.hash);
