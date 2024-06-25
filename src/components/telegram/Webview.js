@@ -56,7 +56,8 @@ const WebView = () => {
       tg.openLink(loginUrl);
     } else {
       window.location.href = loginUrl;
-    }
+    } 
+    
   };
 
   return (
