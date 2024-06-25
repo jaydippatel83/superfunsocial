@@ -19,7 +19,7 @@ const RecentList = ({ trendingChannels }) => {
   }, []);
 
   return (
-    <div className="w-full rounded-lg overflow-y-scroll h-80  dark:bg-gray-800">
+    <div className="w-full rounded-lg overflow-y-scroll h-80 overflow-x-hidden  dark:bg-gray-800">
       {trendingChannels.map((obj, index) => (
         <div
           key={index}
