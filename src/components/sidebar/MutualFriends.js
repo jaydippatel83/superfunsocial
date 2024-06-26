@@ -51,10 +51,9 @@ const MutualFriends = ({ fid }) => {
   }, [fid]);
 
   return (
-    <div className="flex-1   lg:max-w-[400px] mx-auto">
+    <div className="flex-1   lg:max-w-[400px] mx-auto sm:max-w-[580px]">
       <div
-        className="lg:space-y-4 lg:pb-8  sm:grid-cols-2 max-lg:gap-6"
-        uk-sticky="media: 1024; end: #js-oversized; offset: 80"
+        className="space-y-3 lg:space-y-4 lg:pb-8  sm:grid-cols-2 max-lg:gap-6" 
       >
         <div className="box p-5 px-6">
           <div className="flex items-baseline justify-between text-black dark:text-white">
@@ -64,9 +63,9 @@ const MutualFriends = ({ fid }) => {
             </a>
           </div>
           <RecentList trendingChannels={trendingChannels} />
-        </div>
-        <Friends fid={fid} />
-        <SuggestedUsers userData={userData} />
+         </div>
+         <Friends fid={fid} />
+         <SuggestedUsers userData={userData} />
       </div>
     </div>
   );
