@@ -50,7 +50,7 @@ const RightSIdeBar = () => {
   }, [user]);
 
   return (
-    <div className="flex-1 lg:max-w-[400px] mx-auto">
+    <div className=" lg:max-w-[400px] sm:max-w-[580px]  mx-auto flex-1   space-y-3">
       <div
         className="lg:space-y-4 sm:space-x-2 lg:pb-8  sm:grid-cols-2 max-lg:gap-6" 
       >

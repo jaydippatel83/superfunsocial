@@ -22,7 +22,7 @@ const HomeComponent = ({feed}) => {
                 </div>
                 <RightSIdeBar />
             </div>
-        </main>
+        </main> 
     );
 };
 
