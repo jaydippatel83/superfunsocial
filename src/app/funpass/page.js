@@ -16,7 +16,7 @@ const page = () => {
                     className="lg:flex 2xl:gap-8 gap-6 max-w-[1065px] mx-auto"
                     id="js-oversized"
                 >
-                    <div className="max-w-[1080px] mx-auto">
+                    <div className="flex-1 max-w-[1080px] mx-auto">
                         <div class="page-heading ">
                             <h1 class="page-title"> Fun Pass NFTs </h1>
                         </div>
