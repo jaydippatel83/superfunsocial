@@ -30,10 +30,10 @@ const ProfileHeader = ({ userData }) => {
       <div className='items-center '>
         <p className="mt-1">{userData.profile.bio.text}</p>
         <div className="flex items-center mt-2 text-gray-500">
-          <Link href={`/${userData.username}-${user.fid}/following`} className="mt-1 text-gray-900 ">
+          <Link href={`/${userData.username}-${user?.fid}/following`} className="mt-1 text-gray-900 ">
             <span className="mr-4"><span className='text-black font-bold'>{formatNumber(userData?.following_count)}</span> Following</span>
           </Link>
-          <Link href={`/${userData.username}-${user.fid}/followers`} className="mt-1 text-gray-900  ">
+          <Link href={`/${userData.username}-${user?.fid}/followers`} className="mt-1 text-gray-900  ">
             <span><span className='text-black font-bold'>{formatNumber(userData?.follower_count)}</span> Followers</span>
           </Link>
         </div>
