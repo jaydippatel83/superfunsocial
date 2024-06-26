@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import { NeynarContextProvider, Theme } from "@neynar/react";
 import "react-toastify/dist/ReactToastify.css";
 import "@neynar/react/dist/style.css";
-import "./globals.css"; 
+import "./globals.css";
 import Script from "next/script";
 
 const ProgressBarProvider = dynamic(() => import("./ProgressBarProvider"), {
@@ -18,8 +18,6 @@ const ProgressBarProvider = dynamic(() => import("./ProgressBarProvider"), {
 
 export default function RootLayout({ children }) {
   const router = useRouter();
-
- 
 
   return (
     <html lang="en">
@@ -40,6 +38,7 @@ export default function RootLayout({ children }) {
                 },
                 onSignout() {
                   router.push("/login");
+                  localStorage.removeItem("neynar_authenticated_user");
                 },
               },
             }}

@@ -6,6 +6,7 @@ import { ethers } from "ethers";
 import { toast } from "react-toastify";
 import { useNeynarContext } from "@neynar/react";
 import { useRouter } from "next/navigation.js";
+import { usePathname } from "next/navigation";
 
 export const FarcasterContext = createContext();
 
@@ -18,16 +19,15 @@ export function FarcasterContextProvider(props) {
   const [address, setAddress] = useState();
   const { user } = useNeynarContext();
   const router = useRouter();
-
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }else{
-      router.push('/')
-    }
-  }, [user])
+    let localuser = localStorage.getItem("neynar_authenticated_user");
 
+    if (!user && !localuser) {
+      router.push("/login");
+    }
+  }, [user]);
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
@@ -140,7 +140,6 @@ export function FarcasterContextProvider(props) {
       return error;
     }
   }
-
 
   async function getVotes(pollId) {
     try {
