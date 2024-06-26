@@ -30,6 +30,12 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                                         <span>Fun Feed </span>
                                     </Link>
                                 </li>
+                                <li className={` ${isActive('/funpass') ? 'active' : ' '}`}>
+                                    <Link href="/funpass">
+                                        <Image width={50} height={50} src="/assets/images/icons/question.png" alt="q & a" className="w-6" />
+                                        <span>Fun pass NFTs </span>
+                                    </Link>
+                                </li>
                                 <li className={` ${isActive('/questions') ? 'active' : ' '}`}>
                                     <Link href="/questions">
                                         <Image width={50} height={50} src="/assets/images/icons/question.png" alt="q & a" className="w-6" />
