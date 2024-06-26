@@ -22,6 +22,8 @@
   animation: spin 1s linear infinite;
 }
 
+
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -45,6 +47,11 @@
     text-wrap: balance;
   }
 } 
+
+#side a:hover {
+  --tw-bg-opacity: 1;
+  background: none;
+}
  
 @layer base {
 

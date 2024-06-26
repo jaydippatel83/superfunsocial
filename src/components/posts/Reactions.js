@@ -25,7 +25,7 @@ const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
     if (data.reactions.likes_count > 0) {
       getReactions();
     }
-  }, [data]);
+  }, [data, user]);
 
   const publishLike = async (reactionType, hash) => {
     if (!user) {
@@ -38,14 +38,17 @@ const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
       contentType: "application/json",
     };
 
-    await axios.post("https://api.neynar.com/v2/farcaster/reaction", {
-      headers: headers,
-      data: {
+    await axios.post(
+      "https://api.neynar.com/v2/farcaster/reaction",
+      {
         signer_uuid: user?.signer_uuid,
         reaction_type: reactionType,
         target: hash,
       },
-    });
+      {
+        headers: headers,
+      }
+    );
   };
 
   const deleteReaction = async (reactionType, hash) => {
@@ -75,10 +78,10 @@ const Reactions = ({ data, handleCommentClick, handleRecastClick }) => {
   };
 
   const handleLikeButtonClick = () => {
-    const hasUserLiked = data.reactions.likes.some(
-      (like) => like.fid == user?.fid
-    );
-    if (!hasUserLiked && !hasLiked) {
+    // const hasUserLiked = data.reactions.likes.some(
+    //   (like) => like.fid == user?.fid
+    // );
+    if (!hasLiked) {
       setLikeCount(likeCount + 1);
       setHasLiked(true);
       publishLike("like", data.hash);

@@ -41,7 +41,7 @@ const PostCards = ({ data }) => {
     if (data?.reactions.likes_count > 0) {
       getReactions();
     }
-  }, [data]);
+  }, [data, user]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -124,11 +124,11 @@ const PostCards = ({ data }) => {
   };
 
   const handleLikeButtonClick = () => {
-    const hasUserLiked = data.reactions.likes.some(
-      (like) => like.fid == user?.fid
-    );
+    // const hasUserLiked = data.reactions.likes.some(
+    //   (like) => like.fid == user?.fid
+    // );
 
-    if (!hasUserLiked && !hasLiked) {
+    if (!hasLiked) {
       setReactions([...data.reactions.likes, { user: { fid: user?.fid } }]);
       setLikeCount(likeCount + 1);
       setHasLiked(true);

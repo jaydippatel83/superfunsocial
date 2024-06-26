@@ -65,7 +65,7 @@ const MutualFriends = ({ fid }) => {
           </div>
           <RecentList trendingChannels={trendingChannels} />
         </div>
-        <Friends fid={fid} login={user?.fid} />
+        <Friends fid={fid} />
         <SuggestedUsers userData={userData} />
       </div>
     </div>

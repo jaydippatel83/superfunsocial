@@ -41,7 +41,7 @@ export const PostDetailPage = ({ post }) => {
     if (post.reactions.likes_count > 0) {
       getReactions();
     }
-  }, [post]);
+  }, [post, user]);
 
   const publishLike = async (reactionType, hash) => {
     if (!user) {
@@ -90,14 +90,18 @@ export const PostDetailPage = ({ post }) => {
 
   const getReactions = async () => {
     setLikeCount(post.reactions.likes_count);
+
     setHasLiked(post.reactions.likes.some((like) => like.fid == user?.fid));
   };
 
+
+
   const handleLikeButtonClick = () => {
-    const hasUserLiked = post.reactions.likes.some(
-      (like) => like.fid == user?.fid
-    );
-    if (!hasUserLiked && !hasLiked) {
+    // const hasUserLiked = post.reactions.likes.some(
+    //   (like) => like.fid == user?.fid
+    // );
+
+    if (!hasLiked) {
       setLikeCount(likeCount + 1);
       setHasLiked(true);
       publishLike("like", post.hash);
