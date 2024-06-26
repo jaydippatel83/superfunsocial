@@ -18,7 +18,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
           <div className="flex items-center gap-1">
             <button
               onClick={toggleSidebar}
-              className="flex items-center justify-center w-8 h-8 text-xl rounded-full hover:bg-gray-100 xl:hidden dark:hover:bg-slate-600 group"
+              className="flex items-center justify-center w-8 h-8 text-xl sm:bg-bgYellow rounded-full hover:bg-gray-100 xl:hidden dark:hover:bg-slate-600 group"
             >
               <IonIcon
                 icon={menuOutline}

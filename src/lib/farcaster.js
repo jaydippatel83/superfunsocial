@@ -1,8 +1,8 @@
 "use server";
 import neynarClient from "@/clients/neynar";
 import { FeedType, FilterType } from "@neynar/nodejs-sdk";
-import axios from "axios"; 
-import { Telegraf } from 'telegraf'; 
+import axios from "axios";
+import { Telegraf } from "telegraf";
 
 // const TELEGRAM_TOKEN = process.env.NEXT_PUBLIC_TG_TOKEN || "";
 // const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
@@ -23,9 +23,6 @@ import { Telegraf } from 'telegraf';
 
 // bot.launch()
 // }
- 
- 
-
 
 export async function getFeed(cursor) {
   try {
@@ -58,21 +55,60 @@ export async function getCastByHash(hash) {
 
 export  const getFeedByHash = async (req) => {
   const headers = {
-      accept: 'application/json', api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY
-  }
-  const url = `https://api.neynar.com/v2/farcaster/feed?feed_type=filter&filter_type=fids&fids=${req.fid}&limit=10&cursor=${req.cursor}`
+    accept: "application/json",
+    api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+  };
+  const url = `https://api.neynar.com/v2/farcaster/feed?feed_type=filter&filter_type=fids&fids=${req.fid}&limit=10&cursor=${req.cursor}`;
   try {
-      const response = await axios.get(url, {
-          headers
-      })
-      const data = response.data; 
-      return data;
+    const response = await axios.get(url, {
+      headers,
+    });
+    const data = response.data;
+    return data;
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
-}
+};
 
-export async function getTrendingFeeds(fid){ 
+export const getReactions = async (fid, type) => {
+  const headers = {
+    accept: "application/json",
+    api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+  };
+
+  const url = `https://api.neynar.com/v2/farcaster/reactions/user?fid=${fid}&viewer_fid=${fid}&type=${type}&limit=10`;
+  try {
+    const response = await axios.get(url, {
+      headers,
+    });
+    const data = response.data?.reactions;
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getReactionsProfile = async (req) => {
+  const headers = {
+    accept: "application/json",
+    api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
+  };
+
+  const url = `https://api.neynar.com/v2/farcaster/reactions/user?fid=${req.fid}&viewer_fid=${req.fid}&type=${req.type}&limit=10`;
+  try {
+    const response = await axios.get(url, {
+      headers,
+    });
+    const data = response.data;
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export async function getTrendingFeeds(fid) {
   const headers = {
     accept: "application/json",
     api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
@@ -93,8 +129,8 @@ export const fetchFollowing = async (req) => {
   try {
     const {
       result: { users },
-    } = await neynarClient.searchUser(req.name); 
-    const fid = users[0].fid; 
+    } = await neynarClient.searchUser(req.name);
+    const fid = users[0].fid;
     const url = `https://api.neynar.com/v2/farcaster/${req.filter}?fid=${fid}&limit=20&cursor=${req.cursor}&viewer_fid=${req.viewer}`;
     const response = await axios.get(url, {
       headers,
@@ -102,11 +138,11 @@ export const fetchFollowing = async (req) => {
     const data = response.data;
     return data;
   } catch (error) {
-    console.error('Error fetching suggestions:', error);
+    console.error("Error fetching suggestions:", error);
   }
-}
+};
 
-export const searchUsers= async(search)=>{
+export const searchUsers = async (search) => {
   try {
     const {
       result: { users },
@@ -115,7 +151,7 @@ export const searchUsers= async(search)=>{
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const fetchFollowers = async () => {
   try {
@@ -123,12 +159,15 @@ export const fetchFollowers = async () => {
       result: { users },
     } = await neynarClient.searchUser(req.name);
     const fid = users[0].fid;
-    const data = await neynarClient.fetchUserFollowersV2(fid, { limit: 20, cursor: req.cursor })
+    const data = await neynarClient.fetchUserFollowersV2(fid, {
+      limit: 20,
+      cursor: req.cursor,
+    });
     return data;
   } catch (error) {
-    console.error('Error fetching suggestions:', error);
+    console.error("Error fetching suggestions:", error);
   }
-}
+};
 
 export const fetchAllFollowers = async (fid) => {
   let cursor = "";
@@ -173,16 +212,19 @@ export const followUser = async (signer, fids) => {
       },
       body: JSON.stringify({
         signer_uuid: signer,
-        target_fids: [fids]
+        target_fids: [fids],
       }),
     };
-    const result = await fetch('https://api.neynar.com/v2/farcaster/user/follow', options).then((res) => res.json())
+    const result = await fetch(
+      "https://api.neynar.com/v2/farcaster/user/follow",
+      options
+    ).then((res) => res.json());
 
     return result;
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const unfollowUser = async (signer, fid) => {
   try {
@@ -195,18 +237,21 @@ export const unfollowUser = async (signer, fid) => {
       },
       body: JSON.stringify({
         signer_uuid: signer,
-        target_fids: [fid]
+        target_fids: [fid],
       }),
     };
-    const result = await fetch('https://api.neynar.com/v2/farcaster/user/follow', options).then((res) => res.json())
+    const result = await fetch(
+      "https://api.neynar.com/v2/farcaster/user/follow",
+      options
+    ).then((res) => res.json());
 
     return result;
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const userFollowOrNot = async (fid, viewer) => { 
+export const userFollowOrNot = async (fid, viewer) => {
   const headers = {
     accept: "application/json",
     api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
@@ -217,13 +262,13 @@ export const userFollowOrNot = async (fid, viewer) => {
   });
   const data = response.data;
   return data;
-} 
+};
 
-export const getNotifications= async(fid)=>{
+export const getNotifications = async (fid) => {
   const headers = {
     accept: "application/json",
     api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
-  }; 
+  };
   try {
     const url = `https://api.neynar.com/v2/farcaster/notifications?fid=${fid}`;
     const response = await axios.get(url, {
@@ -234,15 +279,14 @@ export const getNotifications= async(fid)=>{
   } catch (error) {
     console.log(error);
   }
-  
-}
+};
 
 export const fetchRecentItems = async (req) => {
   const headers = {
     accept: "application/json",
     api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,
   };
-  try { 
+  try {
     const url = `https://api.neynar.com/v2/farcaster/feed/user/${req.fid}/replies_and_recasts?limit=10&${req.cursor}`;
     const response = await axios.get(url, {
       headers,
@@ -250,6 +294,6 @@ export const fetchRecentItems = async (req) => {
     const data = response.data;
     return data;
   } catch (error) {
-    console.error('Error fetching suggestions:', error);
+    console.error("Error fetching suggestions:", error);
   }
-}
+};
