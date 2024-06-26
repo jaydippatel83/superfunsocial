@@ -14,14 +14,8 @@ const GameCard = ({ game }) => {
                 <div className="card-body p-4">
                     <h4 className="card-title text-sm font-semibold">{game.title}</h4>
                     <p className="card-text">{game.viewers} Viewers</p> 
-                    <div className="flex gap-2 mt-2">
-                        <button type="button" className="button bg-secondery flex-1">Play</button>
-                        <button type="button" className="button bg-secondery !w-auto">
-                            <IonIcon icon={arrowRedo} className="text-base"></IonIcon>
-                        </button>
-                        <button type="button" className="button bg-secondery !w-auto">
-                            <IonIcon icon={bookmark} className="text-base"></IonIcon>
-                        </button>
+                    <div className="flex  mt-2">
+                        <button type="button" className="button bg-secondery flex-1 ">Buy NFT pass</button> 
                     </div>
                 </div>
             </div>

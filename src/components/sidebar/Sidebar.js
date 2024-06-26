@@ -3,9 +3,12 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useNeynarContext } from "@neynar/react";
+
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const pathname = usePathname();
+  const { user } = useNeynarContext();
 
   const isActive = (path) => {
     return (
@@ -23,7 +26,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         }`}
       >
         <div className="p-2 max-xl:bg-white shadow-sm 2xl:w-72 sm:w-64 w-[80%] h-[calc(100vh-64px)] relative z-30 max-lg:border-r dark:max-xl:!bg-slate-700 dark:border-slate-700">
-          <div className="pr-4 overflow-y-auto h-full ">
+          <div className="pr-4 overflow-y-auto h-full">
             <nav id="side">
               <ul>
                 <li
@@ -31,7 +34,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     isActive("/") ? "bg-yellow-400 " : " "
                   } rounded-lg`}
                 >
-                  <Link href="/" className={`hover:bg-yellow-400 rounded-lg sfs-a`}>
+                  <Link href="/">
                     <Image
                       width={50}
                       height={50}
@@ -42,11 +45,19 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     <span>Fun Feed </span>
                   </Link>
                 </li>
-                <li
-                  className={` ${
-                    isActive("/questions") ? "bg-yellow-400" : " "
-                  } rounded-lg`}
-                >
+                <li className={` ${isActive("/funpass") ? "bg-yellow-400" : " "} rounded-lg`}>
+                  <Link href="/funpass">
+                    <Image
+                      width={50}
+                      height={50}
+                      src="/assets/images/icons/question.png"
+                      alt="q & a"
+                      className="w-6"
+                    />
+                    <span>Fun pass NFTs </span>
+                  </Link>
+                </li>
+                <li className={` ${isActive("/questions") ? "bg-yellow-400" : " "} rounded-lg`}>
                   <Link href="/questions">
                     <Image
                       width={50}
@@ -58,11 +69,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     <span>Q & A </span>
                   </Link>
                 </li>
-                <li
-                  className={` ${
-                    isActive("/superplay") ? "bg-yellow-400" : " "
-                  } rounded-lg`}
-                >
+                <li className={` ${isActive("/superplay") ? "bg-yellow-400" : " "} rounded-lg`}>
                   <Link href="/superplay">
                     <Image
                       width={50}
@@ -74,11 +81,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     <span>Super Play </span>
                   </Link>
                 </li>
-                <li
-                  className={` ${
-                    isActive("/contest") ? "bg-yellow-400" : " "
-                  } rounded-lg`}
-                >
+                <li className={` ${isActive("/contest") ? "bg-yellow-400" : " "} rounded-lg`}>
                   <Link href="/contest">
                     <Image
                       width={50}
@@ -90,11 +93,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     <span>Contest</span>
                   </Link>
                 </li>
-                <li
-                  className={` ${
-                    isActive("/leaderboard") ? "bg-yellow-400" : " "
-                  } rounded-lg`}
-                >
+                <li className={` ${isActive("/leaderboard") ? "bg-yellow-400" : " "} rounded-lg`}>
                   <Link href="/leaderboard">
                     <Image
                       width={50}
@@ -106,12 +105,8 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     <span>Leaderboard</span>
                   </Link>
                 </li>
-                <li
-                  className={` ${
-                    isActive("/profile") ? "bg-yellow-400" : " "
-                  } rounded-lg`}
-                >
-                  <Link href="/profile">
+                <li className={` ${isActive("/profile") ? "bg-yellow-400" : " "} rounded-lg`}>
+                  <Link href={`/profile/${user?.fid}`}>
                     <Image
                       width={50}
                       height={50}

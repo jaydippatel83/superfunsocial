@@ -8,7 +8,9 @@ const page = () => {
     const {user}=useNeynarContext(); 
     return (
         <Layout>
-            <Profile user={user} /> 
+            {
+                user &&  <Profile user={user} /> 
+            } 
         </Layout>
     );
 };

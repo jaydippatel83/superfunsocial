@@ -51,9 +51,9 @@ const MutualFriends = ({ fid }) => {
   }, [fid]);
 
   return (
-    <div className="flex-1">
+    <div className="flex-1   lg:max-w-[400px] mx-auto">
       <div
-        className="lg:space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6"
+        className="lg:space-y-4 lg:pb-8  sm:grid-cols-2 max-lg:gap-6"
         uk-sticky="media: 1024; end: #js-oversized; offset: 80"
       >
         <div className="box p-5 px-6">

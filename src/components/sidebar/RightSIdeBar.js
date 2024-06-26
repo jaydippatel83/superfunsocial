@@ -50,11 +50,11 @@ const RightSIdeBar = () => {
   }, [user]);
 
   return (
-    <div className="flex-1 w-full lg:max-w-[400px] mx-auto">
+    <div className="flex-1 lg:max-w-[400px] mx-auto">
       <div
-        className="lg:space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6" 
+        className="lg:space-y-4 sm:space-x-2 lg:pb-8  sm:grid-cols-2 max-lg:gap-6" 
       >
-        <div className="box p-5 px-6">
+        <div className="box p-5 px-6 mb-3">
           <div className="flex items-baseline justify-between text-black dark:text-white">
             <h3 className="font-bold text-base">Trending Channels 📣</h3>
             <a href="#" className="text-sm text-blue-500">
