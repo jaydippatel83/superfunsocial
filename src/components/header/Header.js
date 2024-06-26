@@ -62,7 +62,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
               </button>
               <Create />
               <Notifications />
-              <Message />
+              {/* <Message /> */}
               <Profile />
             </div>
           </div>

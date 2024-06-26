@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "@neynar/react/dist/style.css";
 import "./globals.css";
 import Script from "next/script";
+import CreatePostModal from "@/components/modals/CreatePostModal";
 
 const ProgressBarProvider = dynamic(() => import("./ProgressBarProvider"), {
   ssr: false,
@@ -43,7 +44,10 @@ export default function RootLayout({ children }) {
               },
             }}
           >
-            <FarcasterContextProvider>{children}</FarcasterContextProvider>
+            <FarcasterContextProvider>
+              {children}
+              <CreatePostModal/>
+            </FarcasterContextProvider>
           </NeynarContextProvider>
         </ProgressBarProvider>
       </body> 
