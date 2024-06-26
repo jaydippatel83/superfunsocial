@@ -3,9 +3,11 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { useNeynarContext } from '@neynar/react';
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     const pathname = usePathname();
+    const {user} = useNeynarContext();
 
     const isActive = (path) => {
         return pathname.startsWith(path) && (pathname.length === path.length || pathname[path.length] === '/');
@@ -53,7 +55,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                                     </Link>
                                 </li>
                                 <li className={` ${isActive('/profile') ? 'active' : ' '}`}>
-                                    <Link href="/profile">
+                                    <Link href={`/profile/${user?.fid}`}>
                                         <Image width={50} height={50} src="/assets/images/icons/user.png" alt="profile" className="w-6" />
                                         <span>Profile</span>
                                     </Link>
