@@ -56,16 +56,16 @@ export async function getCastByHash(hash) {
   return data;
 }
 
-export  const getFeedByHash = async (fid) => {
+export  const getFeedByHash = async (req) => {
   const headers = {
       accept: 'application/json', api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY
   }
-  const url = `https://api.neynar.com/v2/farcaster/feed?feed_type=filter&filter_type=fids&fids=${fid}&limit=10`
+  const url = `https://api.neynar.com/v2/farcaster/feed?feed_type=filter&filter_type=fids&fids=${req.fid}&limit=10&cursor=${req.cursor}`
   try {
       const response = await axios.get(url, {
           headers
       })
-      const data = response.data?.casts; 
+      const data = response.data; 
       return data;
   } catch (error) {
       console.log(error);

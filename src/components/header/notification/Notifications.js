@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { IonIcon } from '@ionic/react';
 import { notificationsOutline, close } from 'ionicons/icons';
-import Image from 'next/image'; 
+import Image from 'next/image';
 import { getNotifications } from '@/lib/farcaster';
 import Link from 'next/link';
 import getRelativeTime from '@/lib/utils';
@@ -12,7 +12,7 @@ const Notifications = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const [notifications, setNotifications] = useState([]);
-    const {user}=useNeynarContext(); 
+    const { user } = useNeynarContext();
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -28,7 +28,7 @@ const Notifications = () => {
     const getNoti = async () => {
         const fid = user.fid;
         const data = await getNotifications(fid);
-        setNotifications(data.notifications); 
+        setNotifications(data.notifications);
     }
 
     useEffect(() => {
@@ -60,7 +60,7 @@ const Notifications = () => {
                     </div>
                     <div className="text-sm h-[400px] w-full overflow-y-auto pr-2">
                         <div className="pl-2 p-1 text-sm font-normal dark:text-white">
-                            {notifications && notifications.map((item, index) => {
+                            {notifications ? notifications.map((item, index) => {
                                 if (item.type === "mention") {
                                     return (
                                         <Link key={index} href={`/${item?.cast?.author?.username}/${item?.cast.hash}`} className="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
@@ -74,20 +74,20 @@ const Notifications = () => {
                                         </Link>
                                     );
                                 }
-                                if (item.type === "follows") { 
+                                if (item.type === "follows") {
                                     return item?.follows?.map((follow, i) => (
                                         <Link key={i} href={`/profile/${follow?.user?.fid}`} className="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
                                             <div className="relative w-8 h-8 shrink-0">
                                                 <Image src={follow?.user?.pfp_url} alt="Profile" className="object-cover w-full h-full rounded-full" width={48} height={48} />
                                             </div>
                                             <div className="flex-1">
-                                                <p><b className="font-bold mr-1"> {follow?.user?.display_name}</b> Followed you</p> 
+                                                <p><b className="font-bold mr-1"> {follow?.user?.display_name}</b> Followed you</p>
                                             </div>
                                         </Link>
                                     ));
                                 }
-                                if (item.type === "likes") { 
-                                    return item?.reactions?.map((like,index)=> (
+                                if (item.type === "likes") {
+                                    return item?.reactions?.map((like, index) => (
                                         <Link key={index} href={`/${item?.cast?.author?.username}/${like?.cast.hash}`} className="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
                                             <div className="relative w-8 h-8 shrink-0">
                                                 <Image src={like?.user?.pfp_url} alt="Profile" className="object-cover w-full h-full rounded-full" width={48} height={48} />
@@ -100,7 +100,9 @@ const Notifications = () => {
                                     ));
                                 }
                                 return null;
-                            })}
+                            }) : <div className="flex justify-center align-middle h-20">
+                                <div className="w-10 h-10 border-4 border-t-blue-500 border-solid rounded-full animate-spin"></div>
+                            </div>}
                         </div>
                     </div>
                 </div>

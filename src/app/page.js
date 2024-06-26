@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <Layout>
       <HomeComponent feed={data}/>
-      <CreatePostModal />
+      {/* <CreatePostModal /> */}
     </Layout>
   );
 }
