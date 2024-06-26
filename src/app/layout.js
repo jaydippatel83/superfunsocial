@@ -46,8 +46,7 @@ export default function RootLayout({ children }) {
             <FarcasterContextProvider>{children}</FarcasterContextProvider>
           </NeynarContextProvider>
         </ProgressBarProvider>
-      </body>
-      <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
+      </body> 
     </html>
   );
 }
