@@ -174,6 +174,7 @@ export function FarcasterContextProvider(props) {
         setEthreumProvider,
         connectMetaMaskAndGetSigner,
         polls,
+        address
       }}
     >
       {props.children}
