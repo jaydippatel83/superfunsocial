@@ -75,7 +75,7 @@ export function FarcasterContextProvider(props) {
           method: "eth_requestAccounts",
         });
         console.log("Found an account! Address: ", accounts[0]);
-        console.log(accounts);
+        localStorage.setItem("currentUser", accounts[0]);
         setAddress(accounts[0]);
       } catch (err) {
         console.log(err);
@@ -174,7 +174,7 @@ export function FarcasterContextProvider(props) {
         setEthreumProvider,
         connectMetaMaskAndGetSigner,
         polls,
-        address
+        address,
       }}
     >
       {props.children}
