@@ -27,14 +27,34 @@ import { Telegraf } from "telegraf";
 export async function getFeed(cursor) {
   try {
     const feed = await neynarClient.fetchFeed(FeedType.Filter, {
-      filterType: FilterType.EmbedUrl,
-      embedUrl: "farcaster",
+      filterType: FilterType.ParentUrl,
+      parentUrl: "/superfunsocial",
       limit: 20,
       cursor: cursor || "",
       withRecasts: true,
       withReplies: true,
     });
+    console.log(feed, "feed");
     return { feed };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getPolls(cursor) {
+  try {
+    const poll = await neynarClient.fetchFeed(FeedType.Filter, {
+      filterType: FilterType.ParentUrl,
+      parentUrl: "/sfspolls",
+      limit: 20,
+      cursor: cursor || "",
+      withRecasts: true,
+      withReplies: true,
+    });
+
+    console.log(poll, "dsnfhdhjf");
+
+    return { poll };
   } catch (error) {
     console.log(error);
   }
@@ -53,7 +73,7 @@ export async function getCastByHash(hash) {
   return data;
 }
 
-export  const getFeedByHash = async (req) => {
+export const getFeedByHash = async (req) => {
   const headers = {
     accept: "application/json",
     api_key: process.env.NEXT_PUBLIC_NEYNAR_API_KEY,

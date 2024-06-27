@@ -9,14 +9,15 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FarcasterContext } from "@/context/farcaster"; 
+import { FarcasterContext } from "@/context/farcaster";
 import { useNeynarContext } from "@neynar/react";
+import { toast } from "react-toastify";
 
 const PollInputForm = ({ togglePollModal }) => {
   const farcasterContext = useContext(FarcasterContext);
   const { CreatePoll } = farcasterContext;
 
-   const {user}= useNeynarContext();
+  const { user } = useNeynarContext();
 
   const [pollOptions, setPollOptions] = useState([{ id: 1, value: "" }]);
   const [pollQuestion, setPollQuestion] = useState("");
@@ -51,9 +52,10 @@ const PollInputForm = ({ togglePollModal }) => {
         fid: user.fid,
       })
       .then(async (res) => {
+        console.log(res, "res------------>");
         await CreatePoll(pollQuestion, pollOptions.length, res.data.data._id);
 
-        let arr = [{ url: "superfunsocial" }];
+        let arr = [];
         arr.push({
           url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/poll/${res.data.data._id}`,
         });
@@ -69,12 +71,13 @@ const PollInputForm = ({ togglePollModal }) => {
             signer_uuid: user?.signer_uuid,
             text: text,
             embeds: arr,
+            parent: "/sfspolls",
           }),
         };
 
         fetch("https://api.neynar.com/v2/farcaster/cast", options)
           .then((response) => {
-            alert("Poll Created!");
+            toast.success("Poll Created!");
             setLoading(false);
           })
           .catch((err) => console.error(err));
