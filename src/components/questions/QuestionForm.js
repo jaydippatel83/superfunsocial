@@ -8,16 +8,16 @@ import { useNeynarContext } from "@neynar/react";
 
 const QuestionForm = () => {
   const [inputValue, setInputValue] = useState("");
+  const [isOpen, setIsOpen]= useState(false);
   const { user } = useNeynarContext();
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
-  };
+  }; 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(inputValue);
-  };
+  const handleToggle=()=>{
+    setIsOpen(!isOpen)
+  }
 
   return (
     <div className="flex-col justify-between p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -46,19 +46,12 @@ const QuestionForm = () => {
       <div className="flex items-center gap-3 justify-around mt-3">
         <button className="flex items-center gap-1 px-3 py-1 text-gray-600 hover:text-blue-600 dark:text-white dark:hover:text-blue-400">
           <IonIcon icon={helpOutline} className="text-xl" />
-          <span className="hidden md:block">Ask</span>
+          <span className="hidden md:block">Ask Questions</span>
         </button>
         <button className="flex items-center gap-1 px-3 py-1 text-gray-600 hover:text-green-600 dark:text-white dark:hover:text-green-400">
           <IonIcon icon={createOutline} className="text-xl" />
           <span className="hidden md:block">Answer</span>
-        </button>
-        <button
-          onClick={handleSubmit}
-          className="flex items-center gap-1 px-3 py-1 text-gray-600 hover:text-red-600 dark:text-white dark:hover:text-red-400"
-        >
-          <IonIcon icon={pencilOutline} className="text-xl" />
-          <span className="hidden md:block">Post</span>
-        </button>
+        </button> 
       </div>
     </div>
   );

@@ -11,7 +11,8 @@ const page = () => {
                     <div className="max-w-[1080px] mx-auto">
                         <div className="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3">
                             <h1>Welcome To Leaderboard</h1>
-                            <LeaderboardCard/>
+                            <h1 className=''>Coming Soon..</h1>
+                            {/* <LeaderboardCard/> */}
                         </div>
                     </div>
                     <RightSIdeBar />
