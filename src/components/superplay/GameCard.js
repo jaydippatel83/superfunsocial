@@ -46,12 +46,14 @@ const GameCard = ({ pass }) => {
   return (
     <div className="relative bg-white shadow-xl rounded-lg transition-transform transform duration-300 m-2">
       <div className="card shadow-xl">
-        <div className="card-media h-60 relative">
-          <img
+        <div className=" ">
+          <Image
+            width={100}
+            height={100}
             src={pass?.image}
             alt={pass?.name}
-            className="object-cover rounded-t-lg"
-          ></img>
+            className=" w-full h-48 rounded-t-lg"
+          />
         </div>
         <div className="card-body p-2">
           <div className="flex">
