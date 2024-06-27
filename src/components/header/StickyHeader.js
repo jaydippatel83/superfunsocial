@@ -6,13 +6,14 @@ import PostCardLoader from "../loader/PostCardLoader";
 import PollInputForm from "../poll/PollForm";
 import CreatePost from "../posts/CreatePost";
 import { imageOutline, videocamOutline } from "ionicons/icons";
-import { getFeed } from "@/lib/farcaster";
+import { getFeed, getPolls } from "@/lib/farcaster";
 import PullToRefresh from "react-pull-to-refresh";
 
 const StickyHeader = ({ data, cursor }) => {
   const [activeTab, setActiveTab] = useState("All");
   const [showPollModal, setShowPollModal] = useState(false);
   const [casts, setCasts] = useState(data || []);
+  const [polls, setPolls] = useState(data || []);
   const [loadcasts, setLoadcasts] = useState(false);
   const [endCursorcasts, setEndCursorcasts] = useState(cursor);
   const [loader, setLoader] = useState(false);
@@ -32,13 +33,26 @@ const StickyHeader = ({ data, cursor }) => {
     setCasts([...casts, ...feed?.casts]);
     setLoadcasts(false);
   };
+
+  const loadmorePollData = async () => {
+    setLoadcasts(true);
+    const { poll } = await getPolls(endCursorcasts);
+    setEndCursorcasts(poll?.next.cursor);
+    setPolls([...polls, ...poll?.casts]);
+    setLoadcasts(false);
+  };
+
   const refreshData = async () => {
     setLoader(true);
     const { feed } = await getFeed(null); // null to get the latest data
     setCasts(feed?.casts || []);
+    const { poll } = await getPolls(null); // null to get the latest data
+    setPolls(poll?.casts || []);
     setEndCursorcasts(feed?.next.cursor);
     setLoader(false);
   };
+
+  console.log(polls,"polls")
 
   useEffect(() => {
     // const interval = setInterval(() => {
@@ -146,6 +160,21 @@ const StickyHeader = ({ data, cursor }) => {
                 </div>
               </div>
             </div>
+            {polls && polls.map((item, i) => <PostCards key={i} data={item} />)}
+            {endCursorcasts && (
+              <div className="flex justify-center">
+                <button
+                  onClick={() => loadmorePollData()}
+                  className="mt-4 font-bold text-base sm:text-lg bg-gradient-to-r text-white px-4 sm:px-6 py-1 sm:py-2 from-ct-blue-dark to-ct-blue-light min-w-[80px] sm:min-w-[100px] text-center rounded-md"
+                >
+                  {loadcasts ? (
+                    <div className="spinner-circular"></div>
+                  ) : (
+                    "Load More"
+                  )}
+                </button>
+              </div>
+            )}
             {/* <PostCards /> */}
           </>
         )}

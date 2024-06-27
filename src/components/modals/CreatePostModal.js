@@ -108,7 +108,7 @@ const CreatePostModal = () => {
 
   const createCast = async () => {
     setLoading(true);
-    if (user) {
+    if (!user) {
       setLoading(false);
       return;
     }
