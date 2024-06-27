@@ -57,7 +57,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     <span>Fun pass NFTs </span>
                   </Link>
                 </li>
-                <li className={` ${isActive("/questions") ? "bg-yellow-400" : " "} rounded-lg`}>
+                {/* <li className={` ${isActive("/questions") ? "bg-yellow-400" : " "} rounded-lg`}>
                   <Link href="/questions">
                     <Image
                       width={50}
@@ -68,7 +68,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     />
                     <span>Q & A </span>
                   </Link>
-                </li>
+                </li> */}
                 <li className={` ${isActive("/superplay") ? "bg-yellow-400" : " "} rounded-lg`}>
                   <Link href="/superplay">
                     <Image
