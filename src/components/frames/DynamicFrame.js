@@ -66,12 +66,12 @@ const DynamicFrame = ({ metadata, link }) => {
 
         var baseUrl = postUrl.split("?")[0];
         const apiUrl = buttonTarget.replace(
-          "http://demo.superfun.social",
+          "https://demo.superfun.social",
           "http://localhost:3002"
         );
 
         baseUrl = baseUrl.replace(
-          "http://demo.superfun.social",
+          "https://demo.superfun.social",
           "http://localhost:3002"
         );
 
@@ -115,7 +115,7 @@ const DynamicFrame = ({ metadata, link }) => {
 
           if (result?.url) {
             var resultUrl = result?.url.replace(
-              "http://demo.superfun.social",
+              "https://demo.superfun.social",
               "http://localhost:3002"
             );
             const response = await fetch(resultUrl, {
