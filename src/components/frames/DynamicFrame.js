@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { contractABI } from "@/utils/contract";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+const baseUrl= process.env.NEXT_PUBLIC_BASE_URL;
 
 const DynamicFrame = ({ metadata, link }) => {
   const [data, setData] = useState(metadata);
@@ -135,7 +136,7 @@ const DynamicFrame = ({ metadata, link }) => {
         }
 
         if (pollId === "voted") {
-          const previewUrl = `https://demo.superfun.social/api/voted/${choice}`;
+          const previewUrl = `${baseUrl}/api/voted/${choice}`;
           const response = await fetch(previewUrl, {
             method: "GET",
             headers: {
@@ -165,9 +166,9 @@ const DynamicFrame = ({ metadata, link }) => {
         if (error.reason == "You have already voted!") {
           var getVotesUrl;
           if (currentPollId !== "voted") {
-            getVotesUrl = `https://demo.superfun.social/api/voted/${currentPollId}`;
+            getVotesUrl = `${baseUrl}/api/voted/${currentPollId}`;
           } else if (currentPollId == "voted") {
-            getVotesUrl = `https://demo.superfun.social/api/voted/${currentChoice}`;
+            getVotesUrl = `${baseUrl}/api/voted/${currentChoice}`;
           }
           const response = await fetch(getVotesUrl, {
             method: "GET",
