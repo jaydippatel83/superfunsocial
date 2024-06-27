@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useNeynarContext } from "@neynar/react";
 import { useRouter } from "next/navigation.js";
 import { usePathname } from "next/navigation";
+import { chainParams } from "@/config.js";
 
 export const FarcasterContext = createContext();
 
@@ -71,6 +72,20 @@ export function FarcasterContextProvider(props) {
         toast.error("Please install the Metamask Extension!");
       }
       try {
+        const chainData = await ethereum.request({
+          method: "eth_chainId",
+          params: [],
+        });
+
+        const currentChain = chainParams[0];
+
+        if (chainData !== currentChain.chainId) {
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: currentChain.chainId }],
+          });
+        }
+
         const accounts = await ethereum.request({
           method: "eth_requestAccounts",
         });
