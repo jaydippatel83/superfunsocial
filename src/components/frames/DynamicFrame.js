@@ -70,12 +70,12 @@ const DynamicFrame = ({ metadata, link }) => {
           "http://localhost:3002"
         );
 
-        baseUrl = baseUrl.replace(
-          "https://demo.superfun.social",
-          "http://localhost:3002"
-        );
+        // baseUrl = baseUrl.replace(
+        //   "http://demo.superfun.social",
+        //   "http://localhost:3002"
+        // );
 
-        const urlParts = apiUrl.split("/");
+        const urlParts = buttonTarget.split("/");
         const pollId = urlParts[urlParts.length - 2];
         currentPollId = pollId;
         const choice = urlParts[urlParts.length - 1];
@@ -114,11 +114,11 @@ const DynamicFrame = ({ metadata, link }) => {
           setData(updatedData);
 
           if (result?.url) {
-            var resultUrl = result?.url.replace(
-              "https://demo.superfun.social",
-              "http://localhost:3002"
-            );
-            const response = await fetch(resultUrl, {
+            // var resultUrl = result?.url.replace(
+            //   "http://demo.superfun.social",
+            //   "http://localhost:3002"
+            // );
+            const response = await fetch(result?.url, {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
@@ -135,7 +135,7 @@ const DynamicFrame = ({ metadata, link }) => {
         }
 
         if (pollId === "voted") {
-          const previewUrl = `http://localhost:3002/api/voted/${choice}`;
+          const previewUrl = `https://demo.superfun.social/api/voted/${choice}`;
           const response = await fetch(previewUrl, {
             method: "GET",
             headers: {
@@ -165,9 +165,9 @@ const DynamicFrame = ({ metadata, link }) => {
         if (error.reason == "You have already voted!") {
           var getVotesUrl;
           if (currentPollId !== "voted") {
-            getVotesUrl = `http://localhost:3002/api/voted/${currentPollId}`;
+            getVotesUrl = `https://demo.superfun.social/api/voted/${currentPollId}`;
           } else if (currentPollId == "voted") {
-            getVotesUrl = `http://localhost:3002/api/voted/${currentChoice}`;
+            getVotesUrl = `https://demo.superfun.social/api/voted/${currentChoice}`;
           }
           const response = await fetch(getVotesUrl, {
             method: "GET",
@@ -207,7 +207,7 @@ const DynamicFrame = ({ metadata, link }) => {
       if (buttonTarget) {
         buttonTarget = buttonTarget.replace(
           "https://superfunsocial.vercel.app",
-          "http://localhost:3002"
+          "https://demo.superfun.social"
         );
       }
       buttonElements.push(
