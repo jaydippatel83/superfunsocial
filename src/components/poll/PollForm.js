@@ -53,7 +53,8 @@ const PollInputForm = ({ togglePollModal }) => {
       })
       .then(async (res) => {
         console.log(res, "res------------>");
-        await CreatePoll(pollQuestion, pollOptions.length, res.data.data._id);
+       const txn= await CreatePoll(pollQuestion, pollOptions.length, res.data.data._id);
+       console.log(txn,"txn");
 
         let arr = [];
         arr.push({
@@ -75,7 +76,7 @@ const PollInputForm = ({ togglePollModal }) => {
           }),
         };
 
-        fetch("https://api.neynar.com/v2/farcaster/cast", options)
+       await fetch("https://api.neynar.com/v2/farcaster/cast", options)
           .then((response) => {
             toast.success("Poll Created!");
             setLoading(false);
