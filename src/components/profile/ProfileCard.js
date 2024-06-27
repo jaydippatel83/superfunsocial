@@ -3,9 +3,16 @@ import { formatNumber } from "@/lib/utils";
 import { useNeynarContext } from "@neynar/react";
 import Image from "next/image";
 import Link from "next/link";
+import EditProfileModal from "../modals/EditProfileModal";
+import { useState } from "react";
 
 const ProfileHeader = ({ userData }) => {
   const { user } = useNeynarContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+      setIsModalOpen(!isModalOpen);
+  }
 
   return (
     <div className="p-4 md:mt-5 bg-white dark:bg-gray-800 shadow   border-t border-gray-100 dark:border-slate-700">
@@ -24,9 +31,7 @@ const ProfileHeader = ({ userData }) => {
           </div>
         </div>
         {userData.fid == user?.fid && (
-          <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full">
-            Edit Profile
-          </button>
+           <EditProfileModal isModalOpen={isModalOpen} toggleModal={toggleModal} userData={userData} />
         )}
       </div>
       <div className="items-center ">
