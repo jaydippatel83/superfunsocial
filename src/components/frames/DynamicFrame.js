@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { contractABI } from "@/utils/contract";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
-const baseUrls= process.env.NEXT_PUBLIC_BASE_URL;
 
 const DynamicFrame = ({ metadata, link }) => {
   const [data, setData] = useState(metadata);
@@ -76,7 +75,7 @@ const DynamicFrame = ({ metadata, link }) => {
           "https://demo.superfun.social"
         );
 
-        const urlParts = buttonTarget.split("/");
+        const urlParts = apiUrl.split("/");
         const pollId = urlParts[urlParts.length - 2];
         currentPollId = pollId;
         const choice = urlParts[urlParts.length - 1];
@@ -136,7 +135,7 @@ const DynamicFrame = ({ metadata, link }) => {
         }
 
         if (pollId === "voted") {
-          const previewUrl = `${baseUrls}/api/voted/${choice}`;
+          const previewUrl = `https://demo.superfun.social/api/voted/${choice}`;
           const response = await fetch(previewUrl, {
             method: "GET",
             headers: {
@@ -166,9 +165,9 @@ const DynamicFrame = ({ metadata, link }) => {
         if (error.reason == "You have already voted!") {
           var getVotesUrl;
           if (currentPollId !== "voted") {
-            getVotesUrl = `${baseUrls}/api/voted/${currentPollId}`;
+            getVotesUrl = `https://demo.superfun.social/api/voted/${currentPollId}`;
           } else if (currentPollId == "voted") {
-            getVotesUrl = `${baseUrls}/api/voted/${currentChoice}`;
+            getVotesUrl = `https://demo.superfun.social/api/voted/${currentChoice}`;
           }
           const response = await fetch(getVotesUrl, {
             method: "GET",
@@ -207,7 +206,7 @@ const DynamicFrame = ({ metadata, link }) => {
 
       if (buttonTarget) {
         buttonTarget = buttonTarget.replace(
-          "https://superfunsocial.vercel.app",
+          "http://demo.superfun.social",
           "https://demo.superfun.social"
         );
       }
