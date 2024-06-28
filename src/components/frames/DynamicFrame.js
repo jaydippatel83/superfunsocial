@@ -67,14 +67,14 @@ const DynamicFrame = ({ metadata, link }) => {
 
         var baseUrl = postUrl.split("?")[0];
         const apiUrl = buttonTarget.replace(
-          "https://demo.superfun.social",
-          "http://localhost:3002"
+          "http://demo.superfun.social",
+          "https://demo.superfun.social"
         );
 
-        // baseUrl = baseUrl.replace(
-        //   "http://demo.superfun.social",
-        //   "http://localhost:3002"
-        // );
+        baseUrl = baseUrl.replace(
+          "http://demo.superfun.social",
+          "https://demo.superfun.social"
+        );
 
         const urlParts = buttonTarget.split("/");
         const pollId = urlParts[urlParts.length - 2];
@@ -115,11 +115,11 @@ const DynamicFrame = ({ metadata, link }) => {
           setData(updatedData);
 
           if (result?.url) {
-            // var resultUrl = result?.url.replace(
-            //   "http://demo.superfun.social",
-            //   "http://localhost:3002"
-            // );
-            const response = await fetch(result?.url, {
+            var resultUrl = result?.url.replace(
+              "http://demo.superfun.social",
+              "https://demo.superfun.social"
+            );
+            const response = await fetch(resultUrl, {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
