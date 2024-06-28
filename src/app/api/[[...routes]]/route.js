@@ -3,8 +3,7 @@
 import { Button, Frog } from "frog";
 import { handle } from "frog/vercel";
 import { getPoll, getVotes } from "../../../utils/poll"; 
-import { neynar } from "frog/hubs";
-import { ethers } from "ethers";
+import { neynar } from "frog/hubs"; 
 import { contractABI } from "@/utils/contract"; 
 
 
@@ -82,7 +81,7 @@ app.frame("/wait/:id", (c) => {
   const { transactionId } = c;
   const pollId = c.req.param("id");
   return c.res({ 
-    action: `/voted/${pollId}`,
+    // action: `/voted/${pollId}`,
     image: (
       <div  style={{fontSize: 48, color:'black', textAlign:'center', padding:'20px'}}>
         {transactionId
