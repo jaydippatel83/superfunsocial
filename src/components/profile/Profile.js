@@ -42,7 +42,7 @@ const Profile = ({
     setFloader(true);
     const data = await getFeedByHash(req);
     setFcursor(data?.next.cursor);
-   
+
     setFeed([...feed, ...data?.casts]);
     setFloader(false);
   };
@@ -72,8 +72,7 @@ const Profile = ({
     setLloader(false);
   };
 
-
-  
+  console.log(feed, "dnfhjdshfjhjjfdjs");
   return (
     <main
       id="site__main"

@@ -11,7 +11,7 @@ const CommentEmbed = ({ embeds }) => {
                      <RepostCast key={index} id={embed.cast_id.fid} hash={embed.cast_id.hash} classId="max-w-md mr-auto" />
                  }
                  {
-                     embed.url && <EmbedUrls key={index} data={embed.url} lable="max-w-md mr-auto"/>
+                     embed.url && <EmbedUrls key={index} data={embed.url}  lable="max-w-md mr-auto"/>
                  }
              </>
             })}
