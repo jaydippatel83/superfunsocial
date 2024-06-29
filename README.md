@@ -1,6 +1,6 @@
  # [SuperFunSocial](https://x.com/SuperFunSocial "Visit SFS's Profile")
 
-![SuperFunSocial - Farcaster](https://github.com/mansijoshi17/superfunsocialTon/assets/54347081/016a16bf-89c2-4a24-a7fb-f815e2c7cc47)
+![SuperFunSocial - Farcaster](https://github.com/jaydippatel83/superfunsocial/assets/54347081/a1970a96-2fd4-4bdc-9f57-20ab1f3ada90)
 
 
 ## What problem we are solving?
