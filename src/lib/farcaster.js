@@ -33,8 +33,7 @@ export async function getFeed(cursor) {
       cursor: cursor || "",
       withRecasts: true,
       withReplies: true,
-    });
-    console.log(feed, "feed");
+    }); 
     return { feed };
   } catch (error) {
     console.log(error);
@@ -50,9 +49,7 @@ export async function getPolls(cursor) {
       cursor: cursor || "",
       withRecasts: true,
       withReplies: true,
-    });
-
-    console.log(poll, "dsnfhdhjf");
+    }); 
 
     return { poll };
   } catch (error) {

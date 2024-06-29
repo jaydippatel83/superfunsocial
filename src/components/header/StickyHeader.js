@@ -50,9 +50,7 @@ const StickyHeader = ({ data, cursor }) => {
     setPolls(poll?.casts || []);
     setEndCursorcasts(feed?.next.cursor);
     setLoader(false);
-  };
-
-  console.log(polls,"polls")
+  }; 
 
   useEffect(() => {
     // const interval = setInterval(() => {

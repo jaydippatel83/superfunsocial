@@ -32,7 +32,7 @@ export async function getVotes(pollId) {
 
     const pollVotes = await votes.map((vote) => vote.toString());
 
-    console.log(pollVotes, "pollVotes");
+   
 
     return pollVotes;
   } catch (error) {
@@ -51,8 +51,7 @@ export async function giveVote(pollId, choice, signer) {
         signer
       );
       transaction = await contract.vote(pollId, choice);
-    }
-    console.log(transaction, "transaction");
+    } 
     return transaction;
   } catch (error) {
     console.log(error);

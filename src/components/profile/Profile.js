@@ -71,8 +71,7 @@ const Profile = ({
     setLikes([...likes, ...data?.reactions]);
     setLloader(false);
   };
-
-  console.log(feed, "dnfhjdshfjhjjfdjs");
+ 
   return (
     <main
       id="site__main"

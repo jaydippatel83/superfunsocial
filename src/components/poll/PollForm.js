@@ -53,7 +53,7 @@ const PollInputForm = ({ togglePollModal }) => {
       })
       .then(async (res) => { 
        const txn= await CreatePoll(pollQuestion, pollOptions.length, res.data.data._id);
-       console.log(txn,"txn");
+      
 
         let arr = [];
         arr.push({

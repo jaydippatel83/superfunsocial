@@ -146,8 +146,7 @@ export function FarcasterContextProvider(props) {
         );
         transaction = await contract.vote(pollId, choice);
       }
-
-      console.log(transaction, "transaction");
+ 
 
       return transaction;
     } catch (error) {

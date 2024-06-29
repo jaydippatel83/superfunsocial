@@ -49,8 +49,7 @@ const page = () => {
 
                     allFunPass.push(newPass);
                     setFunPass(allFunPass);
-                }
-                console.log(allFunPass);
+                } 
             }
 
         } catch (error) {
