@@ -31,7 +31,7 @@ const page = () => {
         );
 
         if (Number(balance) > 0) {
-          window.open("https://t.me/tokensmashbot", "_blank");
+          window.open("https://base.superplay.superfun.social/", "_blank");
         } else {
           toast.error("Please buy FunPass to access game!");
         }
