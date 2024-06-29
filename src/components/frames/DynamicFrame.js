@@ -65,15 +65,21 @@ const DynamicFrame = ({ metadata, link }) => {
           const signer = await provider.getSigner();
 
           var baseUrl = postUrl.split("?")[0];
+
           const apiUrl = buttonTarget.replace(
             "https://demo.superfun.social",
             "https://demo.superfun.social"
           );
 
+          console.log(baseUrl, "baseUrl-----");
+
           baseUrl = baseUrl.replace(
             "https://demo.superfun.social",
             "https://demo.superfun.social"
           );
+
+          console.log(baseUrl, "baseUrl");
+          console.log(apiUrl, "apiUrl");
 
           const urlParts = apiUrl.split("/");
           const pollId = urlParts[urlParts.length - 2];
