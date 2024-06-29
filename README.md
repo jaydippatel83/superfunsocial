@@ -16,6 +16,23 @@
 * **Store:** Buy and sell digital assets and NFTs.
 * **Leaderboard:** Track top performers and compete for the top spot.
 
+## Smart Contracts
+We have created smart contracts for various functionalities including an NFT item contract for FunPass, and a different NFT contract for GameAsset on Base testnet.
+
+
+FunPass : https://github.com/jaydippatel83/superfunsocial/blob/main/contracts/FunPassCollection.sol
+
+GameAsset : https://github.com/jaydippatel83/superfunsocial/blob/main/contracts/SFSGameAssets.sol
+
+
+## Deployed Contracts Address:
+
+* FunPass : https://base-sepolia.blockscout.com/address/0x6020fC64A9EB25bfc6A1aB383cfeCD5460c66A3C
+
+* GameAsset : https://base-sepolia.blockscout.com/address/0xc7FE4Cd80E618c8821d845375d232E6c440210Fe
+
+
+
 ## Token Smash Game
 
 * Token Smash is a game within SuperFunSocial where players can engage in fun and rewarding gameplay.
@@ -42,23 +59,6 @@
 
 * If you’d like to play this in PvP mode, please make sure to join the game as a second player before the timer (indicated by the loading bar at the top of the lobby) runs out.
 
-## Smart Contracts
-We have created smart contracts for various functionalities including an NFT collection contract, an NFT item contract for FunPass, and a different NFT contract for GameAsset.
-
-NFT Collection : 
-
-FunPass : 
-
-GameAsset : 
-
-
-## Deployed Contracts Address:
-
-* NFT Collection : 
-* FunPass : 
-
-* GameAsset :
-
 
 # It includes
 
@@ -72,8 +72,6 @@ GameAsset :
 
 
 <img width="1440" alt="Screenshot 2024-06-29 at 9 39 45 AM" src="https://github.com/mansijoshi17/superfunsocialTon/assets/54347081/44668085-b16d-4c7e-b409-7ec6ee63e161">
-
-
 
 
 
