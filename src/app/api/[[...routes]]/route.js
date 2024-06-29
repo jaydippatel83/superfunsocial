@@ -3,8 +3,7 @@
 import { Button, Frog } from "frog";
 import { handle } from "frog/vercel";
 import { getPoll, getVotes } from "../../../utils/poll"; 
-import { neynar } from "frog/hubs";
-import { ethers } from "ethers";
+import { neynar } from "frog/hubs"; 
 import { contractABI } from "@/utils/contract"; 
 
 
@@ -83,13 +82,14 @@ app.frame("/wait/:id", (c) => {
   const pollId = c.req.param("id");
   return c.res({ 
     action: `/voted/${pollId}`,
-    image: (
-      <div  style={{fontSize: 48, color:'black', textAlign:'center', padding:'20px'}}>
-        {transactionId
-          ? `Your vote is being recorded on the blockchain. Thank you :)`
-          : "Your vote is being recorded on the blockchain. This may take a few moments."}
-      </div>
-    ),
+    // image: (
+    //   <div  style={{fontSize: 48, color:'black', textAlign:'center', padding:'20px'}}>
+    //     {transactionId
+    //       ? `Your vote is being recorded on the blockchain. Thank you :)`
+    //       : "Your vote is being recorded on the blockchain. This may take a few moments."}
+    //   </div>
+    // ),
+    image: `https://via.placeholder.com/600x400/white/black?text=Your vote is being recorded on the blockchain. Thank you :)`,
     intents: [<Button.Transaction target={`/voted/${pollId}`}>View Votes</Button.Transaction>],
   });
 });

@@ -40,170 +40,161 @@ const DynamicFrame = ({ metadata, link }) => {
   }, [aspectRatio]);
 
   const handleButtonClick = async (buttonAction, buttonTarget, index) => {
-    if (typeof window !== "undefined") {
-      setLoader(true);
-      setLoadingButtonIndex(index);
-      var currentPollId;
-      var currentChoice;
+    if (typeof window !== 'undefined') { 
+    setLoader(true);
+    setLoadingButtonIndex(index);
+    var currentPollId;
+    var currentChoice;
 
-      if (buttonAction === "post_redirect" && buttonTarget) {
-        window.location.href = buttonTarget;
-        setLoader(false);
-        setLoadingButtonIndex(null);
-      } else if (buttonAction === "post" && buttonTarget) {
-        window.open(buttonTarget, "_blank");
-        setLoader(false);
-        setLoadingButtonIndex(null);
-      } else if (buttonAction === "link" && buttonTarget) {
-        window.open(buttonTarget, "_blank");
-        setLoader(false);
-        setLoadingButtonIndex(null);
-      } else if (buttonAction === "tx" && buttonTarget) {
-        try {
-          await connectMetaMaskAndGetSigner();
-          const provider = new ethers.BrowserProvider(window.ethereum);
-          const signer = await provider.getSigner();
+    if (buttonAction === "post_redirect" && buttonTarget) {
+      window.location.href = buttonTarget;
+      setLoader(false);
+      setLoadingButtonIndex(null);
+    } else if (buttonAction === "post" && buttonTarget) {
+      window.open(buttonTarget, "_blank");
+      setLoader(false);
+      setLoadingButtonIndex(null);
+    } else if (buttonAction === "link" && buttonTarget) {
+      window.open(buttonTarget, "_blank");
+      setLoader(false);
+      setLoadingButtonIndex(null);
+    } else if (buttonAction === "tx" && buttonTarget) {
+      try {
+        await connectMetaMaskAndGetSigner();
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
 
-          var baseUrl = postUrl.split("?")[0];
+        var baseUrl = postUrl.split("?")[0];
+        const apiUrl = buttonTarget.replace(
+          "http://demo.superfun.social",
+          "https://demo.superfun.social"
+        );
 
-          const apiUrl = buttonTarget.replace(
-            "https://demo.superfun.social",
-            "https://demo.superfun.social"
+        baseUrl = baseUrl.replace(
+          "http://demo.superfun.social",
+          "https://demo.superfun.social"
+        );
+
+        const urlParts = apiUrl.split("/");
+        const pollId = urlParts[urlParts.length - 2];
+        currentPollId = pollId;
+        const choice = urlParts[urlParts.length - 1];
+        currentChoice = choice;
+
+        var transaction;
+        if (signer && pollId !== "voted") {
+          const contract = new ethers.Contract(
+            contractAddress,
+            contractABI,
+            signer
           );
-
-          console.log(baseUrl, "baseUrl-----");
-
-          baseUrl = baseUrl.replace(
-            "https://demo.superfun.social",
-            "https://demo.superfun.social"
-          );
-
-          console.log(baseUrl, "baseUrl");
-          console.log(apiUrl, "apiUrl");
-
-          const urlParts = apiUrl.split("/");
-          const pollId = urlParts[urlParts.length - 2];
-          currentPollId = pollId;
-          const choice = urlParts[urlParts.length - 1];
-          currentChoice = choice;
-
-          var transaction;
-          if (signer && pollId !== "voted") {
-            const contract = new ethers.Contract(
-              contractAddress,
-              contractABI,
-              signer
-            );
-            transaction = await contract.vote(pollId, choice);
-          }
-
-          if (transaction) {
-            const response = await fetch(baseUrl, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-              },
-            });
-            const result = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(result, "text/html");
-
-            const metaElements = doc.head.querySelectorAll("meta");
-            const metaTags = Array.from(metaElements).map((meta) => ({
-              property: meta.getAttribute("property"),
-              content: meta.getAttribute("content"),
-            }));
-            const updatedData = {};
-            metaTags.forEach((meta) => {
-              updatedData[meta.property] = meta.content;
-            });
-            setData(updatedData);
-
-            if (result?.url) {
-              var resultUrl = result?.url.replace(
-                "http://demo.superfun.social",
-                "https://demo.superfun.social"
-              );
-              const response = await fetch(resultUrl, {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
-                },
-              });
-              const result = await response.json();
-              setData((prevData) => ({
-                ...prevData,
-                "fc:frame:image": result.image,
-                "fc:frame:image:aspect_ratio": "1:1",
-              }));
-            }
-          }
-
-          if (pollId === "voted") {
-            const previewUrl = `https://demo.superfun.social/api/voted/${choice}`;
-            const response = await fetch(previewUrl, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-              },
-            });
-            const result = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(result, "text/html");
-
-            const metaElements = doc.head.querySelectorAll("meta");
-            const metaTags = Array.from(metaElements).map((meta) => ({
-              property: meta.getAttribute("property"),
-              content: meta.getAttribute("content"),
-            }));
-            const updatedData = {};
-            metaTags.forEach((meta) => {
-              updatedData[meta.property] = meta.content;
-            });
-            setData(updatedData);
-          }
-
-          setLoader(false);
-          setLoadingButtonIndex(null);
-        } catch (error) {
-          toast.error(error.reason || error.message || "An error occurred");
-          if (error.reason == "You have already voted!") {
-            var getVotesUrl;
-            if (currentPollId !== "voted") {
-              getVotesUrl = `https://demo.superfun.social/api/voted/${currentPollId}`;
-            } else if (currentPollId == "voted") {
-              getVotesUrl = `https://demo.superfun.social/api/voted/${currentChoice}`;
-            }
-            const response = await fetch(getVotesUrl, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-              },
-            });
-            const result = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(result, "text/html");
-
-            const metaElements = doc.head.querySelectorAll("meta");
-            const metaTags = Array.from(metaElements).map((meta) => ({
-              property: meta.getAttribute("property"),
-              content: meta.getAttribute("content"),
-            }));
-            const updatedData = {};
-            metaTags.forEach((meta) => {
-              updatedData[meta.property] = meta.content;
-            });
-            setData(updatedData);
-          }
-          setLoader(false);
-          setLoadingButtonIndex(null);
+          transaction = await contract.vote(pollId, choice);
         }
+
+        if (transaction) {
+          const response = await fetch(baseUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const result = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(result, "text/html");
+
+          const metaElements = doc.head.querySelectorAll("meta");
+          const metaTags = Array.from(metaElements).map((meta) => ({
+            property: meta.getAttribute("property"),
+            content: meta.getAttribute("content"),
+          }));
+          const updatedData = {};
+          metaTags.forEach((meta) => {
+            updatedData[meta.property] = meta.content;
+          });
+          setData(updatedData);
+
+          if (result?.url) {
+            var resultUrl = result?.url.replace(
+              "http://demo.superfun.social",
+              "https://demo.superfun.social"
+            );
+            const response = await fetch(resultUrl, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            const result = await response.json();
+            setData((prevData) => ({
+              ...prevData,
+              "fc:frame:image": result.image,
+              "fc:frame:image:aspect_ratio": "1:1",
+            }));
+          }
+        
+        }
+
+        if (pollId === "voted") {
+          const previewUrl = `https://demo.superfun.social/api/voted/${choice}`;
+          const response = await fetch(previewUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const result = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(result, "text/html");
+
+          const metaElements = doc.head.querySelectorAll("meta");
+          const metaTags = Array.from(metaElements).map((meta) => ({
+            property: meta.getAttribute("property"),
+            content: meta.getAttribute("content"),
+          }));
+          const updatedData = {};
+          metaTags.forEach((meta) => {
+            updatedData[meta.property] = meta.content;
+          });
+          setData(updatedData);
+        }
+
+        setLoader(false);
+        setLoadingButtonIndex(null);
+      } catch (error) {
+        toast.error(error.reason || error.message || "An error occurred");
+        if (error.reason == "You have already voted!") {
+          var getVotesUrl;
+          if (currentPollId !== "voted") {
+            getVotesUrl = `https://demo.superfun.social/api/voted/${currentPollId}`;
+          } else if (currentPollId == "voted") {
+            getVotesUrl = `https://demo.superfun.social/api/voted/${currentChoice}`;
+          }
+          const response = await fetch(getVotesUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const result = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(result, "text/html");
+
+          const metaElements = doc.head.querySelectorAll("meta");
+          const metaTags = Array.from(metaElements).map((meta) => ({
+            property: meta.getAttribute("property"),
+            content: meta.getAttribute("content"),
+          }));
+          const updatedData = {};
+          metaTags.forEach((meta) => {
+            updatedData[meta.property] = meta.content;
+          });
+          setData(updatedData);
+        }
+        setLoader(false);
+        setLoadingButtonIndex(null);
       }
     }
+  }
   };
 
   const renderButtons = () => {
@@ -215,7 +206,7 @@ const DynamicFrame = ({ metadata, link }) => {
 
       if (buttonTarget) {
         buttonTarget = buttonTarget.replace(
-          "http://superfunsocial.vercel.app",
+          "http://demo.superfun.social",
           "https://demo.superfun.social"
         );
       }
@@ -257,9 +248,9 @@ const DynamicFrame = ({ metadata, link }) => {
           </Link>
         </div>
       )}
-      <div className="rounded-b-lg bg-gray-300 flex justify-between">
-        {renderButtons()}
-      </div>
+       <div className="rounded-b-lg bg-gray-300 flex justify-between">
+          {renderButtons()}
+        </div>  
     </div>
   );
 };

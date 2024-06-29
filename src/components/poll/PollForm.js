@@ -51,14 +51,13 @@ const PollInputForm = ({ togglePollModal }) => {
         endDate: endDate,
         fid: user.fid,
       })
-      .then(async (res) => {
-        console.log(res, "res------------>");
+      .then(async (res) => { 
        const txn= await CreatePoll(pollQuestion, pollOptions.length, res.data.data._id);
        console.log(txn,"txn");
 
         let arr = [];
         arr.push({
-          url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/poll/${res.data.data._id}`,
+          url: `https://demo.superfun.social/api/poll/${res.data.data._id}`,
         });
 
         const options = {
@@ -148,7 +147,7 @@ const PollInputForm = ({ togglePollModal }) => {
           <DatePicker
             selected={endDate}
             onChange={(date) => setEndDate(date)}
-            className="mt-1  w-full rounded-md border-black-300   sm:text-sm p-2 input border bg-pgray-100 rounded-xl border-pgray-100"
+            className="mt-1  w-full   border-black-300   sm:text-sm p-2 input border bg-pgray-100 rounded-xl border-pgray-100"
             showTimeSelect
             dateFormat="Pp"
           />
